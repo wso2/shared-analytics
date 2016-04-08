@@ -27,7 +27,8 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>org.wso2.carbon.analytics.common</artifactId>
+    <artifactId>org.wso2.carbon.analytics.util</artifactId>
+    <name>WSO2 - Analytics Common Utilities</name>
     <packaging>bundle</packaging>
     <description>Analytics Common component</description>
 

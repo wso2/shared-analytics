@@ -27,6 +27,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>log-analyzer-apim-feature-aggragate</artifactId>
+    <name>WSO2 - Log Analyzer APIM features</name>
     <packaging>pom</packaging>
     <modules>
         <module>org.wso2.carbon.la.apim.feature</module>
