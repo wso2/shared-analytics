@@ -19,6 +19,7 @@
 package org.wso2.carbon.analytics.common.spark.udf;
 
 import org.wso2.carbon.analytics.spark.core.udf.CarbonUDF;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,8 +30,7 @@ public class RegExrUDF implements CarbonUDF {
     public String getRegexMatch(String message, String regEx) {
         Pattern pattern = Pattern.compile(regEx);
         Matcher matcher = pattern.matcher(message);
-        if (matcher.find())
-        {
+        if (matcher.find()) {
             return matcher.group(0);
         }
         return null;
