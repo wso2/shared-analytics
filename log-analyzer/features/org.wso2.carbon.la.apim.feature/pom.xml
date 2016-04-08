@@ -27,7 +27,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <name>WSO2 - APIM Log Analyzer Dashboards Feature</name>
+    <name>WSO2 - Log Analyzer APIM Dashboards Feature</name>
     <artifactId>org.wso2.carbon.la.apim.feature</artifactId>
     <packaging>pom</packaging>
 
