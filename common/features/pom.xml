@@ -31,5 +31,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>org.wso2.carbon.analytics.util.spark.feature</module>
+        <module>org.wso2.carbon.data.agents.log4j.feature</module>
+        <module>org.wso2.carbon.data.agents.filetail.feature</module>
     </modules>
 </project>
