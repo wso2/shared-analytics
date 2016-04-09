@@ -73,16 +73,17 @@
   							<goal>p2-feature-gen</goal>
   						</goals>
   						<configuration>
-  							<id>org.wso2.carbon.analytics.util.spark</id>
+  							<id>org.wso2.carbon.data.agents.log4j</id>
   							<propertiesFile>../../etc/feature.properties</propertiesFile>
+							<licence>${license}</licence>
   							<adviceFile>
   								<properties>
   									<propertyDef>org.wso2.carbon.p2.category.type:server</propertyDef>
-                    <propertyDef>org.eclipse.equinox.p2.type.group:true</propertyDef>
+                    				<propertyDef>org.eclipse.equinox.p2.type.group:true</propertyDef>
   								</properties>
   							</adviceFile>
 							<bundles>
-								<bundleDef>org.wso2.analytics.common:org.wso2.carbon.analytics.util:${pom.version}</bundleDef>
+								<bundleDef>org.wso2.analytics.common:org.wso2.carbon.data.agents.log4j:${pom.version}</bundleDef>
 							</bundles>
   						</configuration>
   					</execution>

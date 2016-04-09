@@ -78,6 +78,9 @@
                                 <featureArtifactDef>
                                     org.wso2.analytics.common:org.wso2.carbon.la.apim.feature:${analytics.common.version}
                                 </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.analytics.common:org.wso2.carbon.data.agents.log4j.feature:${analytics.common.version}
+                                </featureArtifactDef>
                             </featureArtifacts>
                         </configuration>
                     </execution>
