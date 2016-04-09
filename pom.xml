@@ -203,6 +203,12 @@
                 <artifactId>org.wso2.das.multitenancy.dashboard.ui</artifactId>
                 <version>${das.release.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.logging.service</artifactId>
+                <version>${carbon.commons.version}</version>
+            </dependency>
+
             <!-- ************************ END - Vanilla carbon server + DAS style ************* -->
 
             <!-- START - Integration test dependencies -->
@@ -654,7 +660,7 @@
         <version.equinox.osgi>3.8.1.v20120830-144521</version.equinox.osgi>
         <version.equinox.jsp.jasper>1.0.400.v20120522-2049</version.equinox.jsp.jasper>
         <imp.pkg.version.javax.servlet>[2.6.0, 3.0.0)</imp.pkg.version.javax.servlet>
-        <version.log4j>1.2.13</version.log4j>
+        <version.log4j>1.2.17</version.log4j>
         <version.commons.logging>1.1.1</version.commons.logging>
         <operadriver.version>0.8.1</operadriver.version>
         <selenium.version>2.40.0</selenium.version>
