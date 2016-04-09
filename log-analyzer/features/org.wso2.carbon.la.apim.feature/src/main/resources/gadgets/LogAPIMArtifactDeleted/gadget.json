@@ -1,0 +1,15 @@
+{
+  "id": "logAPIMArtifactDeleted",
+  "title": "APIM Artifact Deleted",
+  "type": "gadget",
+  "thumbnail": "store://gadget/LogAPIMArtifactDeleted/img/thumbnail.png",
+  "data": {
+    "url": "store://gadget/LogAPIMArtifactDeleted/index.xml"
+  },
+  "listen": {
+    "subscriber": {
+      "type": "date-range",
+      "description": "Used to listen to any date range-selected"
+    }
+  }
+}

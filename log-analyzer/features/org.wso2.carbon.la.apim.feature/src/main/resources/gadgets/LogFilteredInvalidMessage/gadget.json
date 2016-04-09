@@ -1,0 +1,21 @@
+{
+  "id": "filteredLogMessages2",
+  "title": "APIM Filtered Messages2",
+  "type": "gadget",
+  "thumbnail": "store://gadget/LogFilteredInvalidMessage/img/thumbnail.png",
+  "data": {
+    "url": "store://gadget/LogFilteredInvalidMessage/index.xml"
+  },
+  "notify": {
+    "publisher2": {
+      "type": "filter-range",
+      "description": "This notifies selected filter"
+    }
+  },
+  "listen": {
+    "subscriber2": {
+      "type": "filter",
+      "description": "Used to listen to any filters"
+    }
+  }
+}

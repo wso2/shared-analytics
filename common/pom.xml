@@ -29,6 +29,5 @@
     <packaging>pom</packaging>
     <modules>
         <module>components</module>
-        <module>features</module>
     </modules>
 </project>
