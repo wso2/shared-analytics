@@ -1,5 +1,5 @@
 {
-  "id": "logEventChart",
+  "id": "logEvents",
   "title": "Log Event Chart",
   "type": "gadget",
   "thumbnail": "store://gadget/LogEvents/img/thumbnail.png",

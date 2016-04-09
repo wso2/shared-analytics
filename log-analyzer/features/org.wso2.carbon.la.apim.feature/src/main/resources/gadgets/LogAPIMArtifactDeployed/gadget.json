@@ -1,6 +1,6 @@
 {
-  "id": "logAPIMArtifact",
-  "title": "Log API Artifact Table",
+  "id": "logAPIMArtifactDeployed",
+  "title": "Log APIM Artifact Deployed",
   "type": "gadget",
   "thumbnail": "store://gadget/LogAPIMArtifactDeployed/img/thumbnail.png",
   "data": {

@@ -1,5 +1,5 @@
 {
-  "id": "logAnalyzer2",
+  "id": "invalidLoggingCount",
   "title": "Invalid login count",
   "type": "gadget",
   "thumbnail": "store://gadget/LogInvalidLoggingCount/img/thumbnail.png",
