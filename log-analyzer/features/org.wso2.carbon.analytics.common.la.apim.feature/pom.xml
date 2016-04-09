@@ -28,7 +28,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <name>WSO2 - Log Analyzer APIM Dashboards Feature</name>
-    <artifactId>org.wso2.carbon.la.apim.feature</artifactId>
+    <artifactId>org.wso2.carbon.analytics.common.la.apim.feature</artifactId>
     <packaging>pom</packaging>
 
     <dependencies>
@@ -73,7 +73,7 @@
   							<goal>p2-feature-gen</goal>
   						</goals>
   						<configuration>
-  							<id>org.wso2.carbon.la.apim</id>
+  							<id>org.wso2.carbon.analytics.common.la.apim</id>
   							<propertiesFile>../../../common/etc/feature.properties</propertiesFile>
 							<licence>${license}</licence>
   							<adviceFile>
@@ -82,6 +82,9 @@
                     <propertyDef>org.eclipse.equinox.p2.type.group:true</propertyDef>
   								</properties>
   							</adviceFile>
+							<bundles>
+								<bundleDef>org.wso2.analytics.common:org.wso2.carbon.analytics.common.la.apim:${analytics.common.version}</bundleDef>
+							</bundles>
   						</configuration>
   					</execution>
   				</executions>

@@ -26,10 +26,10 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>log-analyzer-apim-feature-aggragate</artifactId>
-    <name>WSO2 - Log Analyzer APIM features</name>
+    <artifactId>analytics-common-apim-components-aggragate</artifactId>
+    <name>WSO2 - Analytics common APIM components aggregate</name>
     <packaging>pom</packaging>
     <modules>
-        <module>org.wso2.carbon.analytics.common.la.apim.feature</module>
+        <module>org.wso2.carbon.analytics.common.la.apim</module>
     </modules>
 </project>
