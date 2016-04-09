@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c)  2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+  ~
+  ~ WSO2 Inc. licenses this file to you under the Apache License,
+  ~ Version 2.0 (the "License"); you may not use this file except
+  ~ in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied. See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+
+<Module>
+    <ModulePrefs title="ERROR Thrown Classes"
+                 author="WSO2 Gadget Server"
+                 scrolling="true"
+                 tags="stack,chart,data,visualization"
+                 description="Log Level chart Implementation">
+        <Require feature="pubsub-2"/>
+        <Require feature="dynamic-height"/>
+    </ModulePrefs>
+    <Content type="html">
+        <![CDATA[
+        <html>
+<head>
+    <meta charset="utf-8">
+    <title>ERROR Thrown Classes</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css"/>
+    <link rel="stylesheet" href="css/style.css" type="text/css"/>
+
+    <!-- JS -->
+    <script src="/portal/js/jquery-1.10.2.js"></script>
+    <script src="js/d3.min.js"></script>
+    <script src="js/topojson.js"></script>
+    <script src="js/vega.js"></script>
+    <script src="js/VizGrammar.js"></script>
+    <script src="js/VizGrammarSettings.js"></script>
+    <script src="js/gadgetconf.js"></script>
+    <script src="/portal/js/carbon-analytics.js"></script>
+
+</head>
+<body style="margin-bottom: 0px;">
+<div id="chartErrorClass"/>
+<script src="js/main.js"></script>
+</body>
+</html>
+        ]]>
+    </Content>
+</Module>
+
+

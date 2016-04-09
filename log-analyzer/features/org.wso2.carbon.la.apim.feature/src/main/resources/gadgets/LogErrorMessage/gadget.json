@@ -1,6 +1,6 @@
 {
-  "id": "logErrorByMessageDrilldown",
-  "title": "Log ERROR by Message Drilldown",
+  "id": "logErrorByMessage",
+  "title": "Log ERROR by Message",
   "type": "gadget",
   "thumbnail": "store://gadget/LogErrorMessage/img/thumbnail.png",
   "data": {
