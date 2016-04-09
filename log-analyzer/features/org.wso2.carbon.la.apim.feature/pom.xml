@@ -73,8 +73,9 @@
   							<goal>p2-feature-gen</goal>
   						</goals>
   						<configuration>
-  							<id>org.wso2.carbon.la.das</id>
-  							<propertiesFile>../feature.properties</propertiesFile>
+  							<id>org.wso2.carbon.la.apim</id>
+  							<propertiesFile>../../../common/etc/feature.properties</propertiesFile>
+							<licence>${license}</licence>
   							<adviceFile>
   								<properties>
   									<propertyDef>org.wso2.carbon.p2.category.type:server</propertyDef>
