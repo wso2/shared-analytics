@@ -44,6 +44,13 @@ public class DateTimeUDF implements CarbonUDF {
         }
     }
 
+    public Integer getWeek(Long timeStamp) throws ParseException {
+        synchronized (cal) {
+            cal.setTimeInMillis(timeStamp);
+            return cal.get(Calendar.WEEK_OF_MONTH);
+        }
+    }
+
     public Integer getDay(Long timeStamp) throws ParseException {
         synchronized (cal) {
             cal.setTimeInMillis(timeStamp);
