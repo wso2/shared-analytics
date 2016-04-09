@@ -51,6 +51,7 @@
 	<modules>
 		<module>common</module>
 		<module>log-analyzer</module>
+        <module>p2-profile/distribution</module>
 	</modules>
 
 	<repositories>
@@ -613,6 +614,7 @@
 
 	<properties>
 		<das.release.version>1.0.0-SNAPSHOT</das.release.version>
+        <analytics.common.version>1.0.0-SNAPSHOT</analytics.common.version>
 
         <carbon.kernel.version>4.4.3</carbon.kernel.version>
         <analytics.apim.version>1.0.0-SNAPSHOT</analytics.apim.version>
