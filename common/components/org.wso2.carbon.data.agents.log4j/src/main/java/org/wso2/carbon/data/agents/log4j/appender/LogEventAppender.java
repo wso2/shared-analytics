@@ -278,10 +278,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
             }
         }
 
-        private void publishLogEvent(TenantAwareLoggingEvent event)
-                throws ParseException, MalformedURLException, AuthenticationException, TransportException,
-                MalformedStreamDefinitionException, StreamDefinitionException,
-                DifferentStreamDefinitionAlreadyDefinedException, ExecutionException {
+        private void publishLogEvent(TenantAwareLoggingEvent event) throws ParseException {
             String streamId = "";
             String streamName = "";
             String tenantId = event.getTenantId();
@@ -301,23 +298,23 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
                 dataPublisher = new DataPublisher("Thrift", url, authURLSet, userName, password);
             } catch (DataEndpointAgentConfigurationException e) {
                 log.error(
-                        "Error in initializing binary data-publisher to send requests to global throttling engine " + e
+                        "Invalid urls passed for receiver and auth, and hence expected to fail " + e
                                 .getMessage(), e);
             } catch (DataEndpointException e) {
                 log.error(
-                        "Error in initializing binary data-publisher to send requests to global throttling engine " + e
+                        "Invalid urls passed for receiver and auth, and hence expected to fail " + e
                                 .getMessage(), e);
             } catch (DataEndpointConfigurationException e) {
                 log.error(
-                        "Error in initializing binary data-publisher to send requests to global throttling engine " + e
+                        "Invalid urls passed for receiver and auth, and hence expected to fail " + e
                                 .getMessage(), e);
             } catch (DataEndpointAuthenticationException e) {
                 log.error(
-                        "Error in initializing binary data-publisher to send requests to global throttling engine " + e
+                        "Invalid urls passed for receiver and auth, and hence expected to fail " + e
                                 .getMessage(), e);
             } catch (TransportException e) {
                 log.error(
-                        "Error in initializing binary data-publisher to send requests to global throttling engine " + e
+                        "Invalid urls passed for receiver and auth, and hence expected to fail " + e
                                 .getMessage(), e);
             }
             List<String> patterns = Arrays.asList(columnList.split(","));
@@ -400,10 +397,9 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
                 arbitraryDataMap.put(columns[8], stacktrace);
             }
             if (payLoadData != null && arbitraryDataMap != null) {
-                Event laEvent = new Event("loganalyzer:1.0.0", System.currentTimeMillis(), null, null,
+                Event laEvent = new Event(streamDef, System.currentTimeMillis(), null, null,
                         payLoadData.toArray(), arbitraryDataMap);
                 dataPublisher.publish(laEvent);
-                System.out.println(event.toString());
             }
         }
     }
