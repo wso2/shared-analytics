@@ -1,0 +1,21 @@
+{
+    "id": "generic-gadget",
+    "title": "VizGrammar based generic gadget",
+    "type": "gadget",
+    "thumbnail": "store://gadget/usa-business-revenue/index.png",
+    "data": {
+        "url": "store://gadget/generic-gadget/index.xml"
+    },
+    "listen": {
+        "subscriber": {
+            "type": "date-range",
+            "description": "This notifies message generated in publisher"
+        }
+    },
+    "notify": {
+        "chart-zoomed": {
+            "type": "date-range",
+            "description": "This notifies message generated in publisher"
+        }
+    }
+}
