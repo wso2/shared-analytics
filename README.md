@@ -1,13 +1,15 @@
-WSO2 Analytics Common (Carbon Components and Features)
-======================================================
-
+# WSO2 Analytics Common (Carbon Components and Features)
 
 WSO2 Analytics contains powerful common components for real-time, batch, interactive, and predictive (via machine learning) analysis of data into one integrated platform. This supports the multiple demands of Internet of Things (IoT) solutions, as well as mobile and Web apps.
 
 
+# Available Features
+* Log4J Appender publishing log events to [DAS](http://wso2.com/products/data-analytics-server/)
+* Log Tail Agent listens to given log file and publishing new events to [DAS](http://wso2.com/products/data-analytics-server/)
+* Log Analyzer DAshboard for [APIM](http://wso2.com/api-management/)
 
-Support
-==================================
+--------------------------------------------------------------------------------
+# Support
 
 WSO2 Inc. offers a variety of development and production support
 programs, ranging from Web-based support up through normal business
@@ -16,15 +18,14 @@ hours, to premium 24x7 phone support.
 For additional support information please refer to <http://wso2.com/support>
 
 
-Contact us
-========
+# Contact us
 WSO2 Analytics developers can be contacted via the mailing lists:
 
 * Developers List : dev@wso2.org
 * Architecture List : architecture@wso2.org
 
-Crypto Notice
-==================================
+--------------------------------------------------------------------------------
+# Crypto Notice
 
    This distribution includes cryptographic software.  The country in
    which you currently reside may have restrictions on the import,
