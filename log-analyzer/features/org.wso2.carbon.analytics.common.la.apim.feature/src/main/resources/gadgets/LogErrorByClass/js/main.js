@@ -15,7 +15,9 @@
  *  limitations under the License.
  * /
  */
-var client = new AnalyticsClient().init();
+var gatewayPort = location.port -9443 + 8243; //Calculate the port offset based gateway port.
+var serverUrl = "https://"+location.hostname +":"+ gatewayPort+"/LogAnalyzerRestApi/1.0";
+var client = new AnalyticsClient().init(null, null, serverUrl);
 var div = "#chartErrorClass";
 var from = 1460313000000;
 var to = 1460658600000;

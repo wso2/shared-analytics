@@ -16,7 +16,7 @@
   ~ under the License.
   -->
 
-<api xmlns="http://ws.apache.org/ns/synapse" name="LA_REST_API--1.0"
+<api xmlns="http://ws.apache.org/ns/synapse" name="LogAnalyzerRestApi--1.0"
      context="/LogAnalyzerRestApi/1.0" version="0.1" version-type="context">
 
     <resource methods="DELETE POST PATCH PUT GET" url-mapping="/*">
