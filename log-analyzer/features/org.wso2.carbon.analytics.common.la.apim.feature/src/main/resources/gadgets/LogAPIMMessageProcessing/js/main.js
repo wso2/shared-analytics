@@ -15,7 +15,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var client = new AnalyticsClient().init();
+var gatewayPort = location.port -9443 + 8243; //Calculate the port offset based gateway port.
+var serverUrl = "https://"+location.hostname +":"+ gatewayPort+"/LogAnalyzerRestApi/1.0";
+var client = new AnalyticsClient().init(null, null, serverUrl);
 var div = "#chartAPIMMessageProcessing";
 var from = new Date(moment().subtract(1, 'year')).getTime();
 var to = new Date(moment()).getTime();

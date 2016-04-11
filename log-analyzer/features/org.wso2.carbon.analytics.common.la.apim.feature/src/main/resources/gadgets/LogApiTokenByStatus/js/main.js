@@ -15,7 +15,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var client = new AnalyticsClient().init();
+var gatewayPort = location.port -9443 + 8243; //Calculate the port offset based gateway port.
+var serverUrl = "https://"+location.hostname +":"+ gatewayPort+"/LogAnalyzerRestApi/1.0";
+var client = new AnalyticsClient().init(null, null, serverUrl);
 var div = "#chartApiTokenStatus";
 var table, chart;
 var from = 1460341665000;
@@ -78,7 +80,7 @@ function fetch(ch) {
     var queryInfo = {
         tableName: "LOGANALYZER_APIKEY_STATUS",
         searchParams: {
-            query: "status:" + gadgetConfig.status[ch] + " AND  _timestamp: [" + from + " TO " + to + "]" 
+            query: "status:" + gadgetConfig.status[ch] + " AND  _timestamp: [" + from + " TO " + to + "]"
         }
     };
 
@@ -132,7 +134,7 @@ function publish (data) {
     gadgets.Hub.publish("publisher", data);
 };
 
- var onclick = function(event, item) {
+var onclick = function(event, item) {
     if (item != null) {
         console.log(JSON.stringify(item.datum));
         publish(
