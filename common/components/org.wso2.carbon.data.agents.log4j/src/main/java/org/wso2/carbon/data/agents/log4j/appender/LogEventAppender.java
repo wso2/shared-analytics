@@ -71,7 +71,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     private String trustStorePassword;
     private String truststorePath;
     private String authURLSet;
-    private static final String[] columns = {"serverName", "appName", "eventTimeStamp", "class", "level", "message", "ip",
+    private static final String[] columns = {"serverName", "appName", "eventTimeStamp", "class", "level", "content", "ip",
             "instance", "trace"};
     private boolean isTruststore = false;
 
@@ -310,11 +310,11 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
                                 .getMessage(), e);
             } catch (DataEndpointAuthenticationException e) {
                 log.error(
-                        "Invalid urls passed for receiver and auth, and hence expected to fail " + e
+                        "Error while trying to login to data receiver : " + e
                                 .getMessage(), e);
             } catch (TransportException e) {
                 log.error(
-                        "Invalid urls passed for receiver and auth, and hence expected to fail " + e
+                        "Thrift transport exception occurred " + e
                                 .getMessage(), e);
             }
             List<String> patterns = Arrays.asList(columnList.split(","));
