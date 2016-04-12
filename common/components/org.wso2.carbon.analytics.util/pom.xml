@@ -67,14 +67,6 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-scr-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>generate-scr-scrdescriptor</id>
-                        <goals>
-                            <goal>scr</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -84,13 +76,14 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
-                        <Private-Package>org.wso2.carbon.analytics.common.internal.*</Private-Package>
+                        <Private-Package>org.wso2.carbon.analytics.common.spark.internal.*</Private-Package>
                         <Export-Package>
-                            !org.wso2.carbon.analytics.common.internal.*,
-                            org.wso2.carbon.analytics.common.spark.*
+                            !org.wso2.carbon.analytics.common.spark.internal.*,
+                            org.wso2.carbon.analytics.common.spark.udf*
                         </Export-Package>
                         <Import-Package>
-                            org.wso2.carbon.analytics.spark.core.*
+                            org.wso2.carbon.analytics.spark.core.*,
+                            *;resolution:=optional
                         </Import-Package>
                     </instructions>
                 </configuration>
