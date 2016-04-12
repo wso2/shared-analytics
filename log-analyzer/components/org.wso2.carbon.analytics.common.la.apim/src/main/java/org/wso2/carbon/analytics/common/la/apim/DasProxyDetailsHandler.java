@@ -37,9 +37,9 @@ import java.util.List;
  */
 public class DasProxyDetailsHandler extends AbstractHandler implements ManagedLifecycle {
 
-    private static final String CONFIG_PROPERTY_DAS_RESTAPI_USERNAME = "APIUsageTracking.DASRestApiUsername";
-    private static final String CONFIG_PROPERTY_DAS_RESTAPI_PASSWORD = "APIUsageTracking.DASRestApiPassword";
-    private static final String CONFIG_PROPERTY_DAS_RESTAPI_URL = "APIUsageTracking.DASRestApiURL";
+    private static final String CONFIG_PROPERTY_DAS_RESTAPI_USERNAME = "Analytics.DASRestApiUsername";
+    private static final String CONFIG_PROPERTY_DAS_RESTAPI_PASSWORD = "Analytics.DASRestApiPassword";
+    private static final String CONFIG_PROPERTY_DAS_RESTAPI_URL = "Analytics.DASRestApiURL";
 
     private static final String MEDIATION_PROPERTY_DAS_RESTAPI_URL = "DAS.REST.URL";
     private static final String MEDIATION_PROPERTY_DAS_AUTHORIZATION = "DAS.authorization";
