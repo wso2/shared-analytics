@@ -57,7 +57,7 @@ $(document).ready(function () {
 function fetch() {
     dataM.length = 0;
     var queryInfo;
-    console.log("sajith12345");
+    console.log("LogViewerFetching");
     queryInfo = {
         tableName: "LOGANALYZER_NON_DUPLICATION",
         searchParams: {

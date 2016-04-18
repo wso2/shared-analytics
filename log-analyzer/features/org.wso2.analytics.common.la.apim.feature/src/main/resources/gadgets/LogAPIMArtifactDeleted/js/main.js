@@ -76,7 +76,7 @@ $(document).ready(function () {
 function fetch() {
     dataM.length = 0;
     var queryInfo;
-    console.log("sajith3");
+    console.log("ArtifactDeletedFetching");
     queryInfo = {
         tableName: "LOGANALYZER_APIM_ARTIFACT_DELETED_DAILY",
         searchParams: {

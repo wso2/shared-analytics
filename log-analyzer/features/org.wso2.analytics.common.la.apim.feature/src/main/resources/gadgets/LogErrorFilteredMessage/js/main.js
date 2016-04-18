@@ -75,7 +75,7 @@ $(document).ready(function () {
 function fetch() {
     dataM.length = 0;
     var queryInfo;
-    console.log("sajith1234");
+    console.log("FilteredMessagesFetching");
     queryInfo = {
         tableName: "LOGANALYZER_NON_DUPLICATION",
         searchParams: {
@@ -112,10 +112,7 @@ function drawLogAPIMArtifactTableChart() {
     );
     table.draw(div);
     var table2 = $('#FilteredMessages').DataTable();
-    //$('#body').css( 'display', 'block' );
-    //table2.columns.adjust().draw();
     $("#tableChart-FilteredMessages > tr").on( "click", function( event ) {
-        //alert(this.getElementsByClassName("timestamp")[0].textContent);
         publish({timestamp : this.getElementsByClassName("timestamp")[0].textContent});
     });
 }

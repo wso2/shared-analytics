@@ -57,7 +57,7 @@
 
 </head>
 <body style="margin-bottom: 0px;">
-<div id="tblLogAPIMArtifact"/>
+<div id="tblArtifactDeployed"/>
 <script src="js/main.js"></script>
 </body>
 </html>
