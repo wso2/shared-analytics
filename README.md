@@ -1,5 +1,8 @@
 # WSO2 Analytics Common (Carbon Components and Features)
 
+[![Build Status](https://wso2.org/jenkins/job/analytics-common/badge/icon)](https://wso2.org/jenkins/job/analytics-common)
+
+
 WSO2 Analytics contains powerful common components for real-time, batch, interactive, and predictive (via machine learning) analysis of data into one integrated platform. This supports the multiple demands of Internet of Things (IoT) solutions, as well as mobile and Web apps.
 
 
