@@ -110,7 +110,9 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
 
     public void close() {
         try {
-            dataPublisher.shutdown();
+            if(dataPublisher!=null){
+                dataPublisher.shutdown();
+            }
         } catch (DataEndpointException e) {
             log.error("Error in shutting down the data publisher " + e.getMessage(), e);
         }
