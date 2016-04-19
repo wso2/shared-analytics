@@ -32,7 +32,7 @@ import org.wso2.carbon.databridge.agent.exception.DataEndpointAuthenticationExce
 import org.wso2.carbon.databridge.agent.exception.DataEndpointConfigurationException;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
 import org.wso2.carbon.databridge.commons.Event;
-import org.wso2.carbon.databridge.commons.exception.*;
+import org.wso2.carbon.databridge.commons.exception.TransportException;
 import org.wso2.carbon.logging.service.internal.LoggingServiceComponent;
 import org.wso2.carbon.logging.service.util.LoggingConstants;
 import org.wso2.carbon.user.api.UserStoreException;
@@ -45,14 +45,16 @@ import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.MalformedURLException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.LogRecord;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -74,6 +76,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     private static final String[] columns = {"serverName", "appName", "eventTimeStamp", "class", "level", "content", "ip",
             "instance", "trace"};
     private boolean isTruststore = false;
+    private DataPublisher dataPublisher;
 
     public LogEventAppender() {
         init();
@@ -106,7 +109,11 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     }
 
     public void close() {
-
+        try {
+            dataPublisher.shutdown();
+        } catch (DataEndpointException e) {
+            log.error("Error in shutting down the data publisher " + e.getMessage(), e);
+        }
     }
 
     public void push(LogRecord record) {
@@ -121,6 +128,37 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
             System.setProperty("javax.net.ssl.trustStore", truststorePath);
             System.setProperty("javax.net.ssl.trustStorePassword", "wso2carbon");
             isTruststore = true;
+        }
+        if (dataPublisher == null) {
+            Pattern pattern = Pattern.compile("(tcp):\\/\\/([a-zA-Z0-9]+):([0-9]+)");
+            Matcher matcher = pattern.matcher(url);
+            if (matcher.find() && authURLSet == null) {
+                authURLSet = "ssl://" + matcher.group(2).toString() + ":" + (
+                        Integer.parseInt(matcher.group(3).toString()) + 100);
+            }
+            try {
+                dataPublisher = new DataPublisher("Thrift", url, authURLSet, userName, password);
+            } catch (DataEndpointAgentConfigurationException e) {
+                log.error(
+                        "Invalid urls passed for receiver and auth, and hence expected to fail " + e
+                                .getMessage(), e);
+            } catch (DataEndpointException e) {
+                log.error(
+                        "Error while trying to publish events to data receiver " + e
+                                .getMessage(), e);
+            } catch (DataEndpointConfigurationException e) {
+                log.error(
+                        "Invalid urls passed for receiver and auth, and hence expected to fail " + e
+                                .getMessage(), e);
+            } catch (DataEndpointAuthenticationException e) {
+                log.error(
+                        "Error while trying to login to data receiver : " + e
+                                .getMessage(), e);
+            } catch (TransportException e) {
+                log.error(
+                        "Thrift transport exception occurred " + e
+                                .getMessage(), e);
+            }
         }
         Logger logger = Logger.getLogger(event.getLoggerName());
         TenantAwareLoggingEvent tenantEvent;
@@ -253,7 +291,6 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
 
     private final class LogPublisherTask implements Runnable {
         private int numOfConsecutiveFailures;
-        private DataPublisher dataPublisher;
 
         public void run() {
             try {
@@ -288,35 +325,6 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
             }
             String serverKey = getCurrentServerName();
             String currDateStr = getCurrentDate();
-            try {
-                Pattern pattern = Pattern.compile("(tcp):\\/\\/([a-zA-Z0-9]+):([0-9]+)");
-                Matcher matcher = pattern.matcher(url);
-                if (matcher.find() && authURLSet == null) {
-                    authURLSet = "ssl://" + matcher.group(2).toString() + ":" + (
-                            Integer.parseInt(matcher.group(3).toString()) + 100);
-                }
-                dataPublisher = new DataPublisher("Thrift", url, authURLSet, userName, password);
-            } catch (DataEndpointAgentConfigurationException e) {
-                log.error(
-                        "Invalid urls passed for receiver and auth, and hence expected to fail " + e
-                                .getMessage(), e);
-            } catch (DataEndpointException e) {
-                log.error(
-                        "Invalid urls passed for receiver and auth, and hence expected to fail " + e
-                                .getMessage(), e);
-            } catch (DataEndpointConfigurationException e) {
-                log.error(
-                        "Invalid urls passed for receiver and auth, and hence expected to fail " + e
-                                .getMessage(), e);
-            } catch (DataEndpointAuthenticationException e) {
-                log.error(
-                        "Error while trying to login to data receiver : " + e
-                                .getMessage(), e);
-            } catch (TransportException e) {
-                log.error(
-                        "Thrift transport exception occurred " + e
-                                .getMessage(), e);
-            }
             List<String> patterns = Arrays.asList(columnList.split(","));
             String tenantID = "";
             String serverName = "";
