@@ -29,14 +29,14 @@ var template4 = "<ul class='template4'>{{#arr}}<li class='data'>{{date}}</li><li
 
 function initialize() {
     //fetch();
-    //$("#tblArtifactDeleted").html(getDefaultText());
+    $("#logViewer").html(getDefaultText());
 }
 
 function getDefaultText() {
     return '<div class="status-message">' +
         '<div class="message message-info">' +
         '<h4><i class="icon fw fw-info"></i>No content to display</h4>' +
-        '<p>Please select a date range to view stats.</p>' +
+        '<p>Please select a record to view log.</p>' +
         '</div>' +
         '</div>';
 };

@@ -38,9 +38,9 @@
     <link rel="stylesheet" href="css/style.css" type="text/css"/>
     <link rel="stylesheet" href="css/jquery.dataTables.css" type="text/css"/>
     <link rel="stylesheet" type="text/css" href="/portal/libs/bootstrap_3.3.5/css/bootstrap.min.css" />
-    <!--<link rel="stylesheet" type="text/css" href="/portal/libs/font-wso2_1.0.0/css/font-wso2.min.css" />-->
-    <!--<link rel="stylesheet" type="text/css" href="/portal/libs/theme-wso2_1.0/css/theme-wso2.css" />-->
-    <!--<link rel="stylesheet" type="text/css" href="/portal/extensions/themes/analytics/css/gadget.css" />-->
+    <link rel="stylesheet" type="text/css" href="/portal/libs/font-wso2_1.0.0/css/font-wso2.min.css" />
+    <link rel="stylesheet" type="text/css" href="/portal/libs/theme-wso2_1.0/css/theme-wso2.css" />
+    <link rel="stylesheet" type="text/css" href="/portal/extensions/themes/analytics/css/gadget.css" />
 
     <!-- JS -->
     <script src="../commons/js/jquery-1.10.2.js"></script>

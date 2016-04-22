@@ -47,14 +47,14 @@ var configTable = {
 
 function initialize() {
     //fetch();
-    //$("#tblArtifactDeleted").html(getDefaultText());
+    $(div).html(getDefaultText());
 }
 
 function getDefaultText() {
     return '<div class="status-message">'+
         '<div class="message message-info">'+
         '<h4><i class="icon fw fw-info"></i>No content to display</h4>'+
-        '<p>Please select a date range to view stats.</p>'+
+        '<p>Please select a Log ERROR Message to view details.</p>'+
         '</div>'+
         '</div>';
 };
