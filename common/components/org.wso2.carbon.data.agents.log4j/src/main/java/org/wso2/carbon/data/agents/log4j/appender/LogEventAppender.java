@@ -93,27 +93,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         truststorePath = CarbonUtils.getCarbonHome() + truststorePath;
         System.setProperty("javax.net.ssl.trustStore", truststorePath);
         System.setProperty("javax.net.ssl.trustStorePassword", "wso2carbon");
-
-        tenantId = AccessController.doPrivileged(new PrivilegedAction<Integer>() {
-            public Integer run() {
-                return CarbonContext.getThreadLocalCarbonContext().getTenantId();
-            }
-        });
-
-        if (tenantId == MultitenantConstants.INVALID_TENANT_ID) {
-            String tenantDomain = TenantDomainSetter.getTenantDomain();
-            if (tenantDomain != null && !tenantDomain.equals("")) {
-                try {
-                    tenantId = getTenantIdForDomain(tenantDomain);
-                } catch (UserStoreException e) {
-                    System.err.println("Cannot find tenant id for the given tenant domain.");
-                    e.printStackTrace();
-                }
-            }
-        }
-
         serviceName = TenantDomainSetter.getServiceName();
-        appName = CarbonContext.getThreadLocalCarbonContext().getApplicationName();
 
         try {
             dataPublisher = new DataPublisher("Thrift", url, authURLs, userName, password);
@@ -206,6 +186,23 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
             tenantEvent = new TenantAwareLoggingEvent(event.fqnOfCategoryClass, logger, event.timeStamp,
                     event.getLevel(), event.getMessage(), null);
         }
+        tenantId = AccessController.doPrivileged(new PrivilegedAction<Integer>() {
+            public Integer run() {
+                return CarbonContext.getThreadLocalCarbonContext().getTenantId();
+            }
+        });
+        if (tenantId == MultitenantConstants.INVALID_TENANT_ID) {
+            String tenantDomain = TenantDomainSetter.getTenantDomain();
+            if (tenantDomain != null && !tenantDomain.equals("")) {
+                try {
+                    tenantId = getTenantIdForDomain(tenantDomain);
+                } catch (UserStoreException e) {
+                    System.err.println("Cannot find tenant id for the given tenant domain.");
+                    e.printStackTrace();
+                }
+            }
+        }
+        appName = CarbonContext.getThreadLocalCarbonContext().getApplicationName();
         tenantEvent.setTenantId(String.valueOf(tenantId));
         if (appName != null) {
             tenantEvent.setServiceName(CarbonContext.getThreadLocalCarbonContext().getApplicationName());
