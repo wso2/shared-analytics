@@ -152,7 +152,7 @@ function fetch() {
                         msgMap.set(msgHash,msgCount);
                     }
                     var tempDay = new Date(receivedData[i].timestamp);
-                    dataM.push([tempDay.toDateString(),receivedData[i].values.messageCount,receivedData[i].values.message,"ID :"+msgMap.get(msgHash)+"  - "+receivedData[i].values.message.substring(1,60)+"...",msgMap.get(msgHash)]);
+                    dataM.push([tempDay.toDateString(),receivedData[i].values.messageCount,receivedData[i].values.message,"ID :"+msgMap.get(msgHash)+"  - "+receivedData[i].values.message.substring(0,60)+"...",msgMap.get(msgHash)]);
                 }
             }else if(timeFrame === "monthly"){
                 newFrom.setDate(1);
@@ -168,7 +168,7 @@ function fetch() {
                         msgMap.set(msgHash,msgCount);
                     }
                     var tempDay = new Date(receivedData[i].timestamp);
-                    dataM.push([mS[tempDay.getMonth()]+" - "+tempDay.getFullYear(),receivedData[i].values.messageCount,receivedData[i].values.message,"ID :"+msgMap.get(msgHash)+"  - "+receivedData[i].values.message.substring(1,60)+"...",msgMap.get(msgHash)]);
+                    dataM.push([mS[tempDay.getMonth()]+" - "+tempDay.getFullYear(),receivedData[i].values.messageCount,receivedData[i].values.message,"ID :"+msgMap.get(msgHash)+"  - "+receivedData[i].values.message.substring(0,60)+"...",msgMap.get(msgHash)]);
                 }
             }else if(timeFrame === "weekly"){
                 var weekNo =0;
@@ -183,7 +183,7 @@ function fetch() {
                         msgMap.set(msgHash,msgCount);
                     }
                     var tempDay = new Date(receivedData[i].timestamp);
-                    dataM.push(["W"+receivedData[i].values.week+" "+mS[tempDay.getMonth()]+" - "+tempDay.getFullYear(),receivedData[i].values.messageCount,receivedData[i].values.message,"ID :"+msgMap.get(msgHash)+"  - "+receivedData[i].values.message.substring(1,60)+"...",msgMap.get(msgHash)]);
+                    dataM.push(["W"+receivedData[i].values.week+" "+mS[tempDay.getMonth()]+" - "+tempDay.getFullYear(),receivedData[i].values.messageCount,receivedData[i].values.message,"ID :"+msgMap.get(msgHash)+"  - "+receivedData[i].values.message.substring(0,60)+"...",msgMap.get(msgHash)]);
                 }
             }
             drawChartByClass();
