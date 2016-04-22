@@ -59,7 +59,7 @@ function fetch() {
     var queryInfo;
     console.log("LogViewerFetching");
     queryInfo = {
-        tableName: "LOGANALYZER_NON_DUPLICATION",
+        tableName: "LOGANALYZER",
         searchParams: {
             query: "_eventTimeStamp: [" + from + " TO " + to + "]",
             start: 0, //starting index of the matching record set
