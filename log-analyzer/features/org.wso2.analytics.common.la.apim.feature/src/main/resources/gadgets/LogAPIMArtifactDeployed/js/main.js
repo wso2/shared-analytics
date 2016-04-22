@@ -18,7 +18,7 @@
 var gatewayPort = location.port -9443 + 8243; //Calculate the port offset based gateway port.
 var serverUrl = "https://"+location.hostname +":"+ gatewayPort+"/LogAnalyzerRestApi/1.0";
 var client = new AnalyticsClient().init(null, null, serverUrl);
-var div = "#tblLogAPIMArtifact";
+var div = "#tblArtifactDeployed";
 var table;
 var from = new Date(moment().subtract(1, 'year')).getTime();
 var to = new Date(moment()).getTime();
@@ -32,7 +32,7 @@ var meta = {
 
 var configTable = {
     key: "apiArtifact",
-    title:"LogAPIMArtifact",
+    title:"ArtifactDeployed",
     charts: [{
         type: "table",
         y: "Frequency",
@@ -76,7 +76,7 @@ $(document).ready(function () {
 function fetch() {
     dataM.length = 0;
     var queryInfo;
-    console.log("sajith3");
+    console.log("ArtifactDeployedFetching");
     queryInfo = {
         tableName: "LOGANALYZER_APIM_ARTIFACT_DEPLOYED_DAILY",
         searchParams: {
@@ -105,7 +105,7 @@ function fetch() {
 }
 
 function drawLogAPIMArtifactTableChart() {
-    $("#tblLogAPIMArtifact").empty();
+    $(div).empty();
     table = new vizg(
         [
             {
@@ -116,9 +116,7 @@ function drawLogAPIMArtifactTableChart() {
         configTable
     );
     table.draw(div);
-    //$("#LogLevel").DataTable();
-
-    var table2 = $('#LogAPIMArtifact').DataTable();
+    var table2 = $('#ArtifactDeployed').DataTable();
     $('#body').css( 'display', 'block' );
     table2.columns.adjust().draw();
 }

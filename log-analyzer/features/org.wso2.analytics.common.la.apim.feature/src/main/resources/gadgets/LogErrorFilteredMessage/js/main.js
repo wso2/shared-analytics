@@ -47,14 +47,14 @@ var configTable = {
 
 function initialize() {
     //fetch();
-    //$("#tblArtifactDeleted").html(getDefaultText());
+    $(div).html(getDefaultText());
 }
 
 function getDefaultText() {
     return '<div class="status-message">'+
         '<div class="message message-info">'+
         '<h4><i class="icon fw fw-info"></i>No content to display</h4>'+
-        '<p>Please select a date range to view stats.</p>'+
+        '<p>Please select a Log ERROR Message to view details.</p>'+
         '</div>'+
         '</div>';
 };
@@ -75,7 +75,7 @@ $(document).ready(function () {
 function fetch() {
     dataM.length = 0;
     var queryInfo;
-    console.log("sajith1234");
+    console.log("FilteredMessagesFetching");
     queryInfo = {
         tableName: "LOGANALYZER_NON_DUPLICATION",
         searchParams: {
@@ -89,7 +89,7 @@ function fetch() {
         var obj = JSON.parse(d["message"]);
         if (d["status"] === "success") {
             for (var i =0; i < obj.length ;i++){
-                dataM.push([obj[i].values._content,obj[i].values._class,obj[i].values._eventTimeStamp,obj[i].values._trace]);
+                dataM.push([obj[i].values._content,obj[i].values._class,new Date(obj[i].values._eventTimeStamp).toUTCString(),obj[i].values._trace]);
             }
             drawLogAPIMArtifactTableChart();
 
@@ -112,11 +112,8 @@ function drawLogAPIMArtifactTableChart() {
     );
     table.draw(div);
     var table2 = $('#FilteredMessages').DataTable();
-    //$('#body').css( 'display', 'block' );
-    //table2.columns.adjust().draw();
     $("#tableChart-FilteredMessages > tr").on( "click", function( event ) {
-        //alert(this.getElementsByClassName("timestamp")[0].textContent);
-        publish({timestamp : this.getElementsByClassName("timestamp")[0].textContent});
+        publish({timestamp : new Date(this.getElementsByClassName("timestamp")[0].textContent).getTime()});
     });
 }
 

@@ -28,7 +28,7 @@ var mockData = [];
 var newDataM =[];
 var newDataOtherM=[];
 var chartData = [];
-var names = ["day", "count", "message"];
+var names = ["day", "count", "agentID"];
 var types = ["ordinal", "linear", "linear"];
 var mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 var msgMap = new Map();
@@ -75,7 +75,7 @@ function fetch() {
     var newFrom;
     var newTo;
     var tomorrow;
-    console.log("logErrorMessage");
+    console.log("InvalidLoggingCount");
     var diffDays = daysBetween(new Date(from), new Date(to));
     if(diffDays>90){
         timeFrame = "monthly";
@@ -87,7 +87,7 @@ function fetch() {
                 count : 100, //page size for pagination
                 sortBy : [
                     {
-                        field : "agentCount",
+                        field : "InvalidLoginCount",
                         sortType : "DESC", // This can be ASC, DESC
                         reversed : "false" //optional
                     }
@@ -104,7 +104,7 @@ function fetch() {
                 count : 100, //page size for pagination
                 sortBy : [
                     {
-                        field : "agentCount",
+                        field : "InvalidLoginCount",
                         sortType : "DESC", // This can be ASC, DESC
                         reversed : "false" //optional
                     }
@@ -121,7 +121,7 @@ function fetch() {
                 count : 100, //page size for pagination
                 sortBy : [
                     {
-                        field : "agentCount",
+                        field : "InvalidLoginCount",
                         sortType : "DESC", // This can be ASC, DESC
                         reversed : "false" //optional
                     }
@@ -146,43 +146,33 @@ function fetch() {
                 newTo.setMinutes(0);
                 newTo.setSeconds(0);
                 while(!(newFrom.getTime() >= newTo.getTime())){
-                    mockData.push([newFrom.toDateString(),0,"No Entry","No Entry",0]);
+                    mockData.push([newFrom.toDateString(),0,"No Entry"]);
                     newFrom.setHours(newFrom.getHours()+24);
                 }
                 for (var i =0; i < receivedData.length ;i++){
                     var tempDay = new Date(receivedData[i].timestamp);
-                    dataM.push([tempDay.toDateString(),receivedData[i].values.agentCount,receivedData[i].values.agent]);
+                    dataM.push([tempDay.toDateString(),receivedData[i].values.InvalidLoginCount,receivedData[i].values.AgentId]);
                 }
             }else if(timeFrame === "monthly"){
                 newFrom.setDate(1);
                 newTo.setDate(1);
                 while(!(newFrom.getTime() >= newTo.getTime())){
-                    mockData.push([mS[newFrom.getMonth()]+" - "+newFrom.getFullYear(),0,"No Entry","No Entry",0]);
+                    mockData.push([mS[newFrom.getMonth()]+" - "+newFrom.getFullYear(),0,"No Entry"]);
                     newFrom.setMonth(newFrom.getMonth()+1);
                 }
                 for (var i =0; i < receivedData.length ;i++){
-                    msgHash  =hashCode(receivedData[i].values.message);
-                    if(!msgMap.hasOwnProperty(msgHash)){
-                        msgCount++;
-                        msgMap.set(msgHash,msgCount);
-                    }
                     var tempDay = new Date(receivedData[i].timestamp);
-                    dataM.push([mS[tempDay.getMonth()]+" - "+tempDay.getFullYear(),receivedData[i].values.classCount,receivedData[i].values.message,"ID :"+msgMap.get(msgHash)+"  - "+receivedData[i].values.message.substring(1,60)+"...",msgMap.get(msgHash)]);
+                    dataM.push([mS[tempDay.getMonth()]+" - "+tempDay.getFullYear(),receivedData[i].values.InvalidLoginCount,receivedData[i].values.AgentId]);
                 }
             }else if(timeFrame === "weekly"){
                 var weekNo =0;
                 while(!(newFrom.getTime() > newTo.getTime())){
-                    mockData.push(["W"+(++weekNo)+" "+mS[newFrom.getMonth()]+" - "+newFrom.getFullYear(),0,"No Entry","No Entry",0]);
+                    mockData.push(["W"+(++weekNo)+" "+mS[newFrom.getMonth()]+" - "+newFrom.getFullYear(),0,"No Entry"]);
                     newFrom.setHours(newFrom.getHours()+(24*7));
                 }
                 for (var i =0; i < receivedData.length ;i++){
-                    msgHash  =hashCode(receivedData[i].values.message);
-                    if(!msgMap.hasOwnProperty(msgHash)){
-                        msgCount++;
-                        msgMap.set(msgHash,msgCount);
-                    }
                     var tempDay = new Date(receivedData[i].timestamp);
-                    dataM.push(["W"+receivedData[i].values.week+" "+mS[tempDay.getMonth()]+" - "+tempDay.getFullYear(),receivedData[i].values.classCount,receivedData[i].values.message,"ID :"+msgMap.get(msgHash)+"  - "+receivedData[i].values.message.substring(1,60)+"...",msgMap.get(msgHash)]);
+                    dataM.push(["W"+receivedData[i].values.week+" "+mS[tempDay.getMonth()]+" - "+tempDay.getFullYear(),receivedData[i].values.InvalidLoginCount,receivedData[i].values.AgentId]);
                 }
             }
             drawChartByClass();
@@ -194,32 +184,17 @@ function fetch() {
 
 function drawChartByClass() {
     $("#chartInvalidLoginAttempts").empty();
-    $("#tableErrorMessage").empty();
     var configChart = {
         type: "bar",
         x : "day",
         colorScale:["#ecf0f1","#1abc9c", "#3498db", "#9b59b6", "#f1c40f","#e67e22","#e74c3c","#95a5a6","#2c3e50","#2ecc71","#F16272"],
         xAxisAngle: "true",
-        color:"message",
+        color:"agentID",
         charts : [{type: "bar",  y : "count", mode:"stack"}],
         width: $('body').width()+100,
         height: $('body').height(),
         padding: { "top": 10, "left": 80, "bottom": 70, "right": 500 },
-        tooltip: {"enabled":true, "color":"#e5f2ff", "type":"symbol", "content":["message","count","ID"], "label":true}
-    };
-
-    var configTable = {
-        key: "ID",
-        title:"LogErrorMessage",
-        charts: [{
-            type: "table",
-            columns: ["ID", "message","shortMessage","count","day" ],
-            columnTitles: ["Message ID", "Long Message", "Shorted Message", "Count", "Day"]
-        }
-        ],
-        width: $(window).width()* 0.95,
-        height: $(window).width() * 0.65 > $(window).height() ? $(window).height() : $(window).width() * 0.65,
-        padding: { "top": 100, "left": 30, "bottom": 22, "right": 70 }
+        tooltip: {"enabled":true, "color":"#e5f2ff", "type":"symbol", "content":["agentID","count","day"], "label":true}
     };
 
     var meta = {
@@ -231,7 +206,6 @@ function drawChartByClass() {
         console.log(dataM.length);
         var mapOther = [];
         newDataM = dataM.slice(0,9);
-       // newDataOtherM = dataM.slice(9,dataM.length);
         for (var i=9;i<dataM.length;i++){
             for(var k = 0; k < 10; k++){
             if(dataM[i][2] === dataM[k][2] ){
@@ -253,7 +227,7 @@ function drawChartByClass() {
         }
         for (var key in mapOther) {
             var value = mapOther[key];
-            newDataM.push([key,value,"Other","Other",key]);
+            newDataM.push([key,value,"Other"]);
         }
     }else{
         for(var i=0; i<dataM.length;i++){
@@ -302,7 +276,7 @@ function publish2 (data) {
         fromTime = new Date(item.datum.day);
 
         getFromToTime(fromTime,"daily");
-        if(item.datum.message === "Other"){
+        if(item.datum.agentID === "Other"){
             for (var i =0; i< newDataOtherM.length;i++){
 
                 if(newDataOtherM[i][0][0] === item.datum.day){
@@ -320,7 +294,7 @@ function publish2 (data) {
             publish(
                 {
                     "filter": gadgetConfig.id,
-                    "selected": item.datum.message,
+                    "selected": item.datum.agentID,
                      "fromTime": fromTime.getTime(),
                      "toTime": toTime.getTime()
                 }
