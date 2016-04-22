@@ -21,8 +21,8 @@ var gadgetConfig = {
     "title": "logApiTokenByStatus",
     "datasource": "LOGANALYZER_SUMARIES",
     "type": "batch",
-    "status": ["AUTH_FAIL_MISSING_INFO","INVALID_KEY","REVOKED_KEY"],
-    "statusDescription": ["No Auth Key on Header","Invalid Key","Revoked Key"],
+    "status": ["AUTH_FAIL_MISSING_INFO","INVALID_KEY"],
+    "statusDescription": ["No Auth Key on Header","Invalid Key"],
     "maxUpdateValue": 10,
     "chartConfig": {"yAxis": 2, "xAxis": 1, "chartType": "bar"},
     "domain": "carbon.super"

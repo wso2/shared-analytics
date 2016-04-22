@@ -44,18 +44,17 @@
     <!--<link rel="stylesheet" type="text/css" href="/portal/extensions/themes/analytics/css/gadget.css" />-->
 
     <!-- JS -->
-    <script src="js/jquery-1.10.2.js"></script>
+    <script src="../commons/js/jquery-1.10.2.js"></script>
     <script src="js/jquery.dataTables.js"></script>
-    <script src="js/d3.min.js"></script>
-    <script src="js/topojson.js"></script>
-    <script src="js/vega.js"></script>
-    <script src="js/VizGrammar.mini.js"></script>
-    <script src="js/VizGrammarSettings.js"></script>
+    <script src="../commons/js/d3.min.js"></script>
+    <script src="../commons/js/topojson.js"></script>
+    <script src="../commons/js/vega.js"></script>
+    <script src="../commons/js/VizGrammar.js"></script>
+    <script src="../commons/js/VizGrammarSettings.js"></script>
     <script src="js/gadgetconf.js"></script>
-    <script src="/portal/js/carbon-analytics.js"></script>
-    <script src="js/moment.js"></script>
-    <script src="js/moment.min.js"></script>
     <script src="js/Mustache.js"></script>
+    <script src="../commons/js/carbon-analytics.js"></script>
+    <script src="../commons/js/moment.min.js"></script>
 
 </head>
 <body style="margin-bottom: 0px;">

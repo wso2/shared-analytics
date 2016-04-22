@@ -89,7 +89,7 @@ function fetch() {
         var obj = JSON.parse(d["message"]);
         if (d["status"] === "success") {
             for (var i =0; i < obj.length ;i++){
-                dataM.push([obj[i].values._content,obj[i].values._class,obj[i].values._eventTimeStamp,obj[i].values._trace]);
+                dataM.push([obj[i].values._content,obj[i].values._class,new Date(obj[i].values._eventTimeStamp).toUTCString(),obj[i].values._trace]);
             }
             drawLogAPIMArtifactTableChart();
 
@@ -113,7 +113,7 @@ function drawLogAPIMArtifactTableChart() {
     table.draw(div);
     var table2 = $('#FilteredMessages').DataTable();
     $("#tableChart-FilteredMessages > tr").on( "click", function( event ) {
-        publish({timestamp : this.getElementsByClassName("timestamp")[0].textContent});
+        publish({timestamp : new Date(this.getElementsByClassName("timestamp")[0].textContent).getTime()});
     });
 }
 
