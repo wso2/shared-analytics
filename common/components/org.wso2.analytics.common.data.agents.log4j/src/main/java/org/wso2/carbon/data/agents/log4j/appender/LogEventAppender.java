@@ -73,6 +73,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     private static final String[] columns = {"serverName", "appName", "eventTimeStamp", "class", "level", "content", "ip",
             "instance", "trace"};
     private DataPublisher dataPublisher;
+    private ScheduledExecutorService scheduler;
     private ConditionalLayoutWrapper tenantIDLayout = new ConditionalLayoutWrapper();
     private ConditionalLayoutWrapper serverNameLayout = new ConditionalLayoutWrapper();
     private ConditionalLayoutWrapper appNameLayout = new ConditionalLayoutWrapper();
@@ -87,7 +88,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     @Override
     public void activateOptions() {
         loggingEvents = new ArrayBlockingQueue<>(processingLimit);
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(10);
+        scheduler = Executors.newScheduledThreadPool(10);
         scheduler.scheduleWithFixedDelay(new LogPublisherTask(), 10, 10, TimeUnit.MILLISECONDS);
 
         truststorePath = CarbonUtils.getCarbonHome() + truststorePath;
@@ -166,6 +167,14 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     }
 
     public void close() {
+        if(scheduler != null) {
+            scheduler.shutdown();
+            try {
+                scheduler.awaitTermination(10, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                log.warn("Interrupted while awaiting for Schedule Executor termination");
+            }
+        }
         try {
             if (dataPublisher != null) {
                 dataPublisher.shutdown();

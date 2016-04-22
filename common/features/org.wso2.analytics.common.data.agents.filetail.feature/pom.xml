@@ -28,7 +28,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <name>WSO2 - Analytics File Tail Feature</name>
-    <artifactId>org.wso2.carbon.data.agents.filetail.feature</artifactId>
+    <artifactId>org.wso2.analytics.common.data.agents.filetail.feature</artifactId>
     <packaging>pom</packaging>
 
     <dependencies>
@@ -73,7 +73,7 @@
   							<goal>p2-feature-gen</goal>
   						</goals>
   						<configuration>
-  							<id>org.wso2.carbon.analytics.util.spark</id>
+  							<id>org.wso2.analytics.common.data.agents.filetail</id>
   							<propertiesFile>../../etc/feature.properties</propertiesFile>
   							<adviceFile>
   								<properties>
@@ -82,7 +82,7 @@
   								</properties>
   							</adviceFile>
 							<bundles>
-								<bundleDef>org.wso2.analytics.common:org.wso2.carbon.analytics.util:${pom.version}</bundleDef>
+								<bundleDef>org.wso2.analytics.common:org.wso2.analytics.common.data.agents.filetail:${pom.version}</bundleDef>
 							</bundles>
   						</configuration>
   					</execution>
