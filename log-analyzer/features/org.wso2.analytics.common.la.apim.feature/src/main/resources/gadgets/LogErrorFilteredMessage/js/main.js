@@ -77,7 +77,7 @@ function fetch() {
     var queryInfo;
     console.log("FilteredMessagesFetching");
     queryInfo = {
-        tableName: "LOGANALYZER_NON_DUPLICATION",
+        tableName: "LOGANALYZER",
         searchParams: {
             query: "_content: \"" +filterdMessage+"\"",
             start : 0, //starting index of the matching record set
