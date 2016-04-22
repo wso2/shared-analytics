@@ -17,6 +17,7 @@
   ~ specific language governing permissions and limitations
   ~ under the License.
   -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
@@ -28,29 +29,15 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>org.wso2.carbon.data.agents.log4j</artifactId>
-    <name>WSO2 - Analytics Common Log4J appender</name>
+    <artifactId>org.wso2.analytics.common.data.agents.filetail</artifactId>
+    <name>WSO2 - Analytics Common Logger File Tail component</name>
     <packaging>bundle</packaging>
-    <description>Analytics Log4J appender</description>
+    <description>Analytics File Tail</description>
 
     <dependencies>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon.analytics-common</groupId>
-            <artifactId>org.wso2.carbon.databridge.commons</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon.commons</groupId>
-            <artifactId>org.wso2.carbon.logging.service</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon.analytics-common</groupId>
-            <artifactId>org.wso2.carbon.databridge.agent</artifactId>
-        </dependency>
+
     </dependencies>
+
 
     <build>
         <plugins>
@@ -75,22 +62,14 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
-                        <Export-Package>
-                            org.wso2.carbon.data.agents.log4j.*
-                        </Export-Package>
-                        <Import-Package>
-                            org.apache.log4j.*,
-                            org.apache.log4j.spi,
-                            org.wso2.carbon.base.*,
-                            org.wso2.carbon.context.*,
-                            org.wso2.carbon.databridge.agent.*,
-                            org.wso2.carbon.databridge.commons.*,
-                            org.wso2.carbon.logging.service.*,
-                            org.wso2.carbon.user.*,
-                            org.wso2.carbon.utils.*,
-                            *;resolution:=optional
-                        </Import-Package>
-                        <DynamicImport-Package>*</DynamicImport-Package>
+                        <Private-Package>org.wso2.carbon.analytics.common.internal.*</Private-Package>
+                        <!--<Export-Package>-->
+                            <!--!org.wso2.carbon.analytics.common.internal.*,-->
+                            <!--org.wso2.carbon.analytics.common.spark.*-->
+                        <!--</Export-Package>-->
+                        <!--<Import-Package>-->
+                            <!--org.wso2.carbon.analytics.spark.core.*-->
+                        <!--</Import-Package>-->
                     </instructions>
                 </configuration>
             </plugin>

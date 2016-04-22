@@ -76,10 +76,10 @@
                             <publishArtifactRepository>true</publishArtifactRepository>
                             <featureArtifacts>
                                 <featureArtifactDef>
-                                    org.wso2.analytics.common:org.wso2.carbon.analytics.common.la.apim.feature:${analytics.common.version}
+                                    org.wso2.analytics.common:org.wso2.analytics.common.la.apim.feature:${analytics.common.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.analytics.common:org.wso2.carbon.data.agents.log4j.feature:${analytics.common.version}
+                                    org.wso2.analytics.common:org.wso2.analytics.common.data.agents.log4j.feature:${analytics.common.version}
                                 </featureArtifactDef>
                             </featureArtifacts>
                         </configuration>
@@ -101,28 +101,6 @@
                             <artifactRepository>file:${basedir}/target/p2-repo</artifactRepository>
                         </configuration>
                     </execution>
-
-                    <!--<execution>-->
-                        <!--<id>3-p2-profile-generation</id>-->
-                        <!--<phase>package</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>p2-profile-gen</goal>-->
-                        <!--</goals>-->
-                        <!--<configuration>-->
-                            <!--<profile>default</profile>-->
-                            <!--<p2AgentLocation>${basedir}/target/p2-agent</p2AgentLocation>-->
-                            <!--<metadataRepository>file:${basedir}/target/p2-repo</metadataRepository>-->
-                            <!--<artifactRepository>file:${basedir}/target/p2-repo</artifactRepository>-->
-                            <!--<destination>-->
-                                <!--${basedir}/target/wso2carbon-core-${carbon.kernel.version}/repository/components-->
-                            <!--</destination>-->
-                            <!--<deleteOldProfileFiles>true</deleteOldProfileFiles>-->
-                            <!--<features>-->
-
-
-                            <!--</features>-->
-                        <!--</configuration>-->
-                    <!--</execution>-->
 
                 </executions>
             </plugin>

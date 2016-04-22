@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
   ~
@@ -26,8 +27,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <name>WSO2 - Analytics Spark scripts Common Feature</name>
-    <artifactId>org.wso2.carbon.analytics.util.spark.feature</artifactId>
+    <name>WSO2 - Analytics Log4J Appender Feature</name>
+    <artifactId>org.wso2.analytics.common.data.agents.log4j.feature</artifactId>
     <packaging>pom</packaging>
 
     <dependencies>
@@ -72,16 +73,17 @@
   							<goal>p2-feature-gen</goal>
   						</goals>
   						<configuration>
-  							<id>org.wso2.carbon.analytics.util.spark</id>
+  							<id>org.wso2.analytics.common.data.agents.log4j</id>
   							<propertiesFile>../../etc/feature.properties</propertiesFile>
+							<licence>${license}</licence>
   							<adviceFile>
   								<properties>
   									<propertyDef>org.wso2.carbon.p2.category.type:server</propertyDef>
-                    <propertyDef>org.eclipse.equinox.p2.type.group:true</propertyDef>
+                    				<propertyDef>org.eclipse.equinox.p2.type.group:true</propertyDef>
   								</properties>
   							</adviceFile>
 							<bundles>
-								<bundleDef>org.wso2.analytics.common:org.wso2.carbon.analytics.util:${pom.version}</bundleDef>
+								<bundleDef>org.wso2.analytics.common:org.wso2.analytics.common.data.agents.log4j:${pom.version}</bundleDef>
 							</bundles>
   						</configuration>
   					</execution>

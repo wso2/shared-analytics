@@ -30,8 +30,8 @@
     <name>WSO2 - Analytics common components aggregate</name>
     <packaging>pom</packaging>
     <modules>
-        <module>org.wso2.carbon.analytics.util</module>
-        <module>org.wso2.carbon.data.agents.log4j</module>
-        <module>org.wso2.carbon.data.agents.filetail</module>
+        <module>org.wso2.analytics.common.spark.util</module>
+        <module>org.wso2.analytics.common.data.agents.log4j</module>
+        <module>org.wso2.analytics.common.data.agents.filetail</module>
     </modules>
 </project>

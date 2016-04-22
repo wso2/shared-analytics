@@ -30,6 +30,6 @@
     <name>WSO2 - Log Analyzer APIM features</name>
     <packaging>pom</packaging>
     <modules>
-        <module>org.wso2.carbon.analytics.common.la.apim.feature</module>
+        <module>org.wso2.analytics.common.la.apim.feature</module>
     </modules>
 </project>
