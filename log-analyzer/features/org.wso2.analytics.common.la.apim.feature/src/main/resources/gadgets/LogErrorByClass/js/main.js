@@ -143,7 +143,7 @@ function fetch() {
                 newTo.setMinutes(0);
                 newTo.setSeconds(0);
                 while(!(newFrom.getTime() >= newTo.getTime())){
-                    mockData.push([newFrom.toDateString(),0,"No Entry",0]);
+                    mockData.push([newFrom.toDateString(),0,"No entries",0]);
                     newFrom.setHours(newFrom.getHours()+24);
                 }
                 for (var i =0; i < receivedData.length ;i++){
@@ -159,7 +159,7 @@ function fetch() {
                 newFrom.setDate(1);
                 newTo.setDate(1);
                 while(!(newFrom.getTime() >= newTo.getTime())){
-                    mockData.push([mS[newFrom.getMonth()]+" - "+newFrom.getFullYear(),0,"No Entry",0]);
+                    mockData.push([mS[newFrom.getMonth()]+" - "+newFrom.getFullYear(),0,"No entries",0]);
                     newFrom.setMonth(newFrom.getMonth()+1);
                 }
                 for (var i =0; i < receivedData.length ;i++){
@@ -174,7 +174,7 @@ function fetch() {
             }else if(timeFrame === "weekly"){
                 var weekNo =0;
                 while(!(newFrom.getTime() > newTo.getTime())){
-                    mockData.push(["W"+(++weekNo)+" "+mS[newFrom.getMonth()]+" - "+newFrom.getFullYear(),0,"No Entry",0]);
+                    mockData.push(["W"+(++weekNo)+" "+mS[newFrom.getMonth()]+" - "+newFrom.getFullYear(),0,"No entries",0]);
                     newFrom.setHours(newFrom.getHours()+(24*7));
                 }
                 for (var i =0; i < receivedData.length ;i++){
