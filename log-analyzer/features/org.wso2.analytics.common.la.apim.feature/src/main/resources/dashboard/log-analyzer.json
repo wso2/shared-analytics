@@ -592,7 +592,7 @@
     }
   }, {
     "id": "page4",
-    "title": "Number of API failures",
+    "title": "Number of API Failures",
     "layout": {
       "content": {
         "loggedIn": {
