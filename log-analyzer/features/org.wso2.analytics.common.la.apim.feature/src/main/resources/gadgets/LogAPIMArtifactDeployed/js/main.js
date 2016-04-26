@@ -20,7 +20,7 @@ var serverUrl = "https://"+location.hostname +":"+ gatewayPort+"/LogAnalyzerRest
 var client = new AnalyticsClient().init(null, null, serverUrl);
 var div = "#tblArtifactDeployed";
 var table;
-var from = new Date(moment().subtract(1, 'year')).getTime();
+var from = new Date(moment().subtract(29, 'days')).getTime();
 var to = new Date(moment()).getTime();
 var dataM = [];
 var initState = true;
