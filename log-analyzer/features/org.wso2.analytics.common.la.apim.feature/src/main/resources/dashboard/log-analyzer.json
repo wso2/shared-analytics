@@ -265,16 +265,9 @@
             "id": "logViewer",
             "title": "Log Viewer",
             "type": "gadget",
-            "category": "Widgets",
             "thumbnail": "store://gadget/LogViewer/index.png",
             "data": {
               "url": "store://gadget/LogViewer/index.xml"
-            },
-            "options": {
-              "content": {
-                "type": "text",
-                "value": ""
-              }
             },
             "styles": {
               "no_heading": false,
@@ -799,16 +792,9 @@
             "id": "logViewer",
             "title": "Log Viewer",
             "type": "gadget",
-            "category": "Widgets",
             "thumbnail": "store://gadget/LogViewer/index.png",
             "data": {
               "url": "store://gadget/LogViewer/index.xml"
-            },
-            "options": {
-              "content": {
-                "type": "text",
-                "value": ""
-              }
             },
             "styles": {
               "no_heading": false,
