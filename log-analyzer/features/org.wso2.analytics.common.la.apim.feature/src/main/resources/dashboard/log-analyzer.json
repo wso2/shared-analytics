@@ -13,42 +13,18 @@
       "content": {
         "loggedIn": {
           "blocks": [{
-            "id": "1dd809888e46518100f6e7570c0f5344",
+            "id": "22b1b1d384356c1662a1334f0f78b880",
             "x": 0,
             "y": 0,
-            "width": 12,
-            "height": 1,
-            "banner": false
-          }, {
-            "id": "a66b15191a1d6f7a473b64d3d842d750",
-            "x": 0,
-            "y": 1,
-            "width": 12,
-            "height": 2,
-            "banner": false
-          }]
-        },
-        "anon": {
-          "blocks": [{
-            "id": "1dd809888e46518100f6e7570c0f5344",
-            "x": 0,
-            "y": 0,
-            "width": 12,
-            "height": 1,
-            "banner": false
-          }, {
-            "id": "81ae5703e75b4641898f6bfd57570f17",
-            "x": 0,
-            "y": 1,
             "width": 12,
             "height": 2,
             "banner": false
           }, {
-            "id": "905af2a7e3dd2db3e7952fcf930cd921",
+            "id": "bdb6b75f3e9a689ad69732db33ec5fcf",
             "x": 0,
-            "y": 3,
-            "width": 7,
-            "height": 3,
+            "y": 2,
+            "width": 12,
+            "height": 4,
             "banner": false
           }]
         }
@@ -58,7 +34,7 @@
     "isanon": false,
     "content": {
       "default": {
-        "1dd809888e46518100f6e7570c0f5344": [{
+        "22b1b1d384356c1662a1334f0f78b880": [{
           "id": "Date_Range_Picker-0",
           "content": {
             "id": "Date_Range_Picker",
@@ -89,7 +65,7 @@
             "locale_titles": {}
           }
         }],
-        "a66b15191a1d6f7a473b64d3d842d750": [{
+        "bdb6b75f3e9a689ad69732db33ec5fcf": [{
           "id": "logEvents-0",
           "content": {
             "id": "logEvents",
@@ -111,6 +87,7 @@
             },
             "styles": {
               "no_heading": false,
+              "hide_gadget": false,
               "titlePosition": "left",
               "title": "Log Events"
             },
@@ -131,39 +108,39 @@
       "content": {
         "loggedIn": {
           "blocks": [{
-            "id": "2e9fd969e85a6e7c352f55cef2c11557",
+            "id": "8c81bdf3b17a444906ffe8c492f7ecf4",
             "x": 0,
             "y": 0,
             "width": 12,
-            "height": 1,
-            "banner": false
-          }, {
-            "id": "1c5b5dfffa31fb53ba154f5d0f232011",
-            "x": 0,
-            "y": 1,
-            "width": 12,
             "height": 2,
             "banner": false
           }, {
-            "id": "8145a6209fb996cd37a2d782ddf8dfd5",
+            "id": "b7070a628612936526ad31acc1bec14e",
             "x": 0,
-            "y": 5,
+            "y": 2,
             "width": 12,
-            "height": 2,
+            "height": 4,
             "banner": false
           }, {
-            "id": "6e923ac3fe9960bb7ac590742ed5ce11",
+            "id": "9b685f760aa760d3186688dbeba28bac",
             "x": 0,
-            "y": 3,
+            "y": 6,
             "width": 12,
-            "height": 2,
+            "height": 4,
             "banner": false
           }, {
-            "id": "4cb8d5fcbb685cbc0b897b935a5b657d",
+            "id": "254ff8e034ece9e0959d6bc90c503f39",
             "x": 0,
-            "y": 7,
+            "y": 10,
             "width": 12,
-            "height": 2,
+            "height": 4,
+            "banner": false
+          }, {
+            "id": "6aab8a0f6f6147a99f42bfae7c940b86",
+            "x": 0,
+            "y": 14,
+            "width": 12,
+            "height": 4,
             "banner": false
           }]
         }
@@ -173,7 +150,7 @@
     "isanon": false,
     "content": {
       "default": {
-        "2e9fd969e85a6e7c352f55cef2c11557": [{
+        "8c81bdf3b17a444906ffe8c492f7ecf4": [{
           "id": "Date_Range_Picker-0",
           "content": {
             "id": "Date_Range_Picker",
@@ -204,7 +181,7 @@
             "locale_titles": {}
           }
         }],
-        "1c5b5dfffa31fb53ba154f5d0f232011": [{
+        "b7070a628612936526ad31acc1bec14e": [{
           "id": "logErrorByMessage-0",
           "content": {
             "id": "logErrorByMessage",
@@ -232,6 +209,7 @@
             },
             "styles": {
               "no_heading": false,
+              "hide_gadget": false,
               "titlePosition": "left",
               "title": "Log ERROR by Message"
             },
@@ -242,11 +220,11 @@
             "settings": {}
           }
         }],
-        "6e923ac3fe9960bb7ac590742ed5ce11": [{
+        "9b685f760aa760d3186688dbeba28bac": [{
           "id": "filteredLogMessages-0",
           "content": {
             "id": "filteredLogMessages",
-            "title": "APIM Filtered Messages",
+            "title": "Filtered Messages",
             "type": "gadget",
             "thumbnail": "store://gadget/LogErrorFilteredMessage/img/thumbnail.png",
             "data": {
@@ -270,35 +248,30 @@
             },
             "styles": {
               "no_heading": false,
+              "hide_gadget": false,
               "titlePosition": "left",
-              "title": "APIM Filtered Messages"
+              "title": "Filtered Messages"
             },
             "options": {},
             "locale_titles": {
-              "en-US": "APIM Filtered Messages"
+              "en-US": "Filtered Messages"
             },
             "settings": {}
           }
         }],
-        "8145a6209fb996cd37a2d782ddf8dfd5": [{
+        "254ff8e034ece9e0959d6bc90c503f39": [{
           "id": "logViewer-0",
           "content": {
             "id": "logViewer",
             "title": "Log Viewer",
             "type": "gadget",
-            "category": "Widgets",
             "thumbnail": "store://gadget/LogViewer/index.png",
             "data": {
               "url": "store://gadget/LogViewer/index.xml"
             },
-            "options": {
-              "content": {
-                "type": "text",
-                "value": ""
-              }
-            },
             "styles": {
               "no_heading": false,
+              "hide_gadget": false,
               "titlePosition": "left",
               "title": "Log Viewer"
             },
@@ -318,7 +291,7 @@
             "settings": {}
           }
         }],
-        "4cb8d5fcbb685cbc0b897b935a5b657d": [{
+        "6aab8a0f6f6147a99f42bfae7c940b86": [{
           "id": "logErrorByClass-0",
           "content": {
             "id": "logErrorByClass",
@@ -339,15 +312,11 @@
               }
             },
             "styles": {
-              "no_heading": false,
-              "titlePosition": "left",
-              "title": "Log ERROR by Class"
+              "title": "Log ERROR by Class",
+              "borders": true
             },
             "options": {},
-            "locale_titles": {
-              "en-US": "Log ERROR by Class"
-            },
-            "settings": {}
+            "locale_titles": {}
           }
         }]
       },
@@ -360,24 +329,24 @@
       "content": {
         "loggedIn": {
           "blocks": [{
-            "id": "b351cb1b35b8e2872065ca18ef39467b",
+            "id": "2a747b9cb9832d8295b38bd84fffb73d",
+            "x": 6,
+            "y": 2,
+            "width": 6,
+            "height": 4,
+            "banner": false
+          }, {
+            "id": "ad13f84865bff660220b26826a0766d1",
+            "x": 0,
+            "y": 2,
+            "width": 6,
+            "height": 4,
+            "banner": false
+          }, {
+            "id": "bbd843a1da77248bfd02241b6b356182",
             "x": 0,
             "y": 0,
             "width": 12,
-            "height": 1,
-            "banner": false
-          }, {
-            "id": "120b123a0ab5373315a9e8a0838379e0",
-            "x": 6,
-            "y": 1,
-            "width": 6,
-            "height": 2,
-            "banner": false
-          }, {
-            "id": "0eb791ace72bfe8d0561f87f6ada786e",
-            "x": 0,
-            "y": 1,
-            "width": 6,
             "height": 2,
             "banner": false
           }]
@@ -388,7 +357,7 @@
     "isanon": false,
     "content": {
       "default": {
-        "b351cb1b35b8e2872065ca18ef39467b": [{
+        "bbd843a1da77248bfd02241b6b356182": [{
           "id": "Date_Range_Picker-0",
           "content": {
             "id": "Date_Range_Picker",
@@ -419,43 +388,11 @@
             "locale_titles": {}
           }
         }],
-        "120b123a0ab5373315a9e8a0838379e0": [{
-          "id": "logAPIMArtifactDeleted-0",
-          "content": {
-            "id": "logAPIMArtifactDeleted",
-            "title": "APIM Artifact Deleted",
-            "type": "gadget",
-            "thumbnail": "store://gadget/LogAPIMArtifactDeleted/img/thumbnail.png",
-            "data": {
-              "url": "store://gadget/LogAPIMArtifactDeleted/index.xml"
-            },
-            "listen": {
-              "subscriber": {
-                "type": "date-range",
-                "description": "Used to listen to any date range-selected",
-                "on": [{
-                  "from": "Date_Range_Picker-0",
-                  "event": "range-selected"
-                }]
-              }
-            },
-            "styles": {
-              "no_heading": false,
-              "titlePosition": "left",
-              "title": "APIM Artifact Deleted"
-            },
-            "options": {},
-            "locale_titles": {
-              "en-US": "APIM Artifact Deleted"
-            },
-            "settings": {}
-          }
-        }],
-        "0eb791ace72bfe8d0561f87f6ada786e": [{
+        "ad13f84865bff660220b26826a0766d1": [{
           "id": "logAPIMArtifactDeployed-0",
           "content": {
             "id": "logAPIMArtifactDeployed",
-            "title": "Log APIM Artifact Table",
+            "title": "Deployed Artifacts",
             "type": "gadget",
             "thumbnail": "store://gadget/LogAPIMArtifactDeployed/img/thumbnail.png",
             "data": {
@@ -464,23 +401,39 @@
             "listen": {
               "subscriber": {
                 "type": "date-range",
-                "description": "Used to listen to any date range-selected",
-                "on": [{
-                  "from": "Date_Range_Picker-0",
-                  "event": "range-selected"
-                }]
+                "description": "Used to listen to any date range-selected"
               }
             },
             "styles": {
-              "no_heading": false,
-              "titlePosition": "left",
-              "title": "Log APIM Artifact Table"
+              "title": "Deployed Artifacts",
+              "borders": true
             },
             "options": {},
-            "locale_titles": {
-              "en-US": "Log APIM Artifact Table"
+            "locale_titles": {}
+          }
+        }],
+        "2a747b9cb9832d8295b38bd84fffb73d": [{
+          "id": "logAPIMArtifactDeleted-0",
+          "content": {
+            "id": "logAPIMArtifactDeleted",
+            "title": "Deleted Artifacts",
+            "type": "gadget",
+            "thumbnail": "store://gadget/LogAPIMArtifactDeleted/img/thumbnail.png",
+            "data": {
+              "url": "store://gadget/LogAPIMArtifactDeleted/index.xml"
             },
-            "settings": {}
+            "listen": {
+              "subscriber": {
+                "type": "date-range",
+                "description": "Used to listen to any date range-selected"
+              }
+            },
+            "styles": {
+              "title": "Deleted Artifacts",
+              "borders": true
+            },
+            "options": {},
+            "locale_titles": {}
           }
         }]
       },
@@ -493,18 +446,18 @@
       "content": {
         "loggedIn": {
           "blocks": [{
-            "id": "0efc94ba0274005ef77aa421ed0c191d",
-            "x": 0,
-            "y": 1,
-            "width": 12,
-            "height": 3,
-            "banner": false
-          }, {
-            "id": "0f971887a9e79538b400e10d2a4db032",
+            "id": "8453ced9ed418d9f72607dd1587cb8b3",
             "x": 0,
             "y": 0,
             "width": 12,
-            "height": 1,
+            "height": 2,
+            "banner": false
+          }, {
+            "id": "063ff1720a5475b24d58da958b52508c",
+            "x": 0,
+            "y": 2,
+            "width": 12,
+            "height": 5,
             "banner": false
           }]
         }
@@ -514,7 +467,7 @@
     "isanon": false,
     "content": {
       "default": {
-        "0f971887a9e79538b400e10d2a4db032": [{
+        "8453ced9ed418d9f72607dd1587cb8b3": [{
           "id": "Date_Range_Picker-0",
           "content": {
             "id": "Date_Range_Picker",
@@ -545,11 +498,11 @@
             "locale_titles": {}
           }
         }],
-        "0efc94ba0274005ef77aa421ed0c191d": [{
+        "063ff1720a5475b24d58da958b52508c": [{
           "id": "invalidLoggingCount-0",
           "content": {
             "id": "invalidLoggingCount",
-            "title": "Invalid login count",
+            "title": "Invalid Login Count",
             "type": "gadget",
             "thumbnail": "store://gadget/LogInvalidLoggingCount/img/thumbnail.png",
             "data": {
@@ -577,12 +530,13 @@
             },
             "styles": {
               "no_heading": false,
+              "hide_gadget": false,
               "titlePosition": "left",
-              "title": "Invalid login count"
+              "title": "Invalid Login Count"
             },
             "options": {},
             "locale_titles": {
-              "en-US": "Invalid login count"
+              "en-US": "Invalid Login Count"
             },
             "settings": {}
           }
@@ -597,18 +551,18 @@
       "content": {
         "loggedIn": {
           "blocks": [{
-            "id": "f3e006e5a2ab1564c41dc9f408c75576",
+            "id": "abc22735ab9d1976724fb08e4ae0f0ce",
             "x": 0,
             "y": 0,
             "width": 12,
-            "height": 1,
+            "height": 2,
             "banner": false
           }, {
-            "id": "29421380c12c9fe161ce34e4a7494922",
+            "id": "84bf77f42cf4583c2a2a1589fce1149a",
             "x": 0,
-            "y": 1,
+            "y": 2,
             "width": 12,
-            "height": 2,
+            "height": 4,
             "banner": false
           }]
         }
@@ -618,7 +572,7 @@
     "isanon": false,
     "content": {
       "default": {
-        "f3e006e5a2ab1564c41dc9f408c75576": [{
+        "abc22735ab9d1976724fb08e4ae0f0ce": [{
           "id": "Date_Range_Picker-0",
           "content": {
             "id": "Date_Range_Picker",
@@ -649,7 +603,7 @@
             "locale_titles": {}
           }
         }],
-        "29421380c12c9fe161ce34e4a7494922": [{
+        "84bf77f42cf4583c2a2a1589fce1149a": [{
           "id": "logAPIMMessageProcessing-0",
           "content": {
             "id": "logAPIMMessageProcessing",
@@ -671,6 +625,7 @@
             },
             "styles": {
               "no_heading": false,
+              "hide_gadget": false,
               "titlePosition": "left",
               "title": "ERRORs in API Message Processing"
             },
@@ -686,35 +641,35 @@
     }
   }, {
     "id": "page5",
-    "title": "APIM Access Token Errors",
+    "title": "Access Token Errors",
     "layout": {
       "content": {
         "loggedIn": {
           "blocks": [{
-            "id": "60f02d1dab21ec322a2c7310f14c87eb",
+            "id": "1572c6dd6faa5358b024eccae273b7c1",
             "x": 0,
             "y": 0,
             "width": 12,
-            "height": 1,
+            "height": 2,
             "banner": false
           }, {
-            "id": "890ef706dfe44cb6809a7c14dd9492f1",
+            "id": "7514a9be43d934be338512df7003f2e4",
             "x": 0,
-            "y": 3,
+            "y": 6,
             "width": 12,
-            "height": 2,
+            "height": 4,
             "banner": false
           }, {
-            "id": "a6145587894e7ca736baf3d24b4f8d01",
+            "id": "25b799fd94b1a6067de5cce00e1925e9",
             "x": 0,
-            "y": 1,
+            "y": 2,
             "width": 6,
-            "height": 2,
+            "height": 4,
             "banner": false
           }, {
-            "id": "a514b3fa246dc322daa609cc1698826b",
+            "id": "ad538e4951dbb20825f5923c5f6b0a35",
             "x": 0,
-            "y": 5,
+            "y": 10,
             "width": 12,
             "height": 4,
             "banner": false
@@ -726,7 +681,7 @@
     "isanon": false,
     "content": {
       "default": {
-        "60f02d1dab21ec322a2c7310f14c87eb": [{
+        "1572c6dd6faa5358b024eccae273b7c1": [{
           "id": "Date_Range_Picker-0",
           "content": {
             "id": "Date_Range_Picker",
@@ -757,49 +712,11 @@
             "locale_titles": {}
           }
         }],
-        "890ef706dfe44cb6809a7c14dd9492f1": [{
-          "id": "logApiTokenStatusTable-0",
-          "content": {
-            "id": "logApiTokenStatusTable",
-            "title": "APIM API Key Status table",
-            "type": "gadget",
-            "thumbnail": "store://gadget/LogApiTokenByStatusTable/img/thumbnail.png",
-            "data": {
-              "url": "store://gadget/LogApiTokenByStatusTable/index.xml"
-            },
-            "notify": {
-              "publisher": {
-                "type": "filter-range",
-                "description": "This notifies the log time range selected"
-              }
-            },
-            "listen": {
-              "api-keys-subscriber": {
-                "type": "api-key-filter",
-                "description": "Used to listen to any filters",
-                "on": [{
-                  "from": "logApiTokenByStatus-0",
-                  "event": "publisher"
-                }]
-              }
-            },
-            "styles": {
-              "no_heading": false,
-              "titlePosition": "left",
-              "title": "APIM API Key Status table"
-            },
-            "options": {},
-            "locale_titles": {
-              "en-US": "APIM API Key Status table"
-            },
-            "settings": {}
-          }
-        }],
-        "a6145587894e7ca736baf3d24b4f8d01": [{
+        "25b799fd94b1a6067de5cce00e1925e9": [{
           "id": "logApiTokenByStatus-0",
           "content": {
             "id": "logApiTokenByStatus",
-            "title": "Log API Token Status",
+            "title": "API Token Status",
             "type": "gadget",
             "thumbnail": "store://gadget/LogApiTokenByStatus/img/thumbnail.png",
             "data": {
@@ -823,35 +740,69 @@
             },
             "styles": {
               "no_heading": false,
+              "hide_gadget": false,
               "titlePosition": "left",
-              "title": "Log API Token Status"
+              "title": "API Token Status"
             },
             "options": {},
             "locale_titles": {
-              "en-US": "Log API Token Status"
+              "en-US": "API Token Status"
             },
             "settings": {}
           }
         }],
-        "a514b3fa246dc322daa609cc1698826b": [{
+        "7514a9be43d934be338512df7003f2e4": [{
+          "id": "logApiTokenStatusTable-0",
+          "content": {
+            "id": "logApiTokenStatusTable",
+            "title": "API Key Status Table",
+            "type": "gadget",
+            "thumbnail": "store://gadget/LogApiTokenByStatusTable/img/thumbnail.png",
+            "data": {
+              "url": "store://gadget/LogApiTokenByStatusTable/index.xml"
+            },
+            "notify": {
+              "publisher": {
+                "type": "filter-range",
+                "description": "This notifies the log time range selected"
+              }
+            },
+            "listen": {
+              "api-keys-subscriber": {
+                "type": "api-key-filter",
+                "description": "Used to listen to any filters",
+                "on": [{
+                  "from": "logApiTokenByStatus-0",
+                  "event": "publisher"
+                }]
+              }
+            },
+            "styles": {
+              "no_heading": false,
+              "hide_gadget": false,
+              "titlePosition": "left",
+              "title": "API Key Status Table"
+            },
+            "options": {},
+            "locale_titles": {
+              "en-US": "API Key Status Table"
+            },
+            "settings": {}
+          }
+        }],
+        "ad538e4951dbb20825f5923c5f6b0a35": [{
           "id": "logViewer-0",
           "content": {
             "id": "logViewer",
             "title": "Log Viewer",
             "type": "gadget",
-            "category": "Widgets",
             "thumbnail": "store://gadget/LogViewer/index.png",
             "data": {
               "url": "store://gadget/LogViewer/index.xml"
             },
-            "options": {
-              "content": {
-                "type": "text",
-                "value": ""
-              }
-            },
             "styles": {
               "no_heading": false,
+              "hide_gadget": false,
               "titlePosition": "left",
               "title": "Log Viewer"
             },

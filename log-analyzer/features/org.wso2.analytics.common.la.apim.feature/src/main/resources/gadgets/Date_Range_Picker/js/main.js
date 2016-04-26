@@ -4,8 +4,10 @@ var href = parent.window.location.href,
 
 var TOPIC = "range-selected";
 $(function() {
-    var dateLabel = $('#reportrange .btn-label');
+    var dateLabel = $('#reportrange .btn-label'),
+        datePickerBtn = $('#btnCustomRange');
     //if there are url elemements present, use them. Otherwis use last hour
+
     var timeFrom = moment().subtract(29, 'days');
     var timeTo = moment();
     var message = {};
@@ -47,13 +49,25 @@ $(function() {
             $("#reportrange #btnCustomRange").addClass("active");
         }
     }
+    
+    $(datePickerBtn).on('apply.daterangepicker', function(ev, picker) {
+        cb(picker.startDate, picker.endDate);
+    });
+    
+    $(datePickerBtn).on('show.daterangepicker', function(ev, picker) {
+        $(this).attr('aria-expanded', 'true');
+    });
+    
+    $(datePickerBtn).on('hide.daterangepicker', function(ev, picker) {
+        $(this).attr('aria-expanded', 'false');
+    });
 
-    $('#btnCustomRange').daterangepicker({
+    $(datePickerBtn).daterangepicker({
         "timePicker": true,
         "autoApply": true,
         "alwaysShowCalendars": true,
         "opens": "left"
-    }, cb);
+    });
 
     $("#btnLastHour").click(function() {
         dateLabel.html(moment().subtract(1, 'hours').format('MMMM D, YYYY hh:mm A') + ' - ' + moment().format('MMMM D, YYYY hh:mm A'));
@@ -132,7 +146,7 @@ function onChartZoomed(data) {
 $(window).load(function() {
     var datePicker = $('.daterangepicker'),
         parentWindow = window.parent.document,
-        thisParentWrapper = $('#' + gadgets.rpc.RPC_ID, parentWindow).closest('.gadget-body');
+        thisParentWrapper = $('#' + gadgets.rpc.RPC_ID, parentWindow).closest('.grid-stack-item');
 
     $('head', parentWindow).append('<link rel="stylesheet" type="text/css" href="' + resolveURI + 'store/carbon.super/gadget/Date_Range_Picker/css/daterangepicker.css" />');
     $('body', parentWindow).append('<script src="' + resolveURI + 'store/carbon.super/gadget/Date_Range_Picker/js/daterangepicker.js" type="text/javascript"></script>');
