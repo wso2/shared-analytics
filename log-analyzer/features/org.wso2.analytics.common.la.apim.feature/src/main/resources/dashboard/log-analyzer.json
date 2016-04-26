@@ -304,7 +304,11 @@
             "listen": {
               "subscriber": {
                 "type": "date-range",
-                "description": "Used to listen to any date range-selected"
+                "description": "Used to listen to any date range-selected",
+                "on": [{
+                  "from": "Date_Range_Picker-0",
+                  "event": "range-selected"
+                }]
               }
             },
             "styles": {
