@@ -250,11 +250,11 @@
               "no_heading": false,
               "hide_gadget": false,
               "titlePosition": "left",
-              "title": "APIM Filtered Messages"
+              "title": "Filtered Messages"
             },
             "options": {},
             "locale_titles": {
-              "en-US": "APIM Filtered Messages"
+              "en-US": "Filtered Messages"
             },
             "settings": {}
           }
@@ -401,7 +401,7 @@
               }
             },
             "styles": {
-              "title": "Log APIM Artifact Deployed",
+              "title": "Deployed Artifacts",
               "borders": true
             },
             "options": {},
@@ -425,7 +425,7 @@
               }
             },
             "styles": {
-              "title": "APIM Artifact Deleted",
+              "title": "Deleted Artifacts",
               "borders": true
             },
             "options": {},
@@ -528,11 +528,11 @@
               "no_heading": false,
               "hide_gadget": false,
               "titlePosition": "left",
-              "title": "Invalid login count"
+              "title": "Invalid Login Count"
             },
             "options": {},
             "locale_titles": {
-              "en-US": "Invalid login count"
+              "en-US": "Invalid Login Count"
             },
             "settings": {}
           }
@@ -738,11 +738,11 @@
               "no_heading": false,
               "hide_gadget": false,
               "titlePosition": "left",
-              "title": "Log API Token Status"
+              "title": "API Token Status"
             },
             "options": {},
             "locale_titles": {
-              "en-US": "Log API Token Status"
+              "en-US": "API Token Status"
             },
             "settings": {}
           }
@@ -777,11 +777,11 @@
               "no_heading": false,
               "hide_gadget": false,
               "titlePosition": "left",
-              "title": "APIM API Key Status table"
+              "title": "API Key Status Table"
             },
             "options": {},
             "locale_titles": {
-              "en-US": "APIM API Key Status table"
+              "en-US": "API Key Status Table"
             },
             "settings": {}
           }
