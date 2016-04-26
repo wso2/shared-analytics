@@ -1,6 +1,6 @@
 {
   "id": "log-analyzer",
-  "title": "Log Analyzer For APIM",
+  "title": "Log Analyzer for APIM",
   "description": "",
   "permissions": {
     "viewers": ["Internal/everyone"],
@@ -224,7 +224,7 @@
           "id": "filteredLogMessages-0",
           "content": {
             "id": "filteredLogMessages",
-            "title": "APIM Filtered Messages",
+            "title": "Filtered Messages",
             "type": "gadget",
             "thumbnail": "store://gadget/LogErrorFilteredMessage/img/thumbnail.png",
             "data": {
@@ -388,7 +388,7 @@
           "id": "logAPIMArtifactDeployed-0",
           "content": {
             "id": "logAPIMArtifactDeployed",
-            "title": "Log APIM Artifact Deployed",
+            "title": "Deployed Artifacts",
             "type": "gadget",
             "thumbnail": "store://gadget/LogAPIMArtifactDeployed/img/thumbnail.png",
             "data": {
@@ -412,7 +412,7 @@
           "id": "logAPIMArtifactDeleted-0",
           "content": {
             "id": "logAPIMArtifactDeleted",
-            "title": "APIM Artifact Deleted",
+            "title": "Deleted Artifacts",
             "type": "gadget",
             "thumbnail": "store://gadget/LogAPIMArtifactDeleted/img/thumbnail.png",
             "data": {
@@ -498,7 +498,7 @@
           "id": "invalidLoggingCount-0",
           "content": {
             "id": "invalidLoggingCount",
-            "title": "Invalid login count",
+            "title": "Invalid Login Count",
             "type": "gadget",
             "thumbnail": "store://gadget/LogInvalidLoggingCount/img/thumbnail.png",
             "data": {
@@ -637,7 +637,7 @@
     }
   }, {
     "id": "page5",
-    "title": "APIM Access Token Errors",
+    "title": "Access Token Errors",
     "layout": {
       "content": {
         "loggedIn": {
@@ -712,7 +712,7 @@
           "id": "logApiTokenByStatus-0",
           "content": {
             "id": "logApiTokenByStatus",
-            "title": "Log API Token Status",
+            "title": "API Token Status",
             "type": "gadget",
             "thumbnail": "store://gadget/LogApiTokenByStatus/img/thumbnail.png",
             "data": {
@@ -751,7 +751,7 @@
           "id": "logApiTokenStatusTable-0",
           "content": {
             "id": "logApiTokenStatusTable",
-            "title": "APIM API Key Status table",
+            "title": "API Key Status Table",
             "type": "gadget",
             "thumbnail": "store://gadget/LogApiTokenByStatusTable/img/thumbnail.png",
             "data": {
