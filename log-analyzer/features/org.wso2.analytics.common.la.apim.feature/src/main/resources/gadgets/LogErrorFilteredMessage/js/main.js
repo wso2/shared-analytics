@@ -144,10 +144,10 @@ subscribe(function (topic, data, subscriber) {
         duration = from.getDate() + 1;
         to.setDate(duration);
     } else if (filterdTimeframe === "monthly") {
-        duration = from.getMonth + 1;
+        duration = from.getMonth() + 1;
         to.setMonth(duration);
     } else if (filterdTimeframe === "weekly") {
-        duration = from.getDate + 7;
+        duration = from.getDate() + 7;
         to.setDate(duration);
     }
     from = from.getTime();
