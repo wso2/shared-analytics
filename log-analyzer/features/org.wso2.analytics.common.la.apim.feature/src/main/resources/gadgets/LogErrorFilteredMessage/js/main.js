@@ -22,10 +22,8 @@ var div = "#tblFilteredMessages";
 var from;
 var to;
 var dataM = [];
-var initState = true;
 var filterdMessage;
-var filterdTimestamp;
-var filterdTimeframe;
+var filteredCount;
 
 var meta = {
     "names": ["message", "class", "timestamp", "trace"],
@@ -48,7 +46,6 @@ var configTable = {
 
 
 function initialize() {
-    //fetch();
     $(div).html(getDefaultText());
 }
 
@@ -77,16 +74,14 @@ $(document).ready(function () {
 function fetch() {
     dataM.length = 0;
     var queryInfo;
-    console.log("FilteredMessagesFetching");
     queryInfo = {
         tableName: "LOGANALYZER",
         searchParams: {
             query: "_content: \"" + filterdMessage + "\" AND  _eventTimeStamp: [" + from + " TO " + to + "]",
             start: 0, //starting index of the matching record set
-            count: 100 //page size for pagination
+            count: filteredCount //page size for pagination
         }
     };
-    console.log(queryInfo);
     client.search(queryInfo, function (d) {
         var obj = JSON.parse(d["message"]);
         if (d["status"] === "success") {
@@ -97,7 +92,7 @@ function fetch() {
 
         }
     }, function (error) {
-        console.log("error occured: " + error);
+        console.log("error occurred: " + error);
     });
 }
 
@@ -129,28 +124,12 @@ function subscribe(callback) {
             callback(topic, data, subscriber)
         });
     };
-    console.log("APIM subscribed");
 }
 
 subscribe(function (topic, data, subscriber) {
-    console.log("Received Data :" + data["selected"]);
     filterdMessage = data["selected"].replace(/\"/g, "\\\"");
-    filterdTimestamp = data["timeStamp"];
-    filterdTimeframe = data["timeFrame"];
-    from = new Date(filterdTimestamp);
-    to = new Date(filterdTimestamp);
-    var duration;
-    if (filterdTimeframe === "daily") {
-        duration = from.getDate() + 1;
-        to.setDate(duration);
-    } else if (filterdTimeframe === "monthly") {
-        duration = from.getMonth() + 1;
-        to.setMonth(duration);
-    } else if (filterdTimeframe === "weekly") {
-        duration = from.getDate() + 7;
-        to.setDate(duration);
-    }
-    from = from.getTime();
-    to = to.getTime();
+    filteredCount = data["count"];
+    from = data["fromTime"];
+    to = data["toTime"];
     fetch();
 });

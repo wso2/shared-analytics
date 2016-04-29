@@ -15,8 +15,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var gatewayPort = location.port -9443 + 8243; //Calculate the port offset based gateway port.
-var serverUrl = "https://"+location.hostname +":"+ gatewayPort+"/LogAnalyzerRestApi/1.0";
+var gatewayPort = location.port - 9443 + 8243; //Calculate the port offset based gateway port.
+var serverUrl = "https://" + location.hostname + ":" + gatewayPort + "/LogAnalyzerRestApi/1.0";
 var client = new AnalyticsClient().init(null, null, serverUrl);
 var div = "#chartApiTokenStatus";
 var table, chart;
@@ -34,14 +34,14 @@ var meta = {
 
 
 var configChart = {
-    colorScale:["#438CAD","#5CB85C","#EECA5A","#95A5A6"],
+    colorScale: ["#438CAD", "#5CB85C", "#EECA5A", "#95A5A6"],
     type: "bar",
     x: "Status",
-    color:"Status",
+    color: "Status",
     charts: [{y: "Count"}],
     width: $('body').width(),
     height: $('body').height(),
-    padding: { "top": 10, "left": 80, "bottom": 70, "right": 200 }
+    padding: {"top": 10, "left": 80, "bottom": 70, "right": 200}
 };
 
 
@@ -51,20 +51,20 @@ function initialize() {
 }
 
 function getDefaultText() {
-    return '<div class="status-message">'+
-        '<div class="message message-info">'+
-        '<h4><i class="icon fw fw-info"></i>No content to display</h4>'+
-        '<p>Please select a date range to view stats.</p>'+
-        '</div>'+
+    return '<div class="status-message">' +
+        '<div class="message message-info">' +
+        '<h4><i class="icon fw fw-info"></i>No content to display</h4>' +
+        '<p>Please select a date range to view stats.</p>' +
+        '</div>' +
         '</div>';
 };
 
 function getEmptyRecordsText() {
-    return '<div class="status-message">'+
-        '<div class="message message-info">'+
-        '<h4><i class="icon fw fw-info"></i>No records found</h4>'+
-        '<p>Please select a date range to view stats.</p>'+
-        '</div>'+
+    return '<div class="status-message">' +
+        '<div class="message message-info">' +
+        '<h4><i class="icon fw fw-info"></i>No records found</h4>' +
+        '<p>Please select a date range to view stats.</p>' +
+        '</div>' +
         '</div>';
 }
 
@@ -86,14 +86,14 @@ function fetch(ch) {
 
     client.searchCount(queryInfo, function (d) {
         if (d["status"] === "success") {
-            dataM.push([gadgetConfig.statusDescription[ch], parseInt(d["message"]), gadgetConfig.status[ch]] );
+            dataM.push([gadgetConfig.statusDescription[ch], parseInt(d["message"]), gadgetConfig.status[ch]]);
             async_tasks--;
             if (async_tasks == 0) {
-                if(!initState){
+                if (!initState) {
                     redrawApiKeyStatus();
-                }else{
+                } else {
                     drawApiKeyStatus();
-                    initState =false;
+                    initState = false;
                 }
             } else {
                 fetch(++ch);
@@ -102,7 +102,7 @@ function fetch(ch) {
     }, function (error) {
         console.log("error occured: " + error);
     });
-    console.log("ch value: " + ch);
+
 }
 
 function drawApiKeyStatus() {
@@ -124,19 +124,18 @@ function drawApiKeyStatus() {
     ]);
 }
 
-function redrawApiKeyStatus(){
-    for(var i in dataM){
+function redrawApiKeyStatus() {
+    for (var i in dataM) {
         chart.insert([dataM[i]]);
     }
 }
 
-function publish (data) {
+function publish(data) {
     gadgets.Hub.publish("publisher", data);
 };
 
-var onclick = function(event, item) {
+var onclick = function (event, item) {
     if (item != null) {
-        console.log(JSON.stringify(item.datum));
         publish(
             {
                 "filter": gadgetConfig.id,

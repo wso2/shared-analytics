@@ -15,8 +15,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var gatewayPort = location.port -9443 + 8243; //Calculate the port offset based gateway port.
-var serverUrl = "https://"+location.hostname +":"+ gatewayPort+"/LogAnalyzerRestApi/1.0";
+var gatewayPort = location.port - 9443 + 8243; //Calculate the port offset based gateway port.
+var serverUrl = "https://" + location.hostname + ":" + gatewayPort + "/LogAnalyzerRestApi/1.0";
 var client = new AnalyticsClient().init(null, null, serverUrl);
 var div = "#chartAPIMMessageProcessing";
 var from = new Date(moment().subtract(29, 'days')).getTime();
@@ -47,8 +47,6 @@ function fetch() {
         }
     };
 
-    console.log(queryInfo);
-
     client.search(queryInfo, function (d) {
         newFrom = new Date(from);
         newTo = new Date(to);
@@ -60,7 +58,7 @@ function fetch() {
             drawChartByClass();
         }
     }, function (error) {
-        console.log("error occured: " + error);
+        console.log("error occurred: " + error);
     });
 }
 
@@ -107,11 +105,8 @@ function subscribe(callback) {
 }
 
 subscribe(function (topic, data, subscriber) {
-    console.log("From Time : " + parseInt(data["timeFrom"]));
-    console.log("To Time : " + parseInt(data["timeTo"]));
     from = parseInt(data["timeFrom"]);
     to = parseInt(data["timeTo"]);
-    isRedraw = true;
     fetch();
 });
 

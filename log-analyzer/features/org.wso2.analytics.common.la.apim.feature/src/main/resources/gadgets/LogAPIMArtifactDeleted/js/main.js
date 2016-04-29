@@ -15,8 +15,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var gatewayPort = location.port -9443 + 8243; //Calculate the port offset based gateway port.
-var serverUrl = "https://"+location.hostname +":"+ gatewayPort+"/LogAnalyzerRestApi/1.0";
+var gatewayPort = location.port - 9443 + 8243; //Calculate the port offset based gateway port.
+var serverUrl = "https://" + location.hostname + ":" + gatewayPort + "/LogAnalyzerRestApi/1.0";
 var client = new AnalyticsClient().init(null, null, serverUrl);
 var div = "#tblArtifactDeleted";
 var table;
@@ -32,7 +32,7 @@ var meta = {
 
 var configTable = {
     key: "apiArtifact",
-    title:"LogAPIMArtifact",
+    title: "LogAPIMArtifact",
     charts: [{
         type: "table",
         y: "Frequency",
@@ -42,30 +42,29 @@ var configTable = {
     ],
     width: $('body').width(),
     height: $('body').height(),
-    padding: { "top": 40, "left": 80, "bottom": 70, "right": 100 }
+    padding: {"top": 40, "left": 80, "bottom": 70, "right": 100}
 };
 
 
 function initialize() {
     fetch();
-    //$("#tblArtifactDeleted").html(getDefaultText());
 }
 
 function getDefaultText() {
-    return '<div class="status-message">'+
-        '<div class="message message-info">'+
-        '<h4><i class="icon fw fw-info"></i>No content to display</h4>'+
-        '<p>Please select a date range to view stats.</p>'+
-        '</div>'+
+    return '<div class="status-message">' +
+        '<div class="message message-info">' +
+        '<h4><i class="icon fw fw-info"></i>No content to display</h4>' +
+        '<p>Please select a date range to view stats.</p>' +
+        '</div>' +
         '</div>';
 };
 
 function getEmptyRecordsText() {
-    return '<div class="status-message">'+
-        '<div class="message message-info">'+
-        '<h4><i class="icon fw fw-info"></i>No records found</h4>'+
-        '<p>Please select a date range to view stats.</p>'+
-        '</div>'+
+    return '<div class="status-message">' +
+        '<div class="message message-info">' +
+        '<h4><i class="icon fw fw-info"></i>No records found</h4>' +
+        '<p>Please select a date range to view stats.</p>' +
+        '</div>' +
         '</div>';
 }
 
@@ -76,31 +75,29 @@ $(document).ready(function () {
 function fetch() {
     dataM.length = 0;
     var queryInfo;
-    console.log("ArtifactDeletedFetching");
     queryInfo = {
         tableName: "LOGANALYZER_APIM_ARTIFACT_DELETED_DAILY",
         searchParams: {
             query: "_timestamp: [" + from + " TO " + to + "]",
-            start : 0, //starting index of the matching record set
-            count : 100 //page size for pagination
+            start: 0, //starting index of the matching record set
+            count: 100 //page size for pagination
         }
     };
-    console.log(queryInfo);
     client.search(queryInfo, function (d) {
         var obj = JSON.parse(d["message"]);
         if (d["status"] === "success") {
-            for (var i =0; i < obj.length ;i++){
-                dataM.push([obj[i].values.artifact,obj[i].values.artifactCount]);
+            for (var i = 0; i < obj.length; i++) {
+                dataM.push([obj[i].values.artifact, obj[i].values.artifactCount]);
             }
-            if(!initState){
+            if (!initState) {
                 redrawLogAPIMArtifactTableChart();
-            }else{
+            } else {
                 drawLogAPIMArtifactTableChart();
-                initState =false;
+                initState = false;
             }
         }
     }, function (error) {
-        console.log("error occured: " + error);
+        console.log("error occurred: " + error);
     });
 }
 
@@ -116,15 +113,14 @@ function drawLogAPIMArtifactTableChart() {
         configTable
     );
     table.draw(div);
-    //$("#LogLevel").DataTable();
 
     var table2 = $('#LogAPIMArtifact').DataTable();
-    $('#body').css( 'display', 'block' );
+    $('#body').css('display', 'block');
     table2.columns.adjust().draw();
 }
 
-function redrawLogAPIMArtifactTableChart(){
-    for(var i in dataM){
+function redrawLogAPIMArtifactTableChart() {
+    for (var i in dataM) {
         table.insert([dataM[i]]);
     }
 }
@@ -138,8 +134,6 @@ function subscribe(callback) {
 }
 
 subscribe(function (topic, data, subscriber) {
-    console.log("From Time : "+parseInt(data["timeFrom"]));
-    console.log("To Time : "+parseInt(data["timeTo"]));
     from = parseInt(data["timeFrom"]);
     to = parseInt(data["timeTo"]);
     fetch();
