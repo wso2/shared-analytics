@@ -44,7 +44,7 @@
         <dependency>
             <groupId>org.wso2.carbon.apimgt</groupId>
             <artifactId>org.wso2.carbon.apimgt.impl</artifactId>
-            <version>6.0.0-SNAPSHOT</version>
+            <version>5.0.3</version>
         </dependency>
         <dependency>
             <groupId>org.apache.synapse</groupId>
@@ -107,7 +107,7 @@
                         <Import-Package>
                             org.apache.synapse.*,
                             org.apache.axis2.context.*,
-                            org.wso2.carbon.apimgt.impl.*,
+                            org.wso2.carbon.apimgt.impl.*; version="[5.0,6.1)",
                             org.apache.commons.codec.*,
                             org.apache.commons.logging.*,
                             org.osgi.service.component.*,

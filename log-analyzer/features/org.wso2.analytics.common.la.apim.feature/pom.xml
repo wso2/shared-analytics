@@ -83,7 +83,7 @@
   								</properties>
   							</adviceFile>
 							<bundles>
-								<bundleDef>org.wso2.analytics.common:org.wso2.analytics.common.la.apim:${analytics.common.version}</bundleDef>
+								<bundleDef>org.wso2.analytics.common:org.wso2.analytics.common.la.apim:${pom.version}</bundleDef>
 							</bundles>
   						</configuration>
   					</execution>

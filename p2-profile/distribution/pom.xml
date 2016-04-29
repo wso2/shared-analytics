@@ -76,10 +76,10 @@
                             <publishArtifactRepository>true</publishArtifactRepository>
                             <featureArtifacts>
                                 <featureArtifactDef>
-                                    org.wso2.analytics.common:org.wso2.analytics.common.la.apim.feature:${analytics.common.version}
+                                    org.wso2.analytics.common:org.wso2.analytics.common.la.apim.feature:${pom.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.analytics.common:org.wso2.analytics.common.data.agents.log4j.feature:${analytics.common.version}
+                                    org.wso2.analytics.common:org.wso2.analytics.common.data.agents.log4j.feature:${pom.version}
                                 </featureArtifactDef>
                             </featureArtifacts>
                         </configuration>
