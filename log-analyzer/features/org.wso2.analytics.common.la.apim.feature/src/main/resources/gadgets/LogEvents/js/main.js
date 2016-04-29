@@ -15,8 +15,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var gatewayPort = location.port -9443 + 8243; //Calculate the port offset based gateway port.
-var serverUrl = "https://"+location.hostname +":"+ gatewayPort+"/LogAnalyzerRestApi/1.0";
+var gatewayPort = location.port - 9443 + 8243; //Calculate the port offset based gateway port.
+var serverUrl = "https://" + location.hostname + ":" + gatewayPort + "/LogAnalyzerRestApi/1.0";
 var client = new AnalyticsClient().init(null, null, serverUrl);
 var chart;
 var from = new Date(moment().subtract(29, 'days')).getTime();
@@ -34,20 +34,20 @@ function initialize() {
 }
 
 function getDefaultText() {
-    return '<div class="status-message">'+
-        '<div class="message message-info">'+
-        '<h4><i class="icon fw fw-info"></i>No content to display</h4>'+
-        '<p>Please select a date range to view stats.</p>'+
-        '</div>'+
+    return '<div class="status-message">' +
+        '<div class="message message-info">' +
+        '<h4><i class="icon fw fw-info"></i>No content to display</h4>' +
+        '<p>Please select a date range to view stats.</p>' +
+        '</div>' +
         '</div>';
 };
 
 function getEmptyRecordsText() {
-    return '<div class="status-message">'+
-        '<div class="message message-info">'+
-        '<h4><i class="icon fw fw-info"></i>No records found</h4>'+
-        '<p>Please select a date range to view stats.</p>'+
-        '</div>'+
+    return '<div class="status-message">' +
+        '<div class="message message-info">' +
+        '<h4><i class="icon fw fw-info"></i>No records found</h4>' +
+        '<p>Please select a date range to view stats.</p>' +
+        '</div>' +
         '</div>';
 }
 
@@ -72,11 +72,11 @@ function fetch(ch) {
             dataM.push([gadgetConfig.level[ch], parseInt(d["message"])]);
             async_tasks--;
             if (async_tasks == 0) {
-                if(!initState){
+                if (!initState) {
                     redrawLogLevelChart();
-                }else{
+                } else {
                     drawLogLevelChart();
-                    initState =false;
+                    initState = false;
                 }
             } else {
                 fetch(++ch);
@@ -102,8 +102,8 @@ function drawLogLevelChart() {
     chart.draw(div);
 }
 
-function redrawLogLevelChart(){
-    for(var i in dataM){
+function redrawLogLevelChart() {
+    for (var i in dataM) {
         chart.insert([dataM[i]]);
     }
 }

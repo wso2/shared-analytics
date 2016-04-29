@@ -20,13 +20,13 @@ var gadgetConfig = {
     "id": "logEventChart",
     "title": "Log Event",
     "datasource": "LOGANALYZER",
-    "level": ["INFO","DEBUG","ERROR","WARN","FATAL"],
+    "level": ["DEBUG","INFO","WARN","ERROR","FATAL"],
     "meta":{
         "names": ["LogLevel", "Frequency"],
         "types": ["ordinal", "linear"]
     },
     "chartConfig":{
-        colorScale:["#438CAD","#5CB85C","#D9483D","#EECA5A","#95A5A6"],
+        colorScale:["#5CB85C","#438CAD","#EECA5A","#D9483D","#95A5A6"],
         type: "bar",
         x: "LogLevel",
         color:"LogLevel",

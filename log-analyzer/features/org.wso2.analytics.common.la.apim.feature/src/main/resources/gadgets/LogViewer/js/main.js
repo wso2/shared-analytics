@@ -15,8 +15,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var gatewayPort = location.port -9443 + 8243; //Calculate the port offset based gateway port.
-var serverUrl = "https://"+location.hostname +":"+ gatewayPort+"/LogAnalyzerRestApi/1.0";
+var gatewayPort = location.port - 9443 + 8243; //Calculate the port offset based gateway port.
+var serverUrl = "https://" + location.hostname + ":" + gatewayPort + "/LogAnalyzerRestApi/1.0";
 var client = new AnalyticsClient().init(null, null, serverUrl);
 var from = new Date(moment().subtract(29, 'days')).getTime();
 var to = new Date(moment()).getTime();
@@ -28,7 +28,6 @@ var template3 = "<ul class='template3'>{{#arr}}<li class='data'>{{date}}</li><li
 var template4 = "<ul class='template4'>{{#arr}}<li class='data'>{{date}}</li><li class='level'>{{level}}</li><li class='class'>{{class}}</li><li class='content'>{{content}}</li><li class='trace'>{{trace}}</li>{{/arr}}</ul>";
 
 function initialize() {
-    //fetch();
     $("#logViewer").html(getDefaultText());
 }
 
@@ -57,7 +56,6 @@ $(document).ready(function () {
 function fetch() {
     dataM.length = 0;
     var queryInfo;
-    console.log("LogViewerFetching");
     queryInfo = {
         tableName: "LOGANALYZER",
         searchParams: {
@@ -66,7 +64,6 @@ function fetch() {
             count: 100 //page size for pagination
         }
     };
-    console.log(queryInfo);
     client.search(queryInfo, function (d) {
         var obj = JSON.parse(d["message"]);
 
@@ -77,29 +74,28 @@ function fetch() {
                     level: obj[i].values._level,
                     class: obj[i].values._class,
                     content: obj[i].values._content,
-                    trace: (obj[i].values._trace ? obj[i].values._trace:"")
+                    trace: (obj[i].values._trace ? obj[i].values._trace : "")
                 }]);
             }
             writeToLogViewer();
         }
     }, function (error) {
-        console.log("error occured: " + error);
+        console.log("error occurred: " + error);
     });
 }
 
 function writeToLogViewer() {
     $("#logViewer").empty();
-    for (var i=0;i<dataM.length;i++)
-    {
-        if(dataM[i][0].level==="ERROR"){
-            $('#logViewer').append(Mustache.to_html(template1, {arr:dataM[i]}));
-        }else if(dataM[i][0].level==="WARN"){
-            $('#logViewer').append(Mustache.to_html(template2, {arr:dataM[i]}));
-        }else if(dataM[i][0].level==="DEBUG"){
-            $('#logViewer').append(Mustache.to_html(template3, {arr:dataM[i]}));
-        }else {
-        $('#logViewer').append(Mustache.to_html(template4, {arr:dataM[i]}));
-    }
+    for (var i = 0; i < dataM.length; i++) {
+        if (dataM[i][0].level === "ERROR") {
+            $('#logViewer').append(Mustache.to_html(template1, {arr: dataM[i]}));
+        } else if (dataM[i][0].level === "WARN") {
+            $('#logViewer').append(Mustache.to_html(template2, {arr: dataM[i]}));
+        } else if (dataM[i][0].level === "DEBUG") {
+            $('#logViewer').append(Mustache.to_html(template3, {arr: dataM[i]}));
+        } else {
+            $('#logViewer').append(Mustache.to_html(template4, {arr: dataM[i]}));
+        }
     }
 }
 
@@ -112,7 +108,6 @@ function subscribe(callback) {
 }
 
 subscribe(function (topic, data, subscriber) {
-    console.log("Date :" + data["timestamp"]);
     filterdMessage = parseInt(data["timestamp"]);
     var fromDate = filterdMessage - (1000 * 60 * 60 * 10);
     var toDate = filterdMessage + (1000 * 60 * 60 * 10);

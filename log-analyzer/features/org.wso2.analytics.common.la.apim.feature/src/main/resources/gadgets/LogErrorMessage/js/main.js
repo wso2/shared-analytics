@@ -36,7 +36,6 @@ var timeFrame;
 
 function initialize() {
     fetch();
-    //$("#chartErrorMessage").html(getDefaultText());
 }
 
 function getDefaultText() {
@@ -72,7 +71,6 @@ function fetch() {
     var queryInfo;
     var newFrom;
     var newTo;
-    var tomorrow;
     var diffDays = daysBetween(new Date(from), new Date(to));
     if (diffDays > 90) {
         timeFrame = "monthly";
@@ -127,13 +125,11 @@ function fetch() {
         };
     }
     client.search(queryInfo, function (d) {
-
         newFrom = new Date(from);
         newTo = new Date(to);
         var msgHash;
         receivedData = JSON.parse(d["message"]);
         if (d["status"] === "success") {
-            tomorrow = new Date(from);
             if (timeFrame === "daily") {
                 newFrom.setHours(0);
                 newFrom.setMinutes(0);
@@ -152,7 +148,8 @@ function fetch() {
                         msgMap.set(msgHash, msgCount);
                     }
                     var tempDay = new Date(receivedData[i].timestamp);
-                    dataM.push([tempDay.toDateString(), receivedData[i].values.messageCount, receivedData[i].values.message, "ID :" + msgMap.get(msgHash) + "  - " + receivedData[i].values.message.substring(0, 60) + "...", msgMap.get(msgHash), receivedData[i].timestamp]);
+                    dataM.push([tempDay.toDateString(), receivedData[i].values.messageCount, receivedData[i].values.message,
+                        "ID :" + msgMap.get(msgHash) + "  - " + receivedData[i].values.message.substring(0, 60) + "...", msgMap.get(msgHash), receivedData[i].timestamp]);
                 }
             } else if (timeFrame === "monthly") {
                 newFrom.setDate(1);
@@ -168,7 +165,9 @@ function fetch() {
                         msgMap.set(msgHash, msgCount);
                     }
                     var tempDay = new Date(receivedData[i].timestamp);
-                    dataM.push([mS[tempDay.getMonth()] + " - " + tempDay.getFullYear(), receivedData[i].values.messageCount, receivedData[i].values.message, "ID :" + msgMap.get(msgHash) + "  - " + receivedData[i].values.message.substring(0, 60) + "...", msgMap.get(msgHash), receivedData[i].timestamp]);
+                    dataM.push([mS[tempDay.getMonth()] + " - " + tempDay.getFullYear(), receivedData[i].values.messageCount,
+                        receivedData[i].values.message, "ID :" + msgMap.get(msgHash) + "  - " + receivedData[i].values.message.substring(0, 60) + "...",
+                        msgMap.get(msgHash), receivedData[i].timestamp]);
                 }
             } else if (timeFrame === "weekly") {
                 var weekNo = 0;
@@ -183,19 +182,20 @@ function fetch() {
                         msgMap.set(msgHash, msgCount);
                     }
                     var tempDay = new Date(receivedData[i].timestamp);
-                    dataM.push(["W" + receivedData[i].values.week + " " + mS[tempDay.getMonth()] + " - " + tempDay.getFullYear(), receivedData[i].values.messageCount, receivedData[i].values.message, "ID :" + msgMap.get(msgHash) + "  - " + receivedData[i].values.message.substring(0, 60) + "...", msgMap.get(msgHash), receivedData[i].timestamp]);
+                    dataM.push(["W" + receivedData[i].values.week + " " + mS[tempDay.getMonth()] + " - " + tempDay.getFullYear(),
+                        receivedData[i].values.messageCount, receivedData[i].values.message, "ID :" + msgMap.get(msgHash) + "  - " + receivedData[i].values.message.substring(0, 60) + "...",
+                        msgMap.get(msgHash), setWeekToDate(receivedData[i].timestamp, receivedData[i].values.week)]);
                 }
             }
             drawChartByClass();
         }
     }, function (error) {
-        console.log("error occured: " + error);
+        console.log("error occurred: " + error);
     });
 }
 
 function drawChartByClass() {
     $("#chartErrorMessage").empty();
-    $("#tableErrorMessage").empty();
     var configChart = {
         type: "bar",
         x: "day",
@@ -226,7 +226,7 @@ function drawChartByClass() {
             var isExist = false;
             for (var j = 0; j < 9; j++) {
                 if (dataM[i][2] === newDataM[j][2]) {
-                    newDataM.push(dataM[i]);
+                    newDataM.push([dataM[i][0], dataM[i][1], dataM[i][2], newDataM[j][3], newDataM[j][4], dataM[i][5]]);
                     isExist = true;
                 }
             }
@@ -241,7 +241,7 @@ function drawChartByClass() {
         }
         for (var key in mapOther) {
             var value = mapOther[key];
-            newDataM.push([key, value[0], "Other", "Other", key, value[1]]);//["day", "count", "message", "shortMessage", "ID"]
+            newDataM.push([key, value[0], "Other", "Other", key, value[1]]);//["day", "count", "message", "shortMessage", "ID", "timestamp"]
         }
     } else {
         for (var i = 0; i < dataM.length; i++) {
@@ -280,16 +280,16 @@ function publish(data) {
 };
 
 var onclick = function (event, item) {
-    if (item !== null) {
-        console.log(JSON.stringify(item.datum.message));
+    if (item != null) {
         if (item.datum.message === "Other") {
             for (var i = 0; i < newDataOtherM.length; i++) {
                 if (newDataOtherM[i][0] === item.datum.ID) {
                     publish(
                         {
                             "selected": newDataOtherM[i][2],
-                            "timeStamp": newDataOtherM[i][5],
-                            "timeFrame": timeFrame
+                            "fromTime": newDataM[i][5],
+                            "toTime": getToTime(newDataM[i][5]),
+                            "count": item.datum.count
                         }
                     );
                 }
@@ -300,8 +300,9 @@ var onclick = function (event, item) {
                     publish(
                         {
                             "selected": newDataM[i][2],
-                            "timeStamp": newDataM[i][5],
-                            "timeFrame": timeFrame
+                            "fromTime": newDataM[i][5],
+                            "toTime": getToTime(newDataM[i][5]),
+                            "count": item.datum.count
                         }
                     );
                 }
@@ -319,12 +320,11 @@ function subscribe(callback) {
 }
 
 subscribe(function (topic, data, subscriber) {
-    console.log("From Time : " + parseInt(data["timeFrom"]));
-    console.log("To Time : " + parseInt(data["timeTo"]));
     from = parseInt(data["timeFrom"]);
     to = parseInt(data["timeTo"]);
-    isRedraw = true;
-    fetch();
+    if (to >= from) {
+        fetch();
+    }
 });
 
 function daysBetween(date1, date2) {
@@ -345,6 +345,7 @@ function daysBetween(date1, date2) {
 
 function hashCode(str) {
     var hash = 0;
+    var char;
     if (str.length == 0) return hash;
     for (i = 0; i < str.length; i++) {
         char = str.charCodeAt(i);
@@ -357,4 +358,29 @@ function hashCode(str) {
 function zeroPad(num, places) {
     var zero = places - num.toString().length + 1;
     return Array(+(zero > 0 && zero)).join("0") + num;
+}
+
+function setWeekToDate(timeStamp, week) {
+    var dateWithWeek = new Date(moment().week(moment(timeStamp).week() + (week > 1 ? (week - 1) : 0)).startOf('Week'));
+    return dateWithWeek.getTime();
+}
+
+function getNextWeekDay(timeStamp) {
+    var dateWithWeek = new Date(moment().week(moment(timeStamp).week()).endOf('Week'));
+    return dateWithWeek;
+}
+
+function getToTime(toTime) {
+    var duration;
+    toTime = new Date(toTime);
+    if (timeFrame === "daily") {
+        duration = toTime.getDate() + 1;
+        toTime.setDate(duration);
+    } else if (timeFrame === "monthly") {
+        duration = toTime.getMonth() + 1;
+        toTime.setMonth(duration);
+    } else if (timeFrame === "weekly") {
+        toTime = getNextWeekDay(toTime);
+    }
+    return toTime.getTime();
 }

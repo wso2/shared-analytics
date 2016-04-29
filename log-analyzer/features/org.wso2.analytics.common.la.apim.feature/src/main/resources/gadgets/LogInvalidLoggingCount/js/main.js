@@ -15,8 +15,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var gatewayPort = location.port -9443 + 8243; //Calculate the port offset based gateway port.
-var serverUrl = "https://"+location.hostname +":"+ gatewayPort+"/LogAnalyzerRestApi/1.0";
+var gatewayPort = location.port - 9443 + 8243; //Calculate the port offset based gateway port.
+var serverUrl = "https://" + location.hostname + ":" + gatewayPort + "/LogAnalyzerRestApi/1.0";
 var client = new AnalyticsClient().init(null, null, serverUrl);
 var div = "#chartInvalidLoginAttempts";
 var from = new Date(moment().subtract(29, 'days')).getTime();
@@ -25,36 +25,35 @@ var fromTime;
 var toTime;
 var dataM = [];
 var mockData = [];
-var newDataM =[];
-var newDataOtherM=[];
+var newDataM = [];
+var newDataOtherM = [];
 var chartData = [];
 var names = ["day", "count", "agentID"];
 var types = ["ordinal", "linear", "linear"];
 var mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 var msgMap = new Map();
-var msgCount=0;
+var msgCount = 0;
 var receivedData;
 
 function initialize() {
     fetch();
-    //$("#chartErrorMessage").html(getDefaultText());
 }
 
 function getDefaultText() {
-    return '<div class="status-message">'+
-        '<div class="message message-info">'+
-        '<h4><i class="icon fw fw-info"></i>No content to display</h4>'+
-        '<p>Please select a date range to view stats.</p>'+
-        '</div>'+
+    return '<div class="status-message">' +
+        '<div class="message message-info">' +
+        '<h4><i class="icon fw fw-info"></i>No content to display</h4>' +
+        '<p>Please select a date range to view stats.</p>' +
+        '</div>' +
         '</div>';
 };
 
 function getEmptyRecordsText() {
-    return '<div class="status-message">'+
-        '<div class="message message-info">'+
-        '<h4><i class="icon fw fw-info"></i>No records found</h4>'+
-        '<p>Please select a date range to view stats.</p>'+
-        '</div>'+
+    return '<div class="status-message">' +
+        '<div class="message message-info">' +
+        '<h4><i class="icon fw fw-info"></i>No records found</h4>' +
+        '<p>Please select a date range to view stats.</p>' +
+        '</div>' +
         '</div>';
 }
 
@@ -75,62 +74,60 @@ function fetch() {
     var newFrom;
     var newTo;
     var tomorrow;
-    console.log("InvalidLoggingCount");
     var diffDays = daysBetween(new Date(from), new Date(to));
-    if(diffDays>90){
+    if (diffDays > 90) {
         timeFrame = "monthly";
         queryInfo = {
             tableName: "LOGANALYZER_INVALID_LOGIN_ATTEMPT_MONTHLY",
             searchParams: {
                 query: "_timestamp: [" + from + " TO " + to + "]",
-                start : 0, //starting index of the matching record set
-                count : 100, //page size for pagination
-                sortBy : [
+                start: 0, //starting index of the matching record set
+                count: 100, //page size for pagination
+                sortBy: [
                     {
-                        field : "InvalidLoginCount",
-                        sortType : "DESC", // This can be ASC, DESC
-                        reversed : "false" //optional
+                        field: "InvalidLoginCount",
+                        sortType: "DESC", // This can be ASC, DESC
+                        reversed: "false" //optional
                     }
                 ]
             }
         };
-    }else if (diffDays>30){
+    } else if (diffDays > 30) {
         timeFrame = "weekly";
         queryInfo = {
             tableName: "LOGANALYZER_INVALID_LOGIN_ATTEMPT_WEEKLY",
             searchParams: {
                 query: "_timestamp: [" + from + " TO " + to + "]",
-                start : 0, //starting index of the matching record set
-                count : 100, //page size for pagination
-                sortBy : [
+                start: 0, //starting index of the matching record set
+                count: 100, //page size for pagination
+                sortBy: [
                     {
-                        field : "InvalidLoginCount",
-                        sortType : "DESC", // This can be ASC, DESC
-                        reversed : "false" //optional
+                        field: "InvalidLoginCount",
+                        sortType: "DESC", // This can be ASC, DESC
+                        reversed: "false" //optional
                     }
                 ]
             }
         };
-    }else{
+    } else {
         timeFrame = "daily";
         queryInfo = {
             tableName: "LOGANALYZER_INVALID_LOGIN_ATTEMPT_DAILY",
             searchParams: {
                 query: "_timestamp: [" + from + " TO " + to + "]",
-                start : 0, //starting index of the matching record set
-                count : 100, //page size for pagination
-                sortBy : [
+                start: 0, //starting index of the matching record set
+                count: 100, //page size for pagination
+                sortBy: [
                     {
-                        field : "InvalidLoginCount",
-                        sortType : "DESC", // This can be ASC, DESC
-                        reversed : "false" //optional
+                        field: "InvalidLoginCount",
+                        sortType: "DESC", // This can be ASC, DESC
+                        reversed: "false" //optional
                     }
                 ]
             }
         };
     }
 
-    console.log(queryInfo);
     client.search(queryInfo, function (d) {
         newFrom = new Date(from);
         newTo = new Date(to);
@@ -138,47 +135,47 @@ function fetch() {
         receivedData = JSON.parse(d["message"]);
         if (d["status"] === "success") {
             tomorrow = new Date(from);
-            if(timeFrame==="daily"){
+            if (timeFrame === "daily") {
                 newFrom.setHours(0);
                 newFrom.setMinutes(0);
                 newFrom.setSeconds(0);
                 newTo.setHours(0);
                 newTo.setMinutes(0);
                 newTo.setSeconds(0);
-                while(!(newFrom.getTime() >= newTo.getTime())){
-                    mockData.push([newFrom.toDateString(),0,"No entries"]);
-                    newFrom.setHours(newFrom.getHours()+24);
+                while (!(newFrom.getTime() >= newTo.getTime())) {
+                    mockData.push([newFrom.toDateString(), 0, "No entries"]);
+                    newFrom.setHours(newFrom.getHours() + 24);
                 }
-                for (var i =0; i < receivedData.length ;i++){
+                for (var i = 0; i < receivedData.length; i++) {
                     var tempDay = new Date(receivedData[i].timestamp);
-                    dataM.push([tempDay.toDateString(),receivedData[i].values.InvalidLoginCount,receivedData[i].values.AgentId]);
+                    dataM.push([tempDay.toDateString(), receivedData[i].values.InvalidLoginCount, receivedData[i].values.AgentId]);
                 }
-            }else if(timeFrame === "monthly"){
+            } else if (timeFrame === "monthly") {
                 newFrom.setDate(1);
                 newTo.setDate(1);
-                while(!(newFrom.getTime() >= newTo.getTime())){
-                    mockData.push([mS[newFrom.getMonth()]+" - "+newFrom.getFullYear(),0,"No entries"]);
-                    newFrom.setMonth(newFrom.getMonth()+1);
+                while (!(newFrom.getTime() >= newTo.getTime())) {
+                    mockData.push([mS[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "No entries"]);
+                    newFrom.setMonth(newFrom.getMonth() + 1);
                 }
-                for (var i =0; i < receivedData.length ;i++){
+                for (var i = 0; i < receivedData.length; i++) {
                     var tempDay = new Date(receivedData[i].timestamp);
-                    dataM.push([mS[tempDay.getMonth()]+" - "+tempDay.getFullYear(),receivedData[i].values.InvalidLoginCount,receivedData[i].values.AgentId]);
+                    dataM.push([mS[tempDay.getMonth()] + " - " + tempDay.getFullYear(), receivedData[i].values.InvalidLoginCount, receivedData[i].values.AgentId]);
                 }
-            }else if(timeFrame === "weekly"){
-                var weekNo =0;
-                while(!(newFrom.getTime() > newTo.getTime())){
-                    mockData.push(["W"+(++weekNo)+" "+mS[newFrom.getMonth()]+" - "+newFrom.getFullYear(),0,"No entries"]);
-                    newFrom.setHours(newFrom.getHours()+(24*7));
+            } else if (timeFrame === "weekly") {
+                var weekNo = 0;
+                while (!(newFrom.getTime() > newTo.getTime())) {
+                    mockData.push(["W" + (++weekNo) + " " + mS[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "No entries"]);
+                    newFrom.setHours(newFrom.getHours() + (24 * 7));
                 }
-                for (var i =0; i < receivedData.length ;i++){
+                for (var i = 0; i < receivedData.length; i++) {
                     var tempDay = new Date(receivedData[i].timestamp);
-                    dataM.push(["W"+receivedData[i].values.week+" "+mS[tempDay.getMonth()]+" - "+tempDay.getFullYear(),receivedData[i].values.InvalidLoginCount,receivedData[i].values.AgentId]);
+                    dataM.push(["W" + receivedData[i].values.week + " " + mS[tempDay.getMonth()] + " - " + tempDay.getFullYear(), receivedData[i].values.InvalidLoginCount, receivedData[i].values.AgentId]);
                 }
             }
             drawChartByClass();
         }
     }, function (error) {
-        console.log("error occured: " + error);
+        console.log("error occurred: " + error);
     });
 }
 
@@ -186,60 +183,65 @@ function drawChartByClass() {
     $("#chartInvalidLoginAttempts").empty();
     var configChart = {
         type: "bar",
-        x : "day",
-        colorScale:["#ecf0f1","#1abc9c", "#3498db", "#9b59b6", "#f1c40f","#e67e22","#e74c3c","#95a5a6","#2c3e50","#2ecc71","#F16272"],
+        x: "day",
+        colorScale: ["#ecf0f1", "#1abc9c", "#3498db", "#9b59b6", "#f1c40f", "#e67e22", "#e74c3c", "#95a5a6", "#2c3e50", "#2ecc71", "#F16272"],
         xAxisAngle: "true",
-        color:"agentID",
-        charts : [{type: "bar",  y : "count", mode:"stack"}],
-        width: $('body').width()+100,
+        color: "agentID",
+        charts: [{type: "bar", y: "count", mode: "stack"}],
+        width: $('body').width() + 100,
         height: $('body').height(),
-        padding: { "top": 10, "left": 80, "bottom": 70, "right": 500 },
-        tooltip: {"enabled":true, "color":"#e5f2ff", "type":"symbol", "content":["agentID","count","day"], "label":true}
+        padding: {"top": 10, "left": 80, "bottom": 70, "right": 500},
+        tooltip: {
+            "enabled": true,
+            "color": "#e5f2ff",
+            "type": "symbol",
+            "content": ["agentID", "count", "day"],
+            "label": true
+        }
     };
 
     var meta = {
         "names": names,
         "types": types
     };
-    if(dataM.length > 9){
+    if (dataM.length > 9) {
         var duplicate = false;
-        console.log(dataM.length);
         var mapOther = [];
-        newDataM = dataM.slice(0,9);
-        for (var i=9;i<dataM.length;i++){
-            for(var k = 0; k < 10; k++){
-            if(dataM[i][2] === dataM[k][2] ){
-            duplicate = true;
-            }
+        newDataM = dataM.slice(0, 9);
+        for (var i = 9; i < dataM.length; i++) {
+            for (var k = 0; k < 10; k++) {
+                if (dataM[i][2] === dataM[k][2]) {
+                    duplicate = true;
+                }
             }
 
-        if(!duplicate){
-        newDataOtherM.push([dataM[i],i]);
-         if(isNaN(mapOther[dataM[i][0]])){
-                        mapOther[dataM[i][0]] = dataM[i][1];
-                    }else{
-                        mapOther[dataM[i][0]] = mapOther[dataM[i][0]] + dataM[i][1];
-                    }
-        }else{
-        newDataM.push(dataM[i]);
-        }
-        duplicate = false;
+            if (!duplicate) {
+                newDataOtherM.push([dataM[i], i]);
+                if (isNaN(mapOther[dataM[i][0]])) {
+                    mapOther[dataM[i][0]] = dataM[i][1];
+                } else {
+                    mapOther[dataM[i][0]] = mapOther[dataM[i][0]] + dataM[i][1];
+                }
+            } else {
+                newDataM.push(dataM[i]);
+            }
+            duplicate = false;
         }
         for (var key in mapOther) {
             var value = mapOther[key];
-            newDataM.push([key,value,"Other"]);
+            newDataM.push([key, value, "Other"]);
         }
-    }else{
-        for(var i=0; i<dataM.length;i++){
+    } else {
+        for (var i = 0; i < dataM.length; i++) {
             newDataM.push(dataM[i]);
         }
     }
 
-    for(var i=0; i<mockData.length;i++){
+    for (var i = 0; i < mockData.length; i++) {
         chartData.push(mockData[i]);
     }
 
-    for(var i=0; i<newDataM.length;i++){
+    for (var i = 0; i < newDataM.length; i++) {
         chartData.push(newDataM[i]);
     }
 
@@ -253,7 +255,7 @@ function drawChartByClass() {
         configChart
     );
 
-    chart.draw(div,[
+    chart.draw(div, [
         {
             type: "click",
             callback: onclick
@@ -262,41 +264,40 @@ function drawChartByClass() {
 }
 
 
-
-function publish (data) {
+function publish(data) {
     gadgets.Hub.publish("publisher", data);
 };
 
-function publish2 (data) {
+function publish2(data) {
     gadgets.Hub.publish("publisher2", data);
 };
 
- var onclick = function(event, item) {
+var onclick = function (event, item) {
     if (item != null) {
         fromTime = new Date(item.datum.day);
 
-        getFromToTime(fromTime,"daily");
-        if(item.datum.agentID === "Other"){
-            for (var i =0; i< newDataOtherM.length;i++){
+        getFromToTime(fromTime, "daily");
+        if (item.datum.agentID === "Other") {
+            for (var i = 0; i < newDataOtherM.length; i++) {
 
-                if(newDataOtherM[i][0][0] === item.datum.day){
+                if (newDataOtherM[i][0][0] === item.datum.day) {
 
                     publish(
                         {
-                            "selected":receivedData[newDataOtherM[i][1]].values.agent,
+                            "selected": receivedData[newDataOtherM[i][1]].values.agent,
                             "fromTime": fromTime.getTime(),
                             "toTime": toTime.getTime()
                         }
                     );
                 }
             }
-        }else{
+        } else {
             publish(
                 {
                     "filter": gadgetConfig.id,
                     "selected": item.datum.agentID,
-                     "fromTime": fromTime.getTime(),
-                     "toTime": toTime.getTime()
+                    "fromTime": fromTime.getTime(),
+                    "toTime": toTime.getTime()
                 }
             );
         }
@@ -312,17 +313,15 @@ function subscribe(callback) {
 }
 
 subscribe(function (topic, data, subscriber) {
-    console.log("From Time : "+parseInt(data["timeFrom"]));
-    console.log("To Time : "+parseInt(data["timeTo"]));
     from = parseInt(data["timeFrom"]);
     to = parseInt(data["timeTo"]);
     isRedraw = true;
     fetch();
 });
 
-function daysBetween( date1, date2 ) {
+function daysBetween(date1, date2) {
     //Get 1 day in milliseconds
-    var one_day=1000*60*60*24;
+    var one_day = 1000 * 60 * 60 * 24;
 
     // Convert both dates to milliseconds
     var date1_ms = date1.getTime();
@@ -332,47 +331,42 @@ function daysBetween( date1, date2 ) {
     var difference_ms = Math.abs(date2_ms - date1_ms);
 
     // Convert back to days and return
-    return Math.round(difference_ms/one_day);
+    return Math.round(difference_ms / one_day);
 }
 
 
-function hashCode(str){
+function hashCode(str) {
     var hash = 0;
     if (str.length == 0) return hash;
     for (i = 0; i < str.length; i++) {
         char = str.charCodeAt(i);
-        hash = ((hash<<5)-hash)+char;
+        hash = ((hash << 5) - hash) + char;
         hash = hash & hash; // Convert to 32bit integer
     }
-    return zeroPad(Math.abs(hash),13);
+    return zeroPad(Math.abs(hash), 13);
 }
 
- function getMonday(d) {
-   d = new Date(d);
-   var day = d.getDay(),
-       diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
-   return new Date(d.setDate(diff));
- }
-
-
-
-function getFromToTime(time, period){
-toTime = new Date();
-
-if(period === "daily"){
-    toTime.setDate(fromTime.getDate() + 1);
-    console.log(fromTime);
-        console.log(toTime);
-}else if(period === "weekly"){
-    fromTime = getMonday(fromTime);
-    toTime.setDate(fromTime.getDate() + 6);
-    console.log(fromTime);
-    console.log(toTime);
-
-}else{
-    fromTime = new Date(fromTime.getFullYear(), fromTime.getMonth(), 1);
-    toTime = new Date(fromTime.getFullYear(), fromTime.getMonth() + 1, 0);
+function getMonday(d) {
+    d = new Date(d);
+    var day = d.getDay(),
+        diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
+    return new Date(d.setDate(diff));
 }
+
+
+function getFromToTime(time, period) {
+    toTime = new Date();
+
+    if (period === "daily") {
+        toTime.setDate(fromTime.getDate() + 1);
+    } else if (period === "weekly") {
+        fromTime = getMonday(fromTime);
+        toTime.setDate(fromTime.getDate() + 6);
+
+    } else {
+        fromTime = new Date(fromTime.getFullYear(), fromTime.getMonth(), 1);
+        toTime = new Date(fromTime.getFullYear(), fromTime.getMonth() + 1, 0);
+    }
 
 }
 
