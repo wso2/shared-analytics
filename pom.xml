@@ -551,11 +551,6 @@
                 <version>${version.equinox.osgi.services}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.analytics</groupId>
-                <artifactId>org.wso2.carbon.analytics.spark.core</artifactId>
-                <version>${carbon.analytics.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>ua.parser.wso2</groupId>
                 <artifactId>ua-parser</artifactId>
                 <version>${orbit.version.ua_parser}</version>

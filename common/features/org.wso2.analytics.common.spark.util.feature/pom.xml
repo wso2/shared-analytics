@@ -81,7 +81,7 @@
   								</properties>
   							</adviceFile>
 							<bundles>
-								<bundleDef>org.wso2.analytics.common:org.wso2.analytics.common.spark.util:${pom.version}</bundleDef>
+								<bundleDef>org.wso2.analytics.common:org.wso2.analytics.common.spark.util:${project.version}</bundleDef>
 							</bundles>
   						</configuration>
   					</execution>

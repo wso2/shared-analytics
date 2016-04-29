@@ -82,7 +82,7 @@
   								</properties>
   							</adviceFile>
 							<bundles>
-								<bundleDef>org.wso2.analytics.common:org.wso2.analytics.common.data.agents.filetail:${pom.version}</bundleDef>
+								<bundleDef>org.wso2.analytics.common:org.wso2.analytics.common.data.agents.filetail:${project.version}</bundleDef>
 							</bundles>
   						</configuration>
   					</execution>
