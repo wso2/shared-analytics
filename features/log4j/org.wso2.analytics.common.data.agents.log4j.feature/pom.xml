@@ -21,14 +21,14 @@
 
     <parent>
         <groupId>org.wso2.analytics.common</groupId>
-        <artifactId>analytics-common</artifactId>
+        <artifactId>log4j-feature</artifactId>
         <version>1.0.0-SNAPSHOT</version>
-        <relativePath>../../../pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <name>WSO2 - Log Analyzer APIM Dashboards Feature</name>
-    <artifactId>org.wso2.analytics.common.la.apim.feature</artifactId>
+    <name>WSO2 - Analytics Log4J Appender Feature</name>
+    <artifactId>org.wso2.analytics.common.data.agents.log4j.feature</artifactId>
     <packaging>pom</packaging>
 
     <dependencies>
@@ -73,17 +73,17 @@
   							<goal>p2-feature-gen</goal>
   						</goals>
   						<configuration>
-  							<id>org.wso2.analytics.common.la.apim</id>
-  							<propertiesFile>../../../common/etc/feature.properties</propertiesFile>
+  							<id>org.wso2.analytics.common.data.agents.log4j</id>
+  							<propertiesFile>../../etc/feature.properties</propertiesFile>
 							<licence>${license}</licence>
   							<adviceFile>
   								<properties>
   									<propertyDef>org.wso2.carbon.p2.category.type:server</propertyDef>
-                    <propertyDef>org.eclipse.equinox.p2.type.group:true</propertyDef>
+                    				<propertyDef>org.eclipse.equinox.p2.type.group:true</propertyDef>
   								</properties>
   							</adviceFile>
 							<bundles>
-								<bundleDef>org.wso2.analytics.common:org.wso2.analytics.common.la.apim:${analytics.common.version}</bundleDef>
+								<bundleDef>org.wso2.analytics.common:org.wso2.analytics.common.data.agents.log4j:${pom.version}</bundleDef>
 							</bundles>
   						</configuration>
   					</execution>
