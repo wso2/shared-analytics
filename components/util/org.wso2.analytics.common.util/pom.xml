@@ -46,6 +46,7 @@
 
     <build>
         <plugins>
+
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-scr-plugin</artifactId>
@@ -68,8 +69,7 @@
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Private-Package></Private-Package>
                         <Export-Package>
-                            org.wso2.analytics.common.util.*,
-                            org.wso2.analytics.common.util
+                            org.wso2.analytics.common.util.*
                         </Export-Package>
                         <Import-Package>
                             org.apache.commons.logging.*,

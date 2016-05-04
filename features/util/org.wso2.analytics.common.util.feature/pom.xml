@@ -72,7 +72,7 @@
                             <goal>p2-feature-gen</goal>
                         </goals>
                         <configuration>
-                            <id>org.wso2.analytics.common.util.time</id>
+                            <id>org.wso2.analytics.common.util</id>
                             <propertiesFile>../../etc/feature.properties</propertiesFile>
                             <adviceFile>
                                 <properties>
@@ -81,7 +81,7 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.analytics.common:org.wso2.analytics.common.util.time:${pom
+                                <bundleDef>org.wso2.analytics.common:org.wso2.analytics.common.util:${pom
                                 .version}</bundleDef>
                             </bundles>
                         </configuration>
