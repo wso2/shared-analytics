@@ -49,14 +49,14 @@
 	</licenses>
 
 	<modules>
-        <module>common/components/org.wso2.analytics.common.data.agents.filetail</module>
-        <module>common/components/org.wso2.analytics.common.data.agents.log4j</module>
-        <module>common/components/org.wso2.analytics.common.spark.util</module>
-        <module>common/features/org.wso2.analytics.common.data.agents.filetail.feature</module>
-        <module>common/features/org.wso2.analytics.common.data.agents.log4j.feature</module>
-        <module>common/features/org.wso2.analytics.common.spark.util.feature</module>
-        <module>log-analyzer/components/org.wso2.analytics.common.la.apim</module>
-        <module>log-analyzer/features/org.wso2.analytics.common.la.apim.feature</module>
+        <module>components/log-analyzer</module>
+        <module>components/filetail</module>
+        <module>components/log4j</module>
+        <module>components/spark-udf</module>
+        <module>features/log-analyzer</module>
+        <module>features/filetail</module>
+        <module>features/log4j</module>
+        <module>features/spark-udf</module>
 	</modules>
 
 	<repositories>

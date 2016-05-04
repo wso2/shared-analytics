@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
   ~ Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
   ~
@@ -22,35 +21,45 @@
 
     <parent>
         <groupId>org.wso2.analytics.common</groupId>
-        <artifactId>analytics-common</artifactId>
+        <artifactId>spark-udf</artifactId>
         <version>1.0.1-SNAPSHOT</version>
-        <relativePath>../../../pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>org.wso2.analytics.common.data.agents.log4j</artifactId>
-    <name>WSO2 - Analytics Common Log4J appender</name>
+    <artifactId>org.wso2.analytics.common.spark.util</artifactId>
+    <name>WSO2 - Analytics Common Utilities</name>
     <packaging>bundle</packaging>
-    <description>Analytics Log4J appender</description>
+    <description>Analytics Common component</description>
 
     <dependencies>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
+            <groupId>org.wso2.orbit.joda-time</groupId>
+            <artifactId>joda-time</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.analytics-common</groupId>
-            <artifactId>org.wso2.carbon.databridge.commons</artifactId>
+            <groupId>org.wso2.carbon.analytics</groupId>
+            <artifactId>org.wso2.carbon.analytics.spark.core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.commons</groupId>
-            <artifactId>org.wso2.carbon.logging.service</artifactId>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.analytics-common</groupId>
-            <artifactId>org.wso2.carbon.databridge.agent</artifactId>
+            <groupId>org.eclipse.osgi</groupId>
+            <artifactId>org.eclipse.osgi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.osgi</groupId>
+            <artifactId>org.eclipse.osgi.services</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
+
 
     <build>
         <plugins>
@@ -58,14 +67,6 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-scr-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>generate-scr-scrdescriptor</id>
-                        <goals>
-                            <goal>scr</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -75,22 +76,15 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
+                        <Private-Package>org.wso2.carbon.analytics.common.spark.internal.*</Private-Package>
                         <Export-Package>
-                            org.wso2.carbon.data.agents.log4j.*
+                            !org.wso2.carbon.analytics.common.spark.internal.*,
+                            org.wso2.carbon.analytics.common.spark.udf*
                         </Export-Package>
                         <Import-Package>
-                            org.apache.log4j.*,
-                            org.apache.log4j.spi,
-                            org.wso2.carbon.base.*,
-                            org.wso2.carbon.context.*,
-                            org.wso2.carbon.databridge.agent.*,
-                            org.wso2.carbon.databridge.commons.*,
-                            org.wso2.carbon.logging.service.*,
-                            org.wso2.carbon.user.*,
-                            org.wso2.carbon.utils.*,
+                            org.wso2.carbon.analytics.spark.core.*,
                             *;resolution:=optional
                         </Import-Package>
-                        <DynamicImport-Package>*</DynamicImport-Package>
                     </instructions>
                 </configuration>
             </plugin>

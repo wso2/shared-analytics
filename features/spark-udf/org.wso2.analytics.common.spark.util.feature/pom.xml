@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
   ~ Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
   ~
@@ -21,14 +20,14 @@
 
     <parent>
         <groupId>org.wso2.analytics.common</groupId>
-        <artifactId>analytics-common</artifactId>
+        <artifactId>spark-udf-feature</artifactId>
         <version>1.0.1-SNAPSHOT</version>
-        <relativePath>../../../pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <name>WSO2 - Log Analyzer APIM Dashboards Feature</name>
-    <artifactId>org.wso2.analytics.common.la.apim.feature</artifactId>
+    <name>WSO2 - Analytics Spark scripts Common Feature</name>
+    <artifactId>org.wso2.analytics.common.spark.util.feature</artifactId>
     <packaging>pom</packaging>
 
     <dependencies>
@@ -73,9 +72,8 @@
   							<goal>p2-feature-gen</goal>
   						</goals>
   						<configuration>
-  							<id>org.wso2.analytics.common.la.apim</id>
-  							<propertiesFile>../../../common/etc/feature.properties</propertiesFile>
-							<licence>${license}</licence>
+  							<id>org.wso2.analytics.common.spark.util</id>
+  							<propertiesFile>../../etc/feature.properties</propertiesFile>
   							<adviceFile>
   								<properties>
   									<propertyDef>org.wso2.carbon.p2.category.type:server</propertyDef>
@@ -83,7 +81,7 @@
   								</properties>
   							</adviceFile>
 							<bundles>
-								<bundleDef>org.wso2.analytics.common:org.wso2.analytics.common.la.apim:${analytics.common.version}</bundleDef>
+								<bundleDef>org.wso2.analytics.common:org.wso2.analytics.common.spark.util:${pom.version}</bundleDef>
 							</bundles>
   						</configuration>
   					</execution>
