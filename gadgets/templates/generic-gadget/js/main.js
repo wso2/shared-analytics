@@ -11,13 +11,13 @@ var views = [{
         charts: [{ type: "bar", y: "avg_usage" }],
         padding: { "top": 20, "left": 50, "bottom": 20, "right": 80 },
         range: false,
-        height: 300,
-        rangeColor: COLOR_BLUE
+        height: 300
     },
     callbacks: [{
         type: "click",
         callback: function() {
-            wso2gadgets.load("chart-1");
+            //wso2gadgets.load("chart-1");
+            alert("Clicked on bar chart of chart-0. You can implement your own callback handler for this.");
         }
     }],
     subscriptions: [{
@@ -53,41 +53,6 @@ var views = [{
                 onError(e);
             }
         );
-    }
-}, {
-    id: "chart-1",
-    schema: [{
-        "metadata": {
-            "names": ["metro_area", "min_usage", "max_usag", "avg_usage"],
-            "types": ["ordinal", "linear", "linear", "linear"]
-        }
-    }],
-    chartConfig: {
-        x: "metro_area",
-        height: 300,
-        charts: [{ type: "line", y: "avg_usage" }],
-        padding: { "top": 20, "left": 50, "bottom": 20, "right": 80 },
-        range: false,
-        rangeColor: COLOR_BLUE
-    },
-    callbacks: [{
-        type: "click",
-        callback: function() {
-            wso2gadgets.load("chart-0");
-        }
-    }],
-    subscriptions: [{
-        topic: "range-selected2",
-        callback: function(topic, data, subscriberData) {
-            //do some stuff
-        }
-    }],
-    data: function() {
-        var data = [
-            ["California", 23.4, 45.6, 25.6],
-            ["Texas", 12, 65, 56]
-        ];
-        wso2gadgets.onDataReady(data);
     }
 }];
 
