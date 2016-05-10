@@ -62,7 +62,7 @@
         }
         //load data into current view using view's data configuration
         if (currentView.data && typeof currentView.data === "function") {
-            currentView.data();
+            currentView.data(context);
         }
         //initialize inter-gadget subscriptions
         gadgets.HubSettings.onConnect = function() {
