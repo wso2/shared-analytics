@@ -76,10 +76,10 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
-                        <Private-Package>org.wso2.analytics.common.geolocation.internal.*</Private-Package>
+                        <Private-Package>org.wso2.carbon.analytics.shared.geolocation.internal.*</Private-Package>
                         <Export-Package>
-                            !org.wso2.analytics.common.geolocation.internal.*,
-                            org.wso2.analytics.common.geolocation.*
+                            !org.wso2.carbon.analytics.shared.geolocation.internal.*,
+                            org.wso2.carbon.analytics.shared.geolocation.*
                         </Export-Package>
                         <Import-Package>
                             org.wso2.carbon.analytics.spark.core.*,
