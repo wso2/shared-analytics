@@ -1,328 +1,434 @@
 /*
- * Copyright (c)  2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
+ * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
  */
-var gatewayPort = location.port -9443 + 8243; //Calculate the port offset based gateway port.
-var serverUrl = "https://"+location.hostname +":"+ gatewayPort+"/LogAnalyzerRestApi/1.0";
+var gatewayPort = location.port - 9443 + 8243; //Calculate the port offset based gateway port.
+var serverUrl = "https://" + location.hostname + ":" + gatewayPort + "/LogAnalyzerRestApi/1.0";
 var client = new AnalyticsClient().init(null, null, serverUrl);
-var div = "#chartInvalidLoginAttempts";
-var from = new Date(moment().subtract(29, 'days')).getTime();
-var to = new Date(moment()).getTime();
-var fromTime;
-var toTime;
-var dataM = [];
+var timeFrom = gadgetUtil.timeFrom();
+var timeTo = gadgetUtil.timeTo();
+var timeUnit = null;
+var gadgetPropertyName = "INVALID_LOGIN_ATTEMPT";
+var receivedData = [];
+var receivedOtherData = [];
 var mockData = [];
-var newDataM =[];
-var newDataOtherM=[];
-var chartData = [];
-var names = ["day", "count", "agentID"];
-var types = ["ordinal", "linear", "linear"];
-var mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
-var msgMap = new Map();
-var msgCount=0;
-var receivedData;
+var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+var receivedDataIdMap = new Map();
+var legendMap = new Map();
+var timeFrame = "";
+var TOPIC_SUB_DATE_RANGE = "subscriber";
+var TOPIC_PUB_CONTENT = "publisher";
+var totalRecordCount = 0;
+var tableName = "";
+var canvasDiv = "#canvas";
+var legendDiv = "#legend";
+var legendTitleDiv = "#legendTitle";
+var errorDiv = "#errorDiv";
+var gadgetData;
+var globalPage = 1;
+var chartColorScale = ["#1abc9c", "#3498db", "#9b59b6", "#f1c40f", "#e67e22", "#e74c3c", "#2c3e50", "#2ecc71", "#F16272"];
+
+var legendTemplate = "<ul class='legendText' style='list-style-type:none'><li class='context'><svg width='10' height='10'>" +
+    "<circle cx='5' cy='5' r='6' fill='{{bulletColor}}'/></svg><span class='textContext'><a class='legendTooltip' data-toggle='tooltip' data-placement='bottom' title='{{fullContext}}' style='cursor:default'>{{context}}</a></span></li></ul>";
+
+var paginationTemplate = "<ul class='legendText' style='list-style-type:none'><li><div id='paginate'></div></li></ul>";
+
+var legendTitle = '<div style="position: absolute;top: 16px;left: 750px;">Legend</div><div style="position: absolute;top: 16px;left: 750px;">Legend</div>';
 
 function initialize() {
-    fetch();
-    //$("#chartErrorMessage").html(getDefaultText());
-}
+    gadgetData = gadgetUtil.getChart(gadgetPropertyName);
+    receivedDataIdMap.clear();
+    legendMap.clear();
+    receivedData.length = 0;
+    receivedOtherData.length = 0;
+    mockData.length = 0;
+    globalPage = 1;
+    var newFrom = new Date(timeFrom);
+    var newTo = new Date(timeTo);
+    var diffDays = daysBetween(new Date(timeFrom), new Date(timeTo));
+    if (diffDays > 90) {
+        timeFrame = "MONTHLY";
+        while (!(newFrom.getTime() >= newTo.getTime())) {
+            mockData.push([months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries", 0]);
+            newFrom.setMonth(newFrom.getMonth() + 1);
+        }
+    } else if (diffDays > 30) {
+        timeFrame = "WEEKLY";
+        var weekNo = 0;
+        var loopCount = Math.ceil((timeTo - timeFrom) / (86400000 * 7));
+        for (var i = 0; i < loopCount; i++) {
+            var firstDayOfMonth = new Date(newFrom);
+            firstDayOfMonth.setDate(1);
+            weekNo = (moment(newFrom).week()) - moment(firstDayOfMonth.getTime()).week() + 1;
+            mockData.push(["W" + (weekNo == 0 ? 1 : weekNo) + " - " + months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries", 0]);
+            newFrom.setDate(newFrom.getDate() + 7);
+            if (newFrom.getMonth() != firstDayOfMonth.getMonth()) {
+                mockData.push(["W" + (1) + " - " + months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries", 0]);
+            }
+        }
+    } else {
+        timeFrame = "DAILY";
+        while (!(newFrom.getTime() >= newTo.getTime())) {
+            mockData.push([newFrom.toDateString(), 0, "NoEntries", 0]);
+            newFrom.setHours(newFrom.getHours() + 24);
+        }
+    }
+    tableName = "LOGANALYZER_" + gadgetData.name + "_" + timeFrame;
 
-function getDefaultText() {
-    return '<div class="status-message">'+
-        '<div class="message message-info">'+
-        '<h4><i class="icon fw fw-info"></i>No content to display</h4>'+
-        '<p>Please select a date range to view stats.</p>'+
-        '</div>'+
-        '</div>';
-};
+    var query = "_timestamp: [" + timeFrom + " TO " + timeTo + "]";
+    var sorting = [
+        {
+            field: gadgetData.orderedField,
+            sortType: "DESC", // This can be ASC, DESC
+            reversed: "false" //optional
+        }
+    ];
+    var queryInfo = queryBuilder(tableName, query, 0, 1000, sorting);
 
-function getEmptyRecordsText() {
-    return '<div class="status-message">'+
-        '<div class="message message-info">'+
-        '<h4><i class="icon fw fw-info"></i>No records found</h4>'+
-        '<p>Please select a date range to view stats.</p>'+
-        '</div>'+
-        '</div>';
+    client.searchCount(queryInfo, function (d) {
+        if (d["status"] === "success") {
+            totalRecordCount = d["message"];
+            if (totalRecordCount > 0) {
+                fetch(0, 10);//Initial fetching cycle
+            } else {
+                $(canvasDiv).empty();
+                $(legendDiv).empty();
+                $(legendTitleDiv).empty();
+                $(errorDiv).html(gadgetUtil.getEmptyRecordsText());
+            }
+        }
+    }, function (error) {
+        error.message = "Internal server error while data indexing.";
+        onError(error);
+    });
 }
 
 $(document).ready(function () {
     initialize();
 });
 
-function fetch() {
-    msgMap.length = 0;
-    msgCount = 0;
-    dataM.length = 0;
-    mockData.length = 0;
-    newDataM.length = 0;
-    newDataOtherM.length = 0;
-    chartData.length = 0;
-    var queryInfo;
-    var timeFrame;
-    var newFrom;
-    var newTo;
-    var tomorrow;
-    console.log("InvalidLoggingCount");
-    var diffDays = daysBetween(new Date(from), new Date(to));
-    if(diffDays>90){
-        timeFrame = "monthly";
-        queryInfo = {
-            tableName: "LOGANALYZER_INVALID_LOGIN_ATTEMPT_MONTHLY",
-            searchParams: {
-                query: "_timestamp: [" + from + " TO " + to + "]",
-                start : 0, //starting index of the matching record set
-                count : 100, //page size for pagination
-                sortBy : [
-                    {
-                        field : "InvalidLoginCount",
-                        sortType : "DESC", // This can be ASC, DESC
-                        reversed : "false" //optional
-                    }
-                ]
-            }
-        };
-    }else if (diffDays>30){
-        timeFrame = "weekly";
-        queryInfo = {
-            tableName: "LOGANALYZER_INVALID_LOGIN_ATTEMPT_WEEKLY",
-            searchParams: {
-                query: "_timestamp: [" + from + " TO " + to + "]",
-                start : 0, //starting index of the matching record set
-                count : 100, //page size for pagination
-                sortBy : [
-                    {
-                        field : "InvalidLoginCount",
-                        sortType : "DESC", // This can be ASC, DESC
-                        reversed : "false" //optional
-                    }
-                ]
-            }
-        };
-    }else{
-        timeFrame = "daily";
-        queryInfo = {
-            tableName: "LOGANALYZER_INVALID_LOGIN_ATTEMPT_DAILY",
-            searchParams: {
-                query: "_timestamp: [" + from + " TO " + to + "]",
-                start : 0, //starting index of the matching record set
-                count : 100, //page size for pagination
-                sortBy : [
-                    {
-                        field : "InvalidLoginCount",
-                        sortType : "DESC", // This can be ASC, DESC
-                        reversed : "false" //optional
-                    }
-                ]
-            }
-        };
-    }
-
-    console.log(queryInfo);
+function fetch(start, count) {
+    receivedData.length = 0;
+    receivedOtherData.length = 0;
+    var query = "_timestamp: [" + timeFrom + " TO " + timeTo + "]";
+    var sorting = [
+        {
+            field: gadgetData.orderedField,
+            sortType: "DESC", // This can be ASC, DESC
+            reversed: "false" //optional
+        }
+    ];
+    var queryInfo = queryBuilder(tableName, query, start, count, sorting);
     client.search(queryInfo, function (d) {
-        newFrom = new Date(from);
-        newTo = new Date(to);
-        var msgHash;
-        receivedData = JSON.parse(d["message"]);
         if (d["status"] === "success") {
-            tomorrow = new Date(from);
-            if(timeFrame==="daily"){
-                newFrom.setHours(0);
-                newFrom.setMinutes(0);
-                newFrom.setSeconds(0);
-                newTo.setHours(0);
-                newTo.setMinutes(0);
-                newTo.setSeconds(0);
-                while(!(newFrom.getTime() >= newTo.getTime())){
-                    mockData.push([newFrom.toDateString(),0,"No entries"]);
-                    newFrom.setHours(newFrom.getHours()+24);
-                }
-                for (var i =0; i < receivedData.length ;i++){
-                    var tempDay = new Date(receivedData[i].timestamp);
-                    dataM.push([tempDay.toDateString(),receivedData[i].values.InvalidLoginCount,receivedData[i].values.AgentId]);
-                }
-            }else if(timeFrame === "monthly"){
-                newFrom.setDate(1);
-                newTo.setDate(1);
-                while(!(newFrom.getTime() >= newTo.getTime())){
-                    mockData.push([mS[newFrom.getMonth()]+" - "+newFrom.getFullYear(),0,"No entries"]);
-                    newFrom.setMonth(newFrom.getMonth()+1);
-                }
-                for (var i =0; i < receivedData.length ;i++){
-                    var tempDay = new Date(receivedData[i].timestamp);
-                    dataM.push([mS[tempDay.getMonth()]+" - "+tempDay.getFullYear(),receivedData[i].values.InvalidLoginCount,receivedData[i].values.AgentId]);
-                }
-            }else if(timeFrame === "weekly"){
-                var weekNo =0;
-                while(!(newFrom.getTime() > newTo.getTime())){
-                    mockData.push(["W"+(++weekNo)+" "+mS[newFrom.getMonth()]+" - "+newFrom.getFullYear(),0,"No entries"]);
-                    newFrom.setHours(newFrom.getHours()+(24*7));
-                }
-                for (var i =0; i < receivedData.length ;i++){
-                    var tempDay = new Date(receivedData[i].timestamp);
-                    dataM.push(["W"+receivedData[i].values.week+" "+mS[tempDay.getMonth()]+" - "+tempDay.getFullYear(),receivedData[i].values.InvalidLoginCount,receivedData[i].values.AgentId]);
-                }
+            receivedData = JSON.parse(d["message"]);
+            if (receivedData.length > 0 && (start + count) >= totalRecordCount) {
+                drawInvalidLoggingCountChart();
+            } else if (receivedData.length > 0 && (start + count) < totalRecordCount) {
+                queryInfo = queryBuilder(tableName, query, (start + count), totalRecordCount, sorting);
+                client.search(queryInfo, function (d) {
+                    if (d["status"] === "success") {
+                        receivedOtherData = JSON.parse(d["message"]);
+                        drawInvalidLoggingCountChart();
+                    }
+                }, function (error) {
+                    error.message = "Internal server error while data indexing.";
+                    onError(error);
+                });
+            } else {
+                $(canvasDiv).empty();
+                $(legendDiv).empty();
+                $('#legendTitle').empty();
+                $(canvasDiv).html(gadgetUtil.getEmptyRecordsText());
             }
-            drawChartByClass();
         }
     }, function (error) {
-        console.log("error occured: " + error);
+        error.message = "Internal server error while data indexing.";
+        onError(error);
     });
 }
 
-function drawChartByClass() {
-    $("#chartInvalidLoginAttempts").empty();
-    var configChart = {
-        type: "bar",
-        x : "day",
-        colorScale:["#ecf0f1","#1abc9c", "#3498db", "#9b59b6", "#f1c40f","#e67e22","#e74c3c","#95a5a6","#2c3e50","#2ecc71","#F16272"],
-        xAxisAngle: "true",
-        color:"agentID",
-        charts : [{type: "bar",  y : "count", mode:"stack"}],
-        width: $('body').width()+100,
-        height: $('body').height(),
-        padding: { "top": 10, "left": 80, "bottom": 70, "right": 500 },
-        tooltip: {"enabled":true, "color":"#e5f2ff", "type":"symbol", "content":["agentID","count","day"], "label":true}
-    };
+function drawInvalidLoggingCountChart() {
+    try {
+        gadgetData.chartConfig.colorScale.length = 0;
+        gadgetData.chartConfig.colorDomain.length = 0;
+        $(canvasDiv).empty();
+        $(legendDiv).empty();
+        $(legendTitleDiv).empty();
+        $(errorDiv).empty();
+        legendMap.clear();
+        var totalPages = Math.ceil(totalRecordCount / 10.0);
+        var options = {
+            currentPage: globalPage,
+            totalPages: totalPages,
+            size: "normal",
+            alignment: "center",
+            onPageClicked: onPaginationClicked,
+            itemTexts: function (type, page, current) {
+                switch (type) {
+                    case "prev":
+                        return "<< Back";
+                    case "next":
+                        return "Explore Other >>";
+                }
+            },
+            shouldShowPage: function (type, page, current) {
+                switch (type) {
+                    case "first":
+                    case "last":
+                    case "page":
+                        return false;
+                    default:
+                        return true;
+                }
+            },
+            tooltipTitles: function (type, page, current) {
+                switch (type) {
+                    case "prev":
+                        return "Go to Back";
+                    case "next":
+                        return "Go to Explore Other";
+                }
+            },
+            useBootstrapTooltip: true
+        };
 
-    var meta = {
-        "names": names,
-        "types": types
-    };
-    if(dataM.length > 9){
-        var duplicate = false;
-        console.log(dataM.length);
-        var mapOther = [];
-        newDataM = dataM.slice(0,9);
-        for (var i=9;i<dataM.length;i++){
-            for(var k = 0; k < 10; k++){
-            if(dataM[i][2] === dataM[k][2] ){
-            duplicate = true;
+        //perform necessary transformation on input data
+        var summarizeData = chartDataBuilder();
+        $(legendTitleDiv).empty();
+        $(legendTitleDiv).append(Mustache.to_html(legendTitle));
+        for (var i = 0; i < summarizeData.length; i++) {
+            if (summarizeData[i][2] != "NoEntries") {
+                drawLegend(summarizeData[i][2], summarizeData[i][3]);
             }
+        }
+
+        var drawingChartData = [];
+        for (var i = 0; i < mockData.length; i++) {
+            for (var j = 0; j < summarizeData.length; j++) {
+                if (mockData[i][0] === summarizeData[j][0]) {
+                    drawingChartData.push(summarizeData[j]);
+                } else {
+                    drawingChartData.push(mockData[i]);
+                }
             }
-
-        if(!duplicate){
-        newDataOtherM.push([dataM[i],i]);
-         if(isNaN(mapOther[dataM[i][0]])){
-                        mapOther[dataM[i][0]] = dataM[i][1];
-                    }else{
-                        mapOther[dataM[i][0]] = mapOther[dataM[i][0]] + dataM[i][1];
-                    }
-        }else{
-        newDataM.push(dataM[i]);
         }
-        duplicate = false;
-        }
-        for (var key in mapOther) {
-            var value = mapOther[key];
-            newDataM.push([key,value,"Other"]);
-        }
-    }else{
-        for(var i=0; i<dataM.length;i++){
-            newDataM.push(dataM[i]);
-        }
-    }
+        gadgetData.schema[0].data = drawingChartData;
 
-    for(var i=0; i<mockData.length;i++){
-        chartData.push(mockData[i]);
-    }
-
-    for(var i=0; i<newDataM.length;i++){
-        chartData.push(newDataM[i]);
-    }
-
-    var chart = new vizg(
-        [
+        //finally draw the chart on the given canvas
+        gadgetData.chartConfig.width = $(canvasDiv).width();
+        gadgetData.chartConfig.height = $(canvasDiv).height();
+        gadgetData.chartConfig.colorDomain.push(["NoEntries"]);
+        var vg = new vizg(gadgetData.schema, JSON.parse(JSON.stringify(gadgetData.chartConfig)));
+        vg.draw(canvasDiv, [
             {
-                "metadata": meta,
-                "data": chartData
+                type: "click",
+                callback: onclick
             }
-        ],
-        configChart
-    );
-
-    chart.draw(div,[
-        {
-            type: "click",
-            callback: onclick
-        }
-    ]);
+        ]);
+        $(legendDiv).append(Mustache.to_html(paginationTemplate));
+        $('#paginate').bootstrapPaginator(options);
+        $('[data-toggle="tooltip"]').tooltip();
+    } catch (error) {
+        error.message = "Error while drawing log viewer.";
+        error.status = "";
+        onError(error);
+    }
 }
 
+function drawLegend(fullContext, id) {
+    var bColor;
+    var subContext;
+    if (legendMap.get(fullContext) === undefined) {
+        if (fullContext === "Other") {
+            bColor = "#95a5a6";
+            subContext = fullContext;
+        } else {
+            bColor = chartColorScale[legendMap.size];
+            if (fullContext.length > 57) {
+                subContext = "ID " + id + " - " + fullContext.substring(0, 57) + "...";
+            } else {
+                subContext = "ID " + id + " - " + fullContext;
+            }
+        }
+        legendMap.set(fullContext, (legendMap.size + 1));
+        $(legendDiv).append(Mustache.to_html(legendTemplate, {
+            context: subContext,
+            bulletColor: bColor,
+            fullContext: fullContext
+        }));
+        gadgetData.chartConfig.colorScale.push([bColor]);
+        gadgetData.chartConfig.colorDomain.push([fullContext]);
+    }
+}
 
+function onPaginationClicked(e, originalEvent, type, page) {
+    globalPage = page;
+    fetch((page - 1) * 10, 10);
+}
 
-function publish (data) {
-    gadgets.Hub.publish("publisher", data);
-};
+function chartDataBuilder() {
+    var chartDataArray = [];
+    var otherDataMap = new Map();
+    var chartOtherDataTuple;
+    if (gadgetData.additionalColumns == null) {
+        for (var i = 0; i < receivedData.length; i++) {
+            chartOtherDataTuple = chartDataFormatter(receivedData[i][gadgetData.columns[0]], receivedData[i].values[gadgetData.columns[1]],
+                receivedData[i].values[gadgetData.columns[2]], null);
+            chartDataArray.push(chartOtherDataTuple);
+            receivedData[i]["day"] = chartOtherDataTuple[0];
+        }
+        for (var i = 0; i < receivedOtherData.length; i++) {
+            chartOtherDataTuple = chartOtherDataFormatter(receivedOtherData[i][gadgetData.columns[0]], receivedOtherData[i].values[gadgetData.columns[1]], null);
+            if (otherDataMap.get(chartOtherDataTuple[0]) === undefined) {
+                otherDataMap.set(chartOtherDataTuple[0], chartOtherDataTuple[1]);
+            } else {
+                otherDataMap.set(chartOtherDataTuple[0], otherDataMap.get(chartOtherDataTuple[0]) + chartOtherDataTuple[1]);
+            }
+            receivedOtherData[i]["day"] = chartOtherDataTuple[0];
+        }
+        otherDataMap.forEach(function (element, index, array) {
+            chartDataArray.push([index, element, "Other", index]);
+        });
+    } else {
+        for (var i = 0; i < receivedData.length; i++) {
+            chartOtherDataTuple = chartDataFormatter(receivedData[i][gadgetData.columns[0]], receivedData[i].values[gadgetData.columns[1]],
+                receivedData[i].values[gadgetData.columns[2]], receivedData[i].values.week);
+            chartDataArray.push(chartOtherDataTuple);
+            receivedData[i]["day"] = chartOtherDataTuple[0];
+        }
+        for (var i = 0; i < receivedOtherData.length; i++) {
+            chartOtherDataTuple = chartOtherDataFormatter(receivedOtherData[i][gadgetData.columns[0]], receivedOtherData[i].values[gadgetData.columns[1]], receivedOtherData[i].values.week);
+            if (otherDataMap.get(chartOtherDataTuple[0]) === undefined) {
+                otherDataMap.set(chartOtherDataTuple[0], chartOtherDataTuple[1]);
+            } else {
+                otherDataMap.set(chartOtherDataTuple[0], otherDataMap.get(chartOtherDataTuple[0]) + chartOtherDataTuple[1]);
+            }
+            receivedOtherData[i]["day"] = chartOtherDataTuple[0];
+        }
+        otherDataMap.forEach(function (element, index, array) {
+            chartDataArray.push([index, element, "Other", index]);
+        });
+    }
+    return chartDataArray;
+}
 
-function publish2 (data) {
-    gadgets.Hub.publish("publisher2", data);
-};
+function chartDataFormatter(timestamp, count, context, additionalInfo) {
+    var chartTuple = [];
+    var newTimestamp = new Date(timestamp);
+    var contextHashValue = hashCode(context);
+    var messageID = "";
+    if (receivedDataIdMap.get(contextHashValue) === undefined) {
+        messageID = "ID" + (receivedDataIdMap.size + 1) + " -" + context;
+        receivedDataIdMap.set(contextHashValue, [receivedDataIdMap.size + 1, messageID]);
+    }
+    if (timeFrame === "MONTHLY") {
+        chartTuple = [months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear(), count, context,
+            receivedDataIdMap.get(contextHashValue)[0]];
+    } else if (timeFrame === "WEEKLY") {
+        chartTuple = ["W" + additionalInfo + " - " + months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear(),
+            count, context, receivedDataIdMap.get(contextHashValue)[0]];
+    } else {
+        chartTuple = [newTimestamp.toDateString(), count, context, receivedDataIdMap.get(contextHashValue)[0]];
+    }
+    return chartTuple;
+}
 
- var onclick = function(event, item) {
+function chartOtherDataFormatter(timestamp, count, additionalInfo) {
+    var chartTuple = [];
+    var newTimestamp = new Date(timestamp);
+    if (timeFrame === "MONTHLY") {
+        chartTuple = [months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear(), count, "Other", months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear()];
+    } else if (timeFrame === "WEEKLY") {
+        chartTuple = ["W" + additionalInfo + " - " + months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear(),
+            count, "Other", "W" + additionalInfo + " - " + months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear()];
+    } else {
+        chartTuple = [newTimestamp.toDateString(), count, "Other", newTimestamp.toDateString()];
+    }
+    return chartTuple;
+}
+
+function queryBuilder(tableName, query, start, count, sortBy) {
+    return {
+        tableName: tableName,
+        searchParams: {
+            query: query,
+            start: start, //starting index of the matching record set
+            count: count, //page size for pagination
+            sortBy: sortBy
+        }
+    };
+}
+
+function publish(data) {
+    gadgets.Hub.publish(TOPIC_PUB_CONTENT, data);
+}
+
+var onclick = function (event, item) {
     if (item != null) {
-        fromTime = new Date(item.datum.day);
-
-        getFromToTime(fromTime,"daily");
-        if(item.datum.agentID === "Other"){
-            for (var i =0; i< newDataOtherM.length;i++){
-
-                if(newDataOtherM[i][0][0] === item.datum.day){
-
+        if (item.datum[gadgetData.columns[2]] === "Other") {
+            for (var i = 0; i < receivedOtherData.length; i++) {
+                if (receivedOtherData[i]["day"] === item.datum.day) {
                     publish(
                         {
-                            "selected":receivedData[newDataOtherM[i][1]].values.agent,
-                            "fromTime": fromTime.getTime(),
-                            "toTime": toTime.getTime()
+                            "selected": receivedOtherData[i].values[gadgetData.columns[2]],
+                            "fromTime": receivedOtherData[i][gadgetData.columns[0]],
+                            "toTime": getToTime(receivedOtherData[i][gadgetData.columns[0]]),
+                            "count": item.datum.count,
+                            "filter": gadgetPropertyName
                         }
                     );
                 }
             }
-        }else{
-            publish(
-                {
-                    "filter": gadgetConfig.id,
-                    "selected": item.datum.agentID,
-                     "fromTime": fromTime.getTime(),
-                     "toTime": toTime.getTime()
+        } else {
+            for (var i = 0; i < receivedData.length; i++) {
+                if (receivedData[i].values[gadgetData.columns[2]] === item.datum[gadgetData.columns[2]] && receivedData[i]["day"] === item.datum.day) {
+                    publish(
+                        {
+                            "selected": receivedData[i].values[gadgetData.columns[2]],
+                            "fromTime": receivedData[i][gadgetData.columns[0]],
+                            "toTime": getToTime(receivedData[i][gadgetData.columns[0]]),
+                            "count": item.datum.count,
+                            "filter": gadgetPropertyName
+                        }
+                    );
                 }
-            );
+            }
         }
     }
 };
 
 function subscribe(callback) {
     gadgets.HubSettings.onConnect = function () {
-        gadgets.Hub.subscribe("subscriber", function (topic, data, subscriber) {
+        gadgets.Hub.subscribe(TOPIC_SUB_DATE_RANGE, function (topic, data, subscriber) {
             callback(topic, data, subscriber)
         });
     };
 }
 
 subscribe(function (topic, data, subscriber) {
-    console.log("From Time : "+parseInt(data["timeFrom"]));
-    console.log("To Time : "+parseInt(data["timeTo"]));
-    from = parseInt(data["timeFrom"]);
-    to = parseInt(data["timeTo"]);
-    isRedraw = true;
-    fetch();
+    timeFrom = parseInt(data["timeFrom"]);
+    timeTo = parseInt(data["timeTo"]);
+    timeUnit = data.timeUnit;
+    initialize();
 });
 
-function daysBetween( date1, date2 ) {
+function daysBetween(date1, date2) {
     //Get 1 day in milliseconds
-    var one_day=1000*60*60*24;
+    var one_day = 1000 * 60 * 60 * 24;
 
     // Convert both dates to milliseconds
     var date1_ms = date1.getTime();
@@ -332,51 +438,49 @@ function daysBetween( date1, date2 ) {
     var difference_ms = Math.abs(date2_ms - date1_ms);
 
     // Convert back to days and return
-    return Math.round(difference_ms/one_day);
+    return Math.round(difference_ms / one_day);
 }
 
 
-function hashCode(str){
+function hashCode(str) {
     var hash = 0;
     if (str.length == 0) return hash;
-    for (i = 0; i < str.length; i++) {
-        char = str.charCodeAt(i);
-        hash = ((hash<<5)-hash)+char;
+    for (var i = 0; i < str.length; i++) {
+        var char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
         hash = hash & hash; // Convert to 32bit integer
     }
-    return zeroPad(Math.abs(hash),13);
-}
-
- function getMonday(d) {
-   d = new Date(d);
-   var day = d.getDay(),
-       diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
-   return new Date(d.setDate(diff));
- }
-
-
-
-function getFromToTime(time, period){
-toTime = new Date();
-
-if(period === "daily"){
-    toTime.setDate(fromTime.getDate() + 1);
-    console.log(fromTime);
-        console.log(toTime);
-}else if(period === "weekly"){
-    fromTime = getMonday(fromTime);
-    toTime.setDate(fromTime.getDate() + 6);
-    console.log(fromTime);
-    console.log(toTime);
-
-}else{
-    fromTime = new Date(fromTime.getFullYear(), fromTime.getMonth(), 1);
-    toTime = new Date(fromTime.getFullYear(), fromTime.getMonth() + 1, 0);
-}
-
+    return zeroPad(Math.abs(hash), 13);
 }
 
 function zeroPad(num, places) {
     var zero = places - num.toString().length + 1;
     return Array(+(zero > 0 && zero)).join("0") + num;
+}
+
+function getNextWeekDay(timeStamp) {
+    var dateWithWeek = new Date(moment().week(moment(timeStamp).week()).endOf('Week'));
+    return dateWithWeek;
+}
+
+function getToTime(toTime) {
+    var duration;
+    toTime = new Date(toTime);
+    if (timeFrame === "DAILY") {
+        duration = toTime.getDate() + 1;
+        toTime.setDate(duration);
+    } else if (timeFrame === "MONTHLY") {
+        duration = toTime.getMonth() + 1;
+        toTime.setMonth(duration);
+    } else if (timeFrame === "WEEKLY") {
+        toTime = getNextWeekDay(toTime);
+    }
+    return toTime.getTime();
+}
+
+function onError(msg) {
+    $(canvasDiv).empty();
+    $(legendDiv).empty();
+    $(legendTitleDiv).empty();
+    $(canvasDiv).html(gadgetUtil.getErrorText(msg));
 }

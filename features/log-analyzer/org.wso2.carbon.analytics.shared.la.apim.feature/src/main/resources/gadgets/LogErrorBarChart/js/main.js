@@ -15,14 +15,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 var gatewayPort = location.port - 9443 + 8243; //Calculate the port offset based gateway port.
 var serverUrl = "https://" + location.hostname + ":" + gatewayPort + "/LogAnalyzerRestApi/1.0";
 var client = new AnalyticsClient().init(null, null, serverUrl);
 var timeFrom = gadgetUtil.timeFrom();
 var timeTo = gadgetUtil.timeTo();
 var timeUnit = null;
-var gadgetPropertyName = "APIM_MESSAGE_PROCESSING";
+var gadgetPropertyName = "MESSAGE_LEVEL_ERROR";// "CLASS_LEVEL_ERROR"
 var receivedData = [];
 var receivedOtherData = [];
 var mockData = [];
@@ -84,7 +83,7 @@ function initialize() {
         timeFrame = "DAILY";
         while (!(newFrom.getTime() >= newTo.getTime())) {
             mockData.push([newFrom.toDateString(), 0, "NoEntries", 0]);
-            newFrom.setHours(newFrom.getHours() + 24);
+            newFrom.setDate(newFrom.getDate() + 1);
         }
     }
     tableName = "LOGANALYZER_" + gadgetData.name + "_" + timeFrame;
@@ -119,7 +118,17 @@ function initialize() {
 
 $(document).ready(function () {
     initialize();
+    $("#selector").on('change', onClickSelector);
 });
+
+function onClickSelector() {
+    if (this.value === "Message") {
+        gadgetPropertyName = "MESSAGE_LEVEL_ERROR";
+    } else {
+        gadgetPropertyName = "CLASS_LEVEL_ERROR";
+    }
+    initialize();
+}
 
 function fetch(start, count) {
     receivedData.length = 0;
@@ -232,6 +241,7 @@ function drawErrorChart() {
         //finally draw the chart on the given canvas
         gadgetData.chartConfig.width = $(canvasDiv).width();
         gadgetData.chartConfig.height = $(canvasDiv).height();
+        //gadgetData.chartConfig.colorScale.push(["#95a5a6"]);
         gadgetData.chartConfig.colorDomain.push(["NoEntries"]);
         var vg = new vizg(gadgetData.schema, JSON.parse(JSON.stringify(gadgetData.chartConfig)));
         vg.draw(canvasDiv, [
@@ -424,6 +434,9 @@ subscribe(function (topic, data, subscriber) {
     timeFrom = parseInt(data["timeFrom"]);
     timeTo = parseInt(data["timeTo"]);
     timeUnit = data.timeUnit;
+    if (timeUnit === "Day") {
+        timeTo = timeFrom;
+    }
     initialize();
 });
 

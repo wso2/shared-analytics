@@ -6,12 +6,8 @@
   "data": {
     "url": "store://gadget/LogViewer/index.xml"
   },
-  "styles": {
-    "borders": false,
-    "title": false
-  },
   "listen": {
-    "subscriber3": {
+    "subscriber": {
       "type": "filter-range",
       "description": "Used to listen to any filters"
     }

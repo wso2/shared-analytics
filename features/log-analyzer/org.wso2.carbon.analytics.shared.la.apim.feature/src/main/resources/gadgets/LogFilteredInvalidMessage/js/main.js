@@ -15,14 +15,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var gatewayPort = location.port -9443 + 8243; //Calculate the port offset based gateway port.
-var serverUrl = "https://"+location.hostname +":"+ gatewayPort+"/LogAnalyzerRestApi/1.0";
+var gatewayPort = location.port - 9443 + 8243; //Calculate the port offset based gateway port.
+var serverUrl = "https://" + location.hostname + ":" + gatewayPort + "/LogAnalyzerRestApi/1.0";
 var client = new AnalyticsClient().init(null, null, serverUrl);
 var div = "#tblFilteredMessages2";
 var from = new Date(moment().subtract(29, 'days')).getTime();
 var to = new Date(moment()).getTime();
 var dataM = [];
-var initState = true;
 var filterdMessage;
 var time;
 var fromTime = new Date();
@@ -36,39 +35,37 @@ var meta = {
 
 var configTable = {
     key: "ID",
-    title:"FilteredMessages",
+    title: "FilteredMessages",
     charts: [{
         type: "table",
         columns: ["message", "class", "timestamp", "trace", "ID"],
         columnTitles: ["ERROR Message", "Class", "Event Time Stamp", "Error Trace", "ID"]
     }
     ],
-    width: $(window).width()* 0.95,
+    width: $(window).width() * 0.95,
     height: $(window).width() * 0.65 > $(window).height() ? $(window).height() : $(window).width() * 0.65,
-    padding: { "top": 100, "left": 30, "bottom": 22, "right": 70 }
+    padding: {"top": 100, "left": 30, "bottom": 22, "right": 70}
 };
 
 
 function initialize() {
-    //fetch();
-    //$("#tblArtifactDeleted").html(getDefaultText());
 }
 
 function getDefaultText() {
-    return '<div class="status-message">'+
-        '<div class="message message-info">'+
-        '<h4><i class="icon fw fw-info"></i>No content to display</h4>'+
-        '<p>Please select a date range to view stats.</p>'+
-        '</div>'+
+    return '<div class="status-message">' +
+        '<div class="message message-info">' +
+        '<h4><i class="icon fw fw-info"></i>No content to display</h4>' +
+        '<p>Please select a date range to view stats.</p>' +
+        '</div>' +
         '</div>';
 };
 
 function getEmptyRecordsText() {
-    return '<div class="status-message">'+
-        '<div class="message message-info">'+
-        '<h4><i class="icon fw fw-info"></i>No records found</h4>'+
-        '<p>Please select a date range to view stats.</p>'+
-        '</div>'+
+    return '<div class="status-message">' +
+        '<div class="message message-info">' +
+        '<h4><i class="icon fw fw-info"></i>No records found</h4>' +
+        '<p>Please select a date range to view stats.</p>' +
+        '</div>' +
         '</div>';
 }
 
@@ -77,34 +74,30 @@ $(document).ready(function () {
 });
 
 
-
-
 function fetch() {
     dataM.length = 0;
     var queryInfo;
     queryInfo = {
         tableName: "LOGANALYZER",
         searchParams: {
-            query: "logstream: \"" +filterdMessage+"\" AND _content:\"login attempt\" AND _eventTimeStamp:[" +fromTime+ " TO " + toTime + "]",
-            start : 0, //starting index of the matching record set
-            count : 100 //page size for pagination
+            query: "logstream: \"" + filterdMessage + "\" AND _content:\"login attempt\" AND _eventTimeStamp:[" + fromTime + " TO " + toTime + "]",
+            start: 0, //starting index of the matching record set
+            count: 100 //page size for pagination
         }
     };
-    console.log(queryInfo);
     client.search(queryInfo, function (d) {
         var obj = JSON.parse(d["message"]);
-        console.log(obj);
         var hash;
         if (d["status"] === "success") {
-            for (var i =0; i < obj.length ;i++){
-                hash  =hashCode(d["message"] + "  " +obj[i].values._eventTimeStamp );
-                dataM.push([obj[i].values._content,obj[i].values._class,obj[i].values._eventTimeStamp,obj[i].values.logstream, ID++]);
+            for (var i = 0; i < obj.length; i++) {
+                hash = hashCode(d["message"] + "  " + obj[i].values._eventTimeStamp);
+                dataM.push([obj[i].values._content, obj[i].values._class, obj[i].values._eventTimeStamp, obj[i].values.logstream, ID++]);
             }
             drawLogAPIMArtifactTableChart();
 
         }
     }, function (error) {
-        console.log("error occured: " + error);
+        console.log("error occurred: " + error);
     });
 }
 
@@ -120,16 +113,13 @@ function drawLogAPIMArtifactTableChart() {
         configTable
     );
     table.draw(div);
-    var table2 = $('#FilteredMessages').DataTable();
-    //$('#body').css( 'display', 'block' );
-    //table2.columns.adjust().draw();
-    $("#tableChart-FilteredMessages > tr").on( "click", function( event ) {
-        //alert(this.getElementsByClassName("timestamp")[0].textContent);
-        publish({timestamp : this.getElementsByClassName("timestamp")[0].textContent});
+    $('#FilteredMessages').DataTable();
+    $("#tableChart-FilteredMessages > tr").on("click", function (event) {
+        publish({timestamp: this.getElementsByClassName("timestamp")[0].textContent});
     });
 }
 
-function publish (data) {
+function publish(data) {
     gadgets.Hub.publish("publisher2", data);
 };
 
@@ -139,26 +129,25 @@ function subscribe(callback) {
             callback(topic, data, subscriber)
         });
     };
-    console.log("APIM subscribed");
 }
 
 subscribe(function (topic, data, subscriber) {
-    console.log("Received Data :"+data["selected"]);
     filterdMessage = data["selected"];
     fromTime = data["fromTime"];
-    toTime =  data["toTime"];
+    toTime = data["toTime"];
     fetch();
 });
 
-function hashCode(str){
+function hashCode(str) {
     var hash = 0;
+    var char;
     if (str.length == 0) return hash;
-    for (i = 0; i < str.length; i++) {
+    for (var i = 0; i < str.length; i++) {
         char = str.charCodeAt(i);
-        hash = ((hash<<5)-hash)+char;
+        hash = ((hash << 5) - hash) + char;
         hash = hash & hash; // Convert to 32bit integer
     }
-    return zeroPad(Math.abs(hash),13);
+    return zeroPad(Math.abs(hash), 13);
 }
 
 function zeroPad(num, places) {

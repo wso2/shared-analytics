@@ -17,12 +17,6 @@
  */
 
 var gadgetConfig = {
-    "id": "logAPIMArtifact",
-    "title": "logAPIMArtifact",
-    "datasource": "LOGANALYZER",
-    "type": "batch",
-    "level": ["ERROR","INFO","WARN","DEBUG"],
-    "maxUpdateValue": 10,
-    "chartConfig": {"yAxis": 2, "xAxis": 1, "chartType": "bar"},
-    "domain": "carbon.super"
+    "id": "logAPIMArtifactDeployed",
+    "title": "logAPIMArtifactDeployed",
 };
