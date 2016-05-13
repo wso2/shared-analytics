@@ -18,7 +18,7 @@
 
 package org.wso2.carbon.shared.analytics.spark.udf;
 
-import org.wso2.carbon.shared.analytics.spark.core.udf.CarbonUDF;
+import org.wso2.carbon.analytics.spark.core.udf.CarbonUDF;
 
 import java.text.ParseException;
 import java.util.Calendar;
