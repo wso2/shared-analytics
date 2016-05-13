@@ -30,7 +30,7 @@
     <name>Common Spark UDF Feature</name>
 
     <modules>
-        <module>org.wso2.shared.analytics.spark.util.feature</module>
+        <module>org.wso2.analytics.shared.spark.util.feature</module>
         <module>org.wso2.carbon.analytics.shared.geolocation.udf.feature</module>
     </modules>
 </project>

@@ -27,7 +27,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <name>WSO2 - Analytics Util Feature</name>
-    <artifactId>org.wso2.carbon.analytics.shared.util.feature</artifactId>
+    <artifactId>org.wso2.analytics.shared.util.feature</artifactId>
     <packaging>pom</packaging>
 
     <dependencies>
@@ -81,7 +81,7 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon.analytics.shared:org.wso2.carbon.analytics.shared.util:${pom.version}</bundleDef>
+                                <bundleDef>org.wso2.carbon.analytics.shared:org.wso2.analytics.shared.util:${pom.version}</bundleDef>
                             </bundles>
                         </configuration>
                     </execution>
