@@ -16,8 +16,34 @@
 * under the License.
 */
 
-package org.wso2.shared.analytics.util.time;
+package org.wso2.analytics.shared.util.time.bean;
 
-public enum RangeUnit {
-    SECOND, MINUTE, HOUR, DAY, MONTH
+public class TimeRange {
+
+    private String unit;
+    private long[] range;
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public long[] getRange() {
+        return range;
+    }
+
+    public void setRange(long[] range) {
+        this.range = range;
+    }
+
+    public TimeRange() {
+    }
+
+    public TimeRange(String unit, long[] range) {
+        this.unit = unit;
+        this.range = range;
+    }
 }
