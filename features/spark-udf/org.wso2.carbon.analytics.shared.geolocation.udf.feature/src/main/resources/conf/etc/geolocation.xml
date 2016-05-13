@@ -1,0 +1,12 @@
+<GeoLocation>
+    <Implementation class="org.wso2.carbon.analytics.shared.geolocation.impl.LocationResolverRdbms">
+        <Property name="dataSource">jdbc/GEO_LOCATION_DATA</Property>
+        <Property name="persistInDataBase">true</Property>
+        <Property name="ipToLongCacheCount">10000</Property>
+    </Implementation>
+    <Cache>
+        <enabled>true</enabled>
+        <IpResolveCacheCount>10000</IpResolveCacheCount>
+    </Cache>
+</GeoLocation>
+
