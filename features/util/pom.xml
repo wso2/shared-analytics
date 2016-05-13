@@ -30,6 +30,6 @@
     <name>Common Util Feature</name>
 
     <modules>
-        <module>org.wso2.shared.analytics.util.feature</module>
+        <module>org.wso2.analytics.shared.util.feature</module>
     </modules>
 </project>
