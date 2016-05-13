@@ -18,8 +18,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>org.wso2.analytics.common</groupId>
-        <artifactId>analytics-common</artifactId>
+        <groupId>org.wso2.shared.analytics</groupId>
+        <artifactId>shared-analytics</artifactId>
         <version>1.0.1-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
@@ -30,6 +30,6 @@
     <name>Common Spark UDF Feature</name>
 
     <modules>
-        <module>org.wso2.analytics.common.spark.util.feature</module>
+        <module>org.wso2.shared.analytics.spark.util.feature</module>
     </modules>
 </project>
