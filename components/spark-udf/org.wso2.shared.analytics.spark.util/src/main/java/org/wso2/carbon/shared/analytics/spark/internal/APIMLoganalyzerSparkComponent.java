@@ -15,14 +15,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.shared.carbon.analytics.spark.internal;
+package org.wso2.carbon.shared.analytics.spark.internal;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
-import org.wso2.carbon.analytics.common.spark.udf.DateTimeUDF;
-import org.wso2.carbon.analytics.common.spark.udf.RegExrUDF;
+import org.wso2.carbon.shared.analytics.spark.udf.DateTimeUDF;
+import org.wso2.carbon.shared.analytics.spark.udf.RegExrUDF;
 import org.wso2.carbon.analytics.spark.core.udf.CarbonUDF;
 
 /**

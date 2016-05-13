@@ -28,7 +28,7 @@ import org.joda.time.Hours;
 import org.joda.time.Minutes;
 import org.joda.time.Months;
 import org.joda.time.MutableDateTime;
-import org.wso2.analytics.common.util.time.bean.TimeRange;
+import org.wso2.shared.analytics.util.time.bean.TimeRange;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

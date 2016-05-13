@@ -22,7 +22,7 @@ import org.apache.synapse.ManagedLifecycle;
 import org.apache.synapse.MessageContext;
 import org.apache.synapse.core.SynapseEnvironment;
 import org.apache.synapse.rest.AbstractHandler;
-import org.wso2.carbon.analytics.common.la.apim.internal.ServiceReferenceHolder;
+import org.wso2.carbon.shared.analytics.la.apim.internal.ServiceReferenceHolder;
 import org.wso2.carbon.apimgt.impl.APIManagerConfiguration;
 import org.wso2.carbon.apimgt.impl.APIManagerConfigurationService;
 
