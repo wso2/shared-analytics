@@ -21,14 +21,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>org.wso2.shared.analytics</groupId>
+        <groupId>org.wso2.carbon.analytics.shared</groupId>
         <artifactId>util</artifactId>
         <version>1.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>org.wso2.shared.analytics.util</artifactId>
+    <artifactId>org.wso2.carbon.analytics.shared.util</artifactId>
     <name>Util - Time</name>
     <packaging>bundle</packaging>
 

@@ -18,7 +18,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>org.wso2.shared.analytics</groupId>
+        <groupId>org.wso2.carbon.analytics.shared</groupId>
         <artifactId>shared-analytics</artifactId>
         <version>1.0.1-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
@@ -30,6 +30,6 @@
     <name>log4j data agent component</name>
 
     <modules>
-        <module>org.wso2.shared.analytics.data.agents.log4j</module>
+        <module>org.wso2.carbon.analytics.shared.data.agents.log4j</module>
     </modules>
 </project>

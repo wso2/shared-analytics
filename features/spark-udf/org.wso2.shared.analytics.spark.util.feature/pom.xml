@@ -19,7 +19,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>org.wso2.shared.analytics</groupId>
+        <groupId>org.wso2.carbon.analytics.shared</groupId>
         <artifactId>spark-udf-feature</artifactId>
         <version>1.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -27,7 +27,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <name>WSO2 - Analytics Spark scripts Common Feature</name>
-    <artifactId>org.wso2.shared.analytics.spark.util.feature</artifactId>
+    <artifactId>org.wso2.carbon.analytics.shared.spark.util.feature</artifactId>
     <packaging>pom</packaging>
 
     <dependencies>
@@ -72,7 +72,7 @@
   							<goal>p2-feature-gen</goal>
   						</goals>
   						<configuration>
-  							<id>org.wso2.shared.analytics.spark.util</id>
+  							<id>org.wso2.carbon.analytics.shared.spark.util</id>
   							<propertiesFile>../../etc/feature.properties</propertiesFile>
   							<adviceFile>
   								<properties>
@@ -81,7 +81,7 @@
   								</properties>
   							</adviceFile>
 							<bundles>
-								<bundleDef>org.wso2.shared.analytics:org.wso2.shared.analytics.spark.util:${pom.version}</bundleDef>
+								<bundleDef>org.wso2.carbon.analytics.shared:org.wso2.carbon.analytics.shared.spark.util:${pom.version}</bundleDef>
 							</bundles>
   						</configuration>
   					</execution>
