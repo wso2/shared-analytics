@@ -30,7 +30,7 @@
     <name>Spark Common components</name>
 
     <modules>
-        <module>org.wso2.shared.analytics.spark.util</module>
+        <module>org.wso2.carbon.analytics.shared.spark.util</module>
         <module>org.wso2.carbon.analytics.shared.geolocation.udf</module>
     </modules>
 </project>
