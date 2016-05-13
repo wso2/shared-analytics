@@ -1,7 +1,8 @@
-# WSO2 Analytics Common (Carbon Components and Features)
+# WSO2 Shared Analytics (Carbon Components and Features)
 
-[![Build Status](https://wso2.org/jenkins/job/analytics-common/badge/icon)](https://wso2.org/jenkins/job/analytics-common)
+[![Build Status](https://wso2.org/jenkins/job/shared-analytics/badge/icon)](https://wso2.org/jenkins/job/shared-analytics)
 
+Shared analytics contains reusable components and features which is bundled along with products related to WSO2 Analytics.
 
 WSO2 Analytics contains powerful common components for real-time, batch, interactive, and predictive (via machine learning) analysis of data into one integrated platform. This supports the multiple demands of Internet of Things (IoT) solutions, as well as mobile and Web apps.
 
@@ -9,7 +10,13 @@ WSO2 Analytics contains powerful common components for real-time, batch, interac
 # Available Features
 * Log4J Appender publishing log events to [DAS](http://wso2.com/products/data-analytics-server/)
 * Log Tail Agent listens to given log file and publishing new events to [DAS](http://wso2.com/products/data-analytics-server/)
-* Log Analyzer DAshboard for [APIM](http://wso2.com/api-management/)
+* Log Analyzer Dashboard for [APIM](http://wso2.com/api-management/)
+
+
+# Downstream projects
+* [WSO2 Analytics for APIM](https://github.com/wso2/analytics-apim)
+* [WSO2 Analytics for ESB](https://github.com/wso2/analytics-esb)
+
 
 --------------------------------------------------------------------------------
 # Support
