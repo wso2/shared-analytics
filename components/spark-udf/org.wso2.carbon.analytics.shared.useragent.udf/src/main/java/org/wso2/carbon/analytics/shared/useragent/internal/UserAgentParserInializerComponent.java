@@ -15,35 +15,35 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.carbon.analytics.shared.geolocation.internal;
+package org.wso2.carbon.analytics.shared.useragent.internal;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
-import org.wso2.carbon.analytics.shared.geolocation.impl.GeoLocationResolverUDF;
+import org.wso2.carbon.analytics.shared.useragent.udf.UserAgentParser;
 import org.wso2.carbon.analytics.spark.core.udf.CarbonUDF;
 
 /**
- * This class represents the spark component for IP based geolocation extractor spark component
+ * This class represents the spark component for UserAgent Header base  spark component
  *
- * @scr.component name="org.wso2.carbon.analytics.shared.geolocation" immediate="true"
+ * @scr.component name="org.wso2.carbon.analytics.shared.useragent" immediate="true"
  */
 
-public class GeoLocationInitializerComponent {
-    private static final Log log = LogFactory.getLog(GeoLocationInitializerComponent.class);
+public class UserAgentParserInializerComponent {
+    private static final Log log = LogFactory.getLog(UserAgentParserInializerComponent.class);
 
     protected void activate(ComponentContext ctx) {
         if (log.isDebugEnabled()) {
-            log.debug("Starting Geolocation Initializer#activate");
+            log.debug("Starting UserAgent Initializer#activate");
         }
         BundleContext bundleContext = ctx.getBundleContext();
         try {
 
 
-           bundleContext.registerService(CarbonUDF.class, new GeoLocationResolverUDF(), null);
+           bundleContext.registerService(CarbonUDF.class, new UserAgentParser(), null);
         } catch (Throwable e) {
-            log.error("Error in activating Geolocation Component: " + e.getMessage(), e);
+            log.error("Error in activating UserAgent Component: " + e.getMessage(), e);
         }
     }
 }
