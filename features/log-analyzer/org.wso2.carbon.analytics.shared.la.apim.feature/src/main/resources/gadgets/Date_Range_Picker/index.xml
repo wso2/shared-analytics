@@ -25,6 +25,8 @@
     <Content type="html">
         <![CDATA[
         <head>
+          <meta charset="utf-8"/>
+          <title>Date Range Picker</title>
 
           <!-- Custom Theme -->
           <link rel="stylesheet" type="text/css" href="/portal/libs/bootstrap_3.3.5/css/bootstrap.min.css" />

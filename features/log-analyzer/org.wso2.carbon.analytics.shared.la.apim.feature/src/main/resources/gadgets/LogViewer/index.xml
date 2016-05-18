@@ -30,7 +30,7 @@
         <![CDATA[
         <html>
             <head>
-                <meta charset="utf-8">
+                <meta charset="utf-8"/>
                 <title>Log Viewer</title>
 
                 <!-- WSO2 Theme -->
@@ -50,7 +50,6 @@
                 <script src="../commons/js/carbon-analytics.js"></script>
                 <script src="../commons/js/moment.min.js"></script>
                 <script src="../commons/js/jquery.nanoscroller.min.js"></script>
-                <script src="../commons/js/Mustache.js"></script>
                 <script src="../commons/js/gadget-utils.js"></script>
 
                 <!-- Custom JS-->

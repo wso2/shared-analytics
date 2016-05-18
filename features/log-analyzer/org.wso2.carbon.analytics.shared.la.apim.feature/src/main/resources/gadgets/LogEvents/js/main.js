@@ -22,7 +22,7 @@ var chart;
 var from = gadgetUtil.timeFrom();
 var to = gadgetUtil.timeTo();
 var async_tasks = gadgetConfig.level.length;
-var dataM = [];
+var receivedData = [];
 var initState = true;
 var meta = gadgetConfig.meta;
 var configChart = gadgetConfig.chartConfig;
@@ -36,21 +36,21 @@ $(document).ready(function () {
     initialize();
 });
 
-function fetch(ch) {
-    if (!ch) {
-        dataM.length = 0;
-        ch = 0;
+function fetch(logLevelIndex) {
+    if (!logLevelIndex) {
+        receivedData.length = 0;
+        logLevelIndex = 0;
     }
     var queryInfo = {
         tableName: gadgetConfig.datasource,
         searchParams: {
-            query: "_level:" + gadgetConfig.level[ch] + " AND  _eventTimeStamp: [" + from + " TO " + to + "]"
+            query: "_level:" + gadgetConfig.level[logLevelIndex] + " AND  _eventTimeStamp: [" + from + " TO " + to + "]"
         }
     };
 
     client.searchCount(queryInfo, function (d) {
         if (d["status"] === "success") {
-            dataM.push([gadgetConfig.level[ch], parseInt(d["message"])]);
+            receivedData.push([gadgetConfig.level[logLevelIndex], parseInt(d["message"])]);
             async_tasks--;
             if (async_tasks == 0) {
                 if (!initState) {
@@ -60,7 +60,7 @@ function fetch(ch) {
                     initState = false;
                 }
             } else {
-                fetch(++ch);
+                fetch(++logLevelIndex);
             }
         }
     }, function (error) {
@@ -76,7 +76,7 @@ function drawLogLevelChart() {
             [
                 {
                     "metadata": this.meta,
-                    "data": dataM
+                    "data": receivedData
                 }
             ],
             configChart
@@ -90,8 +90,8 @@ function drawLogLevelChart() {
 }
 
 function redrawLogLevelChart() {
-    for (var i in dataM) {
-        chart.insert([dataM[i]]);
+    for (var i in receivedData) {
+        chart.insert([receivedData[i]]);
     }
 }
 

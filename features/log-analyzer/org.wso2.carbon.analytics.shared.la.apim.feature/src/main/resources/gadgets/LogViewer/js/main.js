@@ -20,20 +20,15 @@ var serverUrl = "https://" + location.hostname + ":" + gatewayPort + "/LogAnalyz
 var client = new AnalyticsClient().init(null, null, serverUrl);
 var from = gadgetUtil.timeFrom();
 var to = gadgetUtil.timeTo();
-var dataM = [];
+var receivedData = [];
 var filteredMessage;
 var filteredTime;
-var logError = "<ul class='logError'>{{#arr}}<li class='data'>{{date}}</li><li class='level'>{{level}}</li><li class='class'>{{class}}</li><li class='content'>{{content}}</li><li class='trace'>{{trace}}</li>{{/arr}}</ul>";
-var logDebug = "<ul class='logDebug'>{{#arr}}<li class='data'>{{date}}</li><li class='level'>{{level}}</li><li class='class'>{{class}}</li><li class='content'>{{content}}</li><li class='trace'>{{trace}}</li>{{/arr}}</ul>";
-var logWarn = "<ul class='logWarn'>{{#arr}}<li class='data'>{{date}}</li><li class='level'>{{level}}</li><li class='class'>{{class}}</li><li class='content'>{{content}}</li><li class='trace'>{{trace}}</li>{{/arr}}</ul>";
-var logInfo = "<ul class='logInfo'>{{#arr}}<li class='data'>{{date}}</li><li class='level'>{{level}}</li><li class='class'>{{class}}</li><li class='content'>{{content}}</li><li class='trace'>{{trace}}</li>{{/arr}}</ul>";
-var logSelectedError = "<ul id = 'selectedError' class='logSelectedError'>{{#arr}}<li class='data'>{{date}}</li><li class='level'>{{level}}</li><li class='class'>{{class}}</li><li class='content'>{{content}}</li><li class='trace'>{{trace}}</li>{{/arr}}</ul>";
-var logSelectedWarn = "<ul id = 'selectedWarn' class='logSelectedWarn'>{{#arr}}<li class='data'>{{date}}</li><li class='level'>{{level}}</li><li class='class'>{{class}}</li><li class='content'>{{content}}</li><li class='trace'>{{trace}}</li>{{/arr}}</ul>";
 var nanoScrollerSelector = $(".nano");
 var canvasDiv = "#canvas";
 
 function initialize() {
-    $(canvasDiv).html(gadgetUtil.getDefaultText());
+    $(canvasDiv).html(gadgetUtil.getCustemText("No content to display","Please click on a View button from the above table" +
+        " to access all the log events in the time period surrounding an event."));
     nanoScrollerSelector.nanoScroller();
 }
 
@@ -42,7 +37,7 @@ $(document).ready(function () {
 });
 
 function fetch() {
-    dataM.length = 0;
+    receivedData.length = 0;
     var queryInfo;
     var queryForSearchCount = {
         tableName: "LOGANALYZER",
@@ -66,7 +61,7 @@ function fetch() {
                 var obj = JSON.parse(d["message"]);
                 if (d["status"] === "success") {
                     for (var i = 0; i < obj.length; i++) {
-                        dataM.push([{
+                        receivedData.push([{
                             date: new Date(parseInt(obj[i].values._eventTimeStamp)).toUTCString(),
                             level: obj[i].values._level,
                             class: obj[i].values._class,
@@ -91,25 +86,27 @@ function fetch() {
 function drawLogViewer() {
     $(canvasDiv).empty();
     var selectedDiv = "logViewer";
-    for (var i = 0; i < dataM.length; i++) {
-        if (dataM[i][0].level === "ERROR") {
-            if (dataM[i][0].content === filteredMessage && dataM[i][0].timestamp === filteredTime) {
-                $(canvasDiv).append(Mustache.to_html(logSelectedError, {arr: dataM[i]}));
+    for (var i = 0; i < receivedData.length; i++) {
+        if (receivedData[i][0].level === "ERROR") {
+            if (receivedData[i][0].content === filteredMessage && receivedData[i][0].timestamp === filteredTime) {
+                $(canvasDiv).append(createLogList("selectedError",receivedData[i][0]));
             } else {
-                $(canvasDiv).append(Mustache.to_html(logError, {arr: dataM[i]}));
+                $(canvasDiv).append(createLogList("logError",receivedData[i][0]));
             }
             selectedDiv = "selectedError";
-        } else if (dataM[i][0].level === "WARN") {
-            if (dataM[i][0].content === filteredMessage && dataM[i][0].timestamp === filteredTime) {
-                $(canvasDiv).append(Mustache.to_html(logSelectedWarn, {arr: dataM[i]}));
+        } else if (receivedData[i][0].level === "WARN") {
+            if (receivedData[i][0].content === filteredMessage && receivedData[i][0].timestamp === filteredTime) {
+                $(canvasDiv).append(createLogList("selectedWarn",receivedData[i][0]));
             } else {
-                $(canvasDiv).append(Mustache.to_html(logDebug, {arr: dataM[i]}));
+                $(canvasDiv).append(createLogList("logWarn",receivedData[i][0]));
             }
             selectedDiv = "selectedWarn";
-        } else if (dataM[i][0].level === "DEBUG") {
-            $(canvasDiv).append(Mustache.to_html(logWarn, {arr: dataM[i]}));
+        } else if (receivedData[i][0].level === "DEBUG") {
+            $(canvasDiv).append(createLogList("logDebug",receivedData[i][0]));
+        }else if (receivedData[i][0].level === "FATAL") {
+            $(canvasDiv).append(createLogList("logFatal",receivedData[i][0]));
         } else {
-            $(canvasDiv).append(Mustache.to_html(logInfo, {arr: dataM[i]}));
+            $(canvasDiv).append(createLogList("logInfo",receivedData[i][0]));
         }
     }
     nanoScrollerSelector[0].nanoscroller.reset();
@@ -137,4 +134,9 @@ subscribe(function (topic, data, subscriber) {
 
 function onError(msg) {
     $(canvasDiv).html(gadgetUtil.getErrorText(msg));
+}
+
+function createLogList(templateName, templateData){
+    return "<ul id="+templateName+" class="+templateName+"><li class='date'>"+templateData.date+"</li><li class='level'>"+templateData.level+"</li>" +
+    "<li class='class'>"+templateData.class+"</li><li class='content'>"+templateData.content+"</li><li class='trace'>"+templateData.trace+"</li></ul>";
 }

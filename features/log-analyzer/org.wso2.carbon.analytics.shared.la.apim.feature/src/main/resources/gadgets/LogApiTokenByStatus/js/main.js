@@ -20,10 +20,10 @@ var serverUrl = "https://" + location.hostname + ":" + gatewayPort + "/LogAnalyz
 var client = new AnalyticsClient().init(null, null, serverUrl);
 var canvasDiv = "#canvas";
 var table, chart;
-var from = gadgetUtil.timeFrom();
-var to = gadgetUtil.timeTo();
+var fromTime = gadgetUtil.timeFrom();
+var toTime = gadgetUtil.timeTo();
 var async_tasks = gadgetConfig.status.length;
-var dataM = [];
+var receivedData = [];
 var initState = true;
 
 
@@ -47,28 +47,28 @@ var configChart = {
 
 function initialize() {
     fetch();
-    $(canvasDiv).html(gadgetUtil().getDefaultText());
+    $(canvasDiv).html(gadgetUtil.getDefaultText());
 }
 
 $(document).ready(function () {
     initialize();
 });
 
-function fetch(ch) {
-    if (!ch) {
-        dataM.length = 0;
-        ch = 0;
+function fetch(statusType) {
+    if (!statusType) {
+        receivedData.length = 0;
+        statusType = 0;
     }
     var queryInfo = {
         tableName: "LOGANALYZER_APIKEY_STATUS",
         searchParams: {
-            query: "status:" + gadgetConfig.status[ch] + " AND  _timestamp: [" + from + " TO " + to + "]"
+            query: "status:" + gadgetConfig.status[statusType] + " AND  _timestamp: [" + fromTime + " TO " + toTime + "]"
         }
     };
 
     client.searchCount(queryInfo, function (d) {
         if (d["status"] === "success") {
-            dataM.push([gadgetConfig.statusDescription[ch], parseInt(d["message"]), gadgetConfig.status[ch]]);
+            receivedData.push([gadgetConfig.statusDescription[statusType], parseInt(d["message"]), gadgetConfig.status[statusType]]);
             async_tasks--;
             if (async_tasks == 0) {
                 if (!initState) {
@@ -78,7 +78,7 @@ function fetch(ch) {
                     initState = false;
                 }
             } else {
-                fetch(++ch);
+                fetch(++statusType);
             }
         }
     }, function (error) {
@@ -95,7 +95,7 @@ function drawApiKeyStatus() {
             [
                 {
                     "metadata": this.meta,
-                    "data": dataM
+                    "data": receivedData
                 }
             ],
             configChart
@@ -115,8 +115,8 @@ function drawApiKeyStatus() {
 
 function redrawApiKeyStatus() {
     try {
-        for (var i in dataM) {
-            chart.insert([dataM[i]]);
+        for (var i in receivedData) {
+            chart.insert([receivedData[i]]);
         }
     } catch (error) {
         error.message = "Error while drawing log event chart.";
@@ -133,8 +133,10 @@ var onclick = function (event, item) {
     if (item != null) {
         publish(
             {
-                "filter": gadgetConfig.id,
-                "selected": item.datum.StatusId
+                "selected": item.datum.StatusId,
+                "fromTime": fromTime,
+                "toTime":toTime,
+                "count": item.datum.Count
             }
         );
     }
@@ -149,8 +151,8 @@ function subscribe(callback) {
 }
 
 subscribe(function (topic, data, subscriber) {
-    from = parseInt(data["timeFrom"]);
-    to = parseInt(data["timeTo"]);
+    fromTime = parseInt(data["timeFrom"]);
+    toTime = parseInt(data["timeTo"]);
     async_tasks = gadgetConfig.status.length;
     fetch();
 });

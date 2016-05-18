@@ -41,13 +41,6 @@ var gadgetData;
 var globalPage = 1;
 var chartColorScale = ["#1abc9c", "#3498db", "#9b59b6", "#f1c40f", "#e67e22", "#e74c3c", "#2c3e50", "#2ecc71", "#F16272"];
 
-var legendTemplate = "<ul class='legendText' style='list-style-type:none'><li class='context'><svg width='10' height='10'>" +
-    "<circle cx='5' cy='5' r='6' fill='{{bulletColor}}'/></svg><span class='textContext'><a class='legendTooltip' data-toggle='tooltip' data-placement='bottom' title='{{fullContext}}' style='cursor:default'>{{context}}</a></span></li></ul>";
-
-var paginationTemplate = "<ul class='legendText' style='list-style-type:none'><li><div id='paginate'></div></li></ul>";
-
-var legendTitle = '<div style="position: absolute;top: 16px;left: 750px;">Legend</div><div style="position: absolute;top: 16px;left: 750px;">Legend</div>';
-
 function initialize() {
     gadgetData = gadgetUtil.getChart(gadgetPropertyName);
     receivedDataIdMap.clear();
@@ -68,7 +61,7 @@ function initialize() {
     } else if (diffDays > 30) {
         timeFrame = "WEEKLY";
         var weekNo = 0;
-        var loopCount = Math.ceil((timeTo - timeFrom) / (86400000 * 7));
+        var loopCount = Math.ceil((timeTo - timeFrom) / (86400000 * 7));// 86400000 one day time in milliseconds
         for (var i = 0; i < loopCount; i++) {
             var firstDayOfMonth = new Date(newFrom);
             firstDayOfMonth.setDate(1);
@@ -219,7 +212,8 @@ function drawErrorChart() {
         //perform necessary transformation on input data
         var summarizeData = chartDataBuilder();
         $(legendTitleDiv).empty();
-        $(legendTitleDiv).append(Mustache.to_html(legendTitle));
+        $(legendTitleDiv).append("<div style='position: absolute;top: 16px;left: 750px;'>Legend</div><div style='position:" +
+            " absolute;top: 16px;left: 750px;'>Legend</div>");
         for (var i = 0; i < summarizeData.length; i++) {
             if (summarizeData[i][2] != "NoEntries") {
                 drawLegend(summarizeData[i][2], summarizeData[i][3]);
@@ -250,7 +244,7 @@ function drawErrorChart() {
                 callback: onclick
             }
         ]);
-        $(legendDiv).append(Mustache.to_html(paginationTemplate));
+        $(legendDiv).append("<ul class='legendText' style='list-style-type:none'><li><div id='paginate'></div></li></ul>");
         $('#paginate').bootstrapPaginator(options);
         $('[data-toggle="tooltip"]').tooltip();
     } catch (error) {
@@ -261,14 +255,14 @@ function drawErrorChart() {
 }
 
 function drawLegend(fullContext, id) {
-    var bColor;
+    var bulletColor;
     var subContext;
     if (legendMap.get(fullContext) === undefined) {
         if (fullContext === "Other") {
-            bColor = "#95a5a6";
+            bulletColor = "#95a5a6";
             subContext = fullContext;
         } else {
-            bColor = chartColorScale[legendMap.size];
+            bulletColor = chartColorScale[legendMap.size];
             if (fullContext.length > 57) {
                 subContext = "ID " + id + " - " + fullContext.substring(0, 57) + "...";
             } else {
@@ -276,12 +270,8 @@ function drawLegend(fullContext, id) {
             }
         }
         legendMap.set(fullContext, (legendMap.size + 1));
-        $(legendDiv).append(Mustache.to_html(legendTemplate, {
-            context: subContext,
-            bulletColor: bColor,
-            fullContext: fullContext
-        }));
-        gadgetData.chartConfig.colorScale.push([bColor]);
+        $(legendDiv).append(createLegendList(bulletColor, fullContext, subContext));
+        gadgetData.chartConfig.colorScale.push([bulletColor]);
         gadgetData.chartConfig.colorDomain.push([fullContext]);
     }
 }
@@ -341,9 +331,8 @@ function chartDataFormatter(timestamp, count, context, additionalInfo) {
     var chartTuple = [];
     var newTimestamp = new Date(timestamp);
     var contextHashValue = hashCode(context);
-    var messageID = "";
     if (receivedDataIdMap.get(contextHashValue) === undefined) {
-        messageID = "ID" + (receivedDataIdMap.size + 1) + " -" + context;
+        var messageID = "ID" + (receivedDataIdMap.size + 1) + " -" + context;
         receivedDataIdMap.set(contextHashValue, [receivedDataIdMap.size + 1, messageID]);
     }
     if (timeFrame === "MONTHLY") {
@@ -497,4 +486,10 @@ function onError(msg) {
     $(legendDiv).empty();
     $(legendTitleDiv).empty();
     $(canvasDiv).html(gadgetUtil.getErrorText(msg));
+}
+
+function createLegendList(bulletColor, fullContext, subContext){
+    return "<ul class='legendText' style='list-style-type:none'><li class='context'><svg width='10' height='10'>" +
+        "<circle cx='5' cy='5' r='6' fill="+bulletColor+"/></svg><span class='textContext'><a class='legendTooltip' " +
+        "data-toggle='tooltip' data-placement='bottom' title=\""+fullContext+"\" style='cursor:default'>"+subContext+"</a></span></li></ul>";
 }

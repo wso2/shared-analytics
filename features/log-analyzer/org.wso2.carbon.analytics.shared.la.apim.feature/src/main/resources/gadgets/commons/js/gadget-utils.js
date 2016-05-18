@@ -72,6 +72,15 @@ function GadgetUtil() {
             '</div>';
     };
 
+    this.getCustemText = function(title, message) {
+        return '<div class="status-message">'+
+            '<div class="message message-info">'+
+            '<h4><i class="icon fw fw-info"></i>'+title+'</h4>'+
+            '<p>'+message+'</p>'+
+            '</div>'+
+            '</div>';
+    };
+
     this.getEmptyRecordsText = function() {
         return '<div class="status-message">'+
                 '<div class="message message-info">'+

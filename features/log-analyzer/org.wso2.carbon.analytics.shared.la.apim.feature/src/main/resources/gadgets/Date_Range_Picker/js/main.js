@@ -48,9 +48,9 @@ $(function () {
         $("#btnLastMonth").addClass("active");
     }
 
-    cb(moment().subtract(29, 'days'), moment());
+    callBack(moment().subtract(29, 'days'), moment());
 
-    function cb(start, end) {
+    function callBack(start, end) {
         dateLabel.html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
         if (count != 0) {
             message = {
@@ -68,7 +68,7 @@ $(function () {
     }
 
     $(datePickerBtn).on('apply.daterangepicker', function (ev, picker) {
-        cb(picker.startDate, picker.endDate);
+        callBack(picker.startDate, picker.endDate);
     });
 
     $(datePickerBtn).on('show.daterangepicker', function (ev, picker) {
@@ -149,10 +149,6 @@ function onChartZoomed(data) {
         timeUnit: "Custom"
     };
     gadgets.Hub.publish(TOPIC, message);
-    var dateLabel = $('#reportrange .btn-label');
-    var start = data.timeFrom;
-    var end = data.timeTo;
-    // dateLabel.html(start.format('MMMM D, YYYY hh:mm A') + ' - ' + end.format('MMMM D, YYYY hh:mm A'));
     if (data.timeUnit && (data.timeUnit == 'Custom')) {
         $("#date-select button").removeClass("active");
         $("#reportrange #btnCustomRange").addClass("active");
@@ -168,5 +164,4 @@ $(window).load(function () {
     $('body', parentWindow).append('<script src="' + resolveURI + 'store/carbon.super/gadget/Date_Range_Picker/js/daterangepicker.js" type="text/javascript"></script>');
     $(thisParentWrapper).append(datePicker);
     $(thisParentWrapper).closest('.ues-component-box').addClass('widget form-control-widget');
-    //$('body').addClass('widget');
 });

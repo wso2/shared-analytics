@@ -43,14 +43,25 @@
     border-left-color:#438CAD;
 }
 
-.logSelectedError{
-    background: #D9483D;
-    color: white;
+.logFatal{
+    background: #cbcbcb;
+    border-left-width:5px;
+    border-left-style:solid;
+    border-left-color:#95A5A6;
 }
 
-.logSelectedWarn{
-    background: #EECA5A;
-    color: rgba(35, 35, 35, 0.96);
+.selectedError{
+    background: #FCD7D6;
+    border-width:5px;
+    border-style:solid;
+    border-color:#D9483D;
+}
+
+.selectedWarn{
+    background: #FCF9D6;
+    border-width:5px;
+    border-style:solid;
+    border-color:#EECA5A;
 }
 
 

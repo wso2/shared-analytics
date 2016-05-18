@@ -41,13 +41,6 @@ var gadgetData;
 var globalPage = 1;
 var chartColorScale = ["#1abc9c", "#3498db", "#9b59b6", "#f1c40f", "#e67e22", "#e74c3c", "#2c3e50", "#2ecc71", "#F16272"];
 
-var legendTemplate = "<ul class='legendText' style='list-style-type:none'><li class='context'><svg width='10' height='10'>" +
-    "<circle cx='5' cy='5' r='6' fill='{{bulletColor}}'/></svg><span class='textContext'><a class='legendTooltip' data-toggle='tooltip' data-placement='bottom' title='{{fullContext}}' style='cursor:default'>{{context}}</a></span></li></ul>";
-
-var paginationTemplate = "<ul class='legendText' style='list-style-type:none'><li><div id='paginate'></div></li></ul>";
-
-var legendTitle = '<div style="position: absolute;top: 16px;left: 750px;">Legend</div><div style="position: absolute;top: 16px;left: 750px;">Legend</div>';
-
 function initialize() {
     gadgetData = gadgetUtil.getChart(gadgetPropertyName);
     receivedDataIdMap.clear();
@@ -68,7 +61,7 @@ function initialize() {
     } else if (diffDays > 30) {
         timeFrame = "WEEKLY";
         var weekNo = 0;
-        var loopCount = Math.ceil((timeTo - timeFrom) / (86400000 * 7));
+        var loopCount = Math.ceil((timeTo - timeFrom) / (86400000 * 7)); // 86400000 one day time in milliseconds
         for (var i = 0; i < loopCount; i++) {
             var firstDayOfMonth = new Date(newFrom);
             firstDayOfMonth.setDate(1);
@@ -209,7 +202,8 @@ function drawInvalidLoggingCountChart() {
         //perform necessary transformation on input data
         var summarizeData = chartDataBuilder();
         $(legendTitleDiv).empty();
-        $(legendTitleDiv).append(Mustache.to_html(legendTitle));
+        $(legendTitleDiv).append("<div style='position: absolute;top: 16px;left: 750px;'>Legend</div><div style='position:" +
+            " absolute;top: 16px;left: 750px;'>Legend</div>");
         for (var i = 0; i < summarizeData.length; i++) {
             if (summarizeData[i][2] != "NoEntries") {
                 drawLegend(summarizeData[i][2], summarizeData[i][3]);
@@ -239,7 +233,7 @@ function drawInvalidLoggingCountChart() {
                 callback: onclick
             }
         ]);
-        $(legendDiv).append(Mustache.to_html(paginationTemplate));
+        $(legendDiv).append("<ul class='legendText' style='list-style-type:none'><li><div id='paginate'></div></li></ul>");
         $('#paginate').bootstrapPaginator(options);
         $('[data-toggle="tooltip"]').tooltip();
     } catch (error) {
@@ -250,14 +244,14 @@ function drawInvalidLoggingCountChart() {
 }
 
 function drawLegend(fullContext, id) {
-    var bColor;
+    var bulletColor;
     var subContext;
     if (legendMap.get(fullContext) === undefined) {
         if (fullContext === "Other") {
-            bColor = "#95a5a6";
+            bulletColor = "#95a5a6";
             subContext = fullContext;
         } else {
-            bColor = chartColorScale[legendMap.size];
+            bulletColor = chartColorScale[legendMap.size];
             if (fullContext.length > 57) {
                 subContext = "ID " + id + " - " + fullContext.substring(0, 57) + "...";
             } else {
@@ -265,12 +259,8 @@ function drawLegend(fullContext, id) {
             }
         }
         legendMap.set(fullContext, (legendMap.size + 1));
-        $(legendDiv).append(Mustache.to_html(legendTemplate, {
-            context: subContext,
-            bulletColor: bColor,
-            fullContext: fullContext
-        }));
-        gadgetData.chartConfig.colorScale.push([bColor]);
+        $(legendDiv).append(createLegendList(bulletColor, fullContext, subContext));
+        gadgetData.chartConfig.colorScale.push([bulletColor]);
         gadgetData.chartConfig.colorDomain.push([fullContext]);
     }
 }
@@ -286,13 +276,15 @@ function chartDataBuilder() {
     var chartOtherDataTuple;
     if (gadgetData.additionalColumns == null) {
         for (var i = 0; i < receivedData.length; i++) {
-            chartOtherDataTuple = chartDataFormatter(receivedData[i][gadgetData.columns[0]], receivedData[i].values[gadgetData.columns[1]],
+            chartOtherDataTuple = chartDataFormatter(receivedData[i][gadgetData.columns[0]],
+                receivedData[i].values[gadgetData.columns[1]],
                 receivedData[i].values[gadgetData.columns[2]], null);
             chartDataArray.push(chartOtherDataTuple);
             receivedData[i]["day"] = chartOtherDataTuple[0];
         }
         for (var i = 0; i < receivedOtherData.length; i++) {
-            chartOtherDataTuple = chartOtherDataFormatter(receivedOtherData[i][gadgetData.columns[0]], receivedOtherData[i].values[gadgetData.columns[1]], null);
+            chartOtherDataTuple = chartOtherDataFormatter(receivedOtherData[i][gadgetData.columns[0]],
+                receivedOtherData[i].values[gadgetData.columns[1]], null);
             if (otherDataMap.get(chartOtherDataTuple[0]) === undefined) {
                 otherDataMap.set(chartOtherDataTuple[0], chartOtherDataTuple[1]);
             } else {
@@ -305,13 +297,15 @@ function chartDataBuilder() {
         });
     } else {
         for (var i = 0; i < receivedData.length; i++) {
-            chartOtherDataTuple = chartDataFormatter(receivedData[i][gadgetData.columns[0]], receivedData[i].values[gadgetData.columns[1]],
+            chartOtherDataTuple = chartDataFormatter(receivedData[i][gadgetData.columns[0]],
+                receivedData[i].values[gadgetData.columns[1]],
                 receivedData[i].values[gadgetData.columns[2]], receivedData[i].values.week);
             chartDataArray.push(chartOtherDataTuple);
             receivedData[i]["day"] = chartOtherDataTuple[0];
         }
         for (var i = 0; i < receivedOtherData.length; i++) {
-            chartOtherDataTuple = chartOtherDataFormatter(receivedOtherData[i][gadgetData.columns[0]], receivedOtherData[i].values[gadgetData.columns[1]], receivedOtherData[i].values.week);
+            chartOtherDataTuple = chartOtherDataFormatter(receivedOtherData[i][gadgetData.columns[0]],
+                receivedOtherData[i].values[gadgetData.columns[1]], receivedOtherData[i].values.week);
             if (otherDataMap.get(chartOtherDataTuple[0]) === undefined) {
                 otherDataMap.set(chartOtherDataTuple[0], chartOtherDataTuple[1]);
             } else {
@@ -330,9 +324,8 @@ function chartDataFormatter(timestamp, count, context, additionalInfo) {
     var chartTuple = [];
     var newTimestamp = new Date(timestamp);
     var contextHashValue = hashCode(context);
-    var messageID = "";
     if (receivedDataIdMap.get(contextHashValue) === undefined) {
-        messageID = "ID" + (receivedDataIdMap.size + 1) + " -" + context;
+        var messageID = "ID" + (receivedDataIdMap.size + 1) + " -" + context;
         receivedDataIdMap.set(contextHashValue, [receivedDataIdMap.size + 1, messageID]);
     }
     if (timeFrame === "MONTHLY") {
@@ -351,7 +344,8 @@ function chartOtherDataFormatter(timestamp, count, additionalInfo) {
     var chartTuple = [];
     var newTimestamp = new Date(timestamp);
     if (timeFrame === "MONTHLY") {
-        chartTuple = [months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear(), count, "Other", months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear()];
+        chartTuple = [months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear(), count, "Other",
+            months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear()];
     } else if (timeFrame === "WEEKLY") {
         chartTuple = ["W" + additionalInfo + " - " + months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear(),
             count, "Other", "W" + additionalInfo + " - " + months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear()];
@@ -395,7 +389,8 @@ var onclick = function (event, item) {
             }
         } else {
             for (var i = 0; i < receivedData.length; i++) {
-                if (receivedData[i].values[gadgetData.columns[2]] === item.datum[gadgetData.columns[2]] && receivedData[i]["day"] === item.datum.day) {
+                if (receivedData[i].values[gadgetData.columns[2]] === item.datum[gadgetData.columns[2]] &&
+                    receivedData[i]["day"] === item.datum.day) {
                     publish(
                         {
                             "selected": receivedData[i].values[gadgetData.columns[2]],
@@ -483,4 +478,10 @@ function onError(msg) {
     $(legendDiv).empty();
     $(legendTitleDiv).empty();
     $(canvasDiv).html(gadgetUtil.getErrorText(msg));
+}
+
+function createLegendList(bulletColor, fullContext, subContext){
+    return "<ul class='legendText' style='list-style-type:none'><li class='context'><svg width='10' height='10'>" +
+        "<circle cx='5' cy='5' r='6' fill="+bulletColor+"/></svg><span class='textContext'><a class='legendTooltip' " +
+        "data-toggle='tooltip' data-placement='bottom' title=\""+fullContext+"\" style='cursor:default'>"+subContext+"</a></span></li></ul>";
 }

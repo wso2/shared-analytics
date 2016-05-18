@@ -241,11 +241,11 @@
                   "hide_gadget": false,
                   "borders": false,
                   "titlePosition": "left",
-                  "title": "Log Error Bar Chart"
+                  "title": "Errors Distribution"
                 },
                 "options": {},
                 "locale_titles": {
-                  "en-US": "Log Error Bar Chart"
+                  "en-US": "Errors Distribution"
                 },
                 "settings": {}
               }
@@ -285,11 +285,11 @@
                   "hide_gadget": false,
                   "borders": false,
                   "titlePosition": "left",
-                  "title": "APIM Filtered Messages"
+                  "title": "Filtered Messages"
                 },
                 "options": {},
                 "locale_titles": {
-                  "en-US": "APIM Filtered Messages"
+                  "en-US": "Filtered Messages"
                 },
                 "settings": {}
               }
@@ -885,11 +885,11 @@
                   "no_heading": false,
                   "hide_gadget": false,
                   "titlePosition": "left",
-                  "title": "API Key Status Table"
+                  "title": "API Key Status"
                 },
                 "options": {},
                 "locale_titles": {
-                  "en-US": "API Key Status Table"
+                  "en-US": "API Key Status"
                 },
                 "settings": {}
               }

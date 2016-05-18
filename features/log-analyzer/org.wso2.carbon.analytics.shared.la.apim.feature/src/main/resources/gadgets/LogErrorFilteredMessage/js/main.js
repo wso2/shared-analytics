@@ -19,9 +19,9 @@
 var gatewayPort = location.port - 9443 + 8243; //Calculate the port offset based gateway port.
 var serverUrl = "https://" + location.hostname + ":" + gatewayPort + "/LogAnalyzerRestApi/1.0";
 var client = new AnalyticsClient().init(null, null, serverUrl);
-var from;
-var to;
-var dataM = [];
+var fromTime;
+var toTime;
+var receivedData = [];
 var filteredMessage;
 var filteredCount;
 var filteringByField;
@@ -38,8 +38,8 @@ var configTable = {
     title: "FilteredMessages",
     charts: [{
         type: "table",
-        columns: ["message", "class", "timestamp", "action"],
-        columnTitles: ["Message", "Class", "Timestamp", "Action"]
+        columns: ["timestamp", "message", "class", "action"],
+        columnTitles: ["Timestamp", "Message", "Class", "Action"]
     }
     ],
     width: $(window).width() * 0.95,
@@ -47,11 +47,9 @@ var configTable = {
     padding: {"top": 100, "left": 30, "bottom": 22, "right": 70}
 };
 
-var template = '<a href="#" class="btn padding-reduce-on-grid-view" onclick= "viewFunction({{logTimestamp}},{{logMessage}})"> <span class="fw-stack"> ' +
-    '<i class="fw fw-ring fw-stack-2x"></i> <i class="fw fw-view fw-stack-1x"></i> </span> <span class="hidden-xs">View</span> </a>';
-
 function initialize() {
-    $(canvasDiv).html(gadgetUtil.getDefaultText());
+    $(canvasDiv).html(gadgetUtil.getCustemText("No content to display","Please click on an error category from the above" +
+        " chart to view the log events."));
     nanoScrollerSelector.nanoScroller();
 }
 
@@ -60,12 +58,12 @@ $(document).ready(function () {
 });
 
 function fetch() {
-    dataM.length = 0;
+    receivedData.length = 0;
     var queryInfo;
     queryInfo = {
         tableName: "LOGANALYZER",
         searchParams: {
-            query: filteringByField + ": \"" + filteredMessage + "\" AND  _eventTimeStamp: [" + from + " TO " + to + "] AND _level: \"ERROR\"",
+            query: filteringByField + ": \"" + filteredMessage + "\" AND  _eventTimeStamp: [" + fromTime + " TO " + toTime + "] AND _level: \"ERROR\"",
             start: 0, //starting index of the matching record set
             count: filteredCount //page size for pagination
         }
@@ -74,11 +72,9 @@ function fetch() {
         var obj = JSON.parse(d["message"]);
         if (d["status"] === "success") {
             for (var i = 0; i < obj.length; i++) {
-                dataM.push([obj[i].values._content, obj[i].values._class, new Date(obj[i].values._eventTimeStamp).toUTCString(),
-                    Mustache.to_html(template, {
-                        logTimestamp: "'" + obj[i].values._eventTimeStamp + "'",
-                        logMessage: "'" + obj[i].values._content + "'"
-                    })]);
+                receivedData.push([obj[i].values._content, obj[i].values._class, new Date(obj[i].values._eventTimeStamp).toUTCString(),
+                    "<a href='#' class='btn padding-reduce-on-grid-view' onclick= 'viewFunction(\""+obj[i].values._eventTimeStamp+"\",\""+obj[i].values._content+"\")'> <span class='fw-stack'> " +
+                    "<i class='fw fw-ring fw-stack-2x'></i> <i class='fw fw-view fw-stack-1x'></i> </span> <span class='hidden-xs'>View</span> </a>"]);
             }
             drawLogErrorFilteredTable();
         }
@@ -95,7 +91,7 @@ function drawLogErrorFilteredTable() {
             [
                 {
                     "metadata": this.meta,
-                    "data": dataM
+                    "data": receivedData
                 }
             ],
             configTable
@@ -139,8 +135,8 @@ subscribe(function (topic, data, subscriber) {
     $(canvasDiv).html(gadgetUtil.getLoadingText());
     filteredMessage = data["selected"].replace(/\"/g, "\\\"");
     filteredCount = data["count"];
-    from = data["fromTime"];
-    to = data["toTime"];
+    fromTime = data["fromTime"];
+    toTime = data["toTime"];
     filteringByField = data["filter"];
     if (filteringByField === "MESSAGE_LEVEL_ERROR") {
         filteringByField = "_content";

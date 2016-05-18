@@ -30,7 +30,7 @@
         <![CDATA[
         <html>
             <head>
-                <meta charset="utf-8">
+                <meta charset="utf-8"/>
                 <title>APIM Api Token By Status</title>
 
                 <!-- CSS -->

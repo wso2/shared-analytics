@@ -20,10 +20,11 @@ var gatewayPort = location.port - 9443 + 8243; //Calculate the port offset based
 var serverUrl = "https://" + location.hostname + ":" + gatewayPort + "/LogAnalyzerRestApi/1.0";
 var client = new AnalyticsClient().init(null, null, serverUrl);
 var canvasDiv = "#canvas";
-var from = new Date(moment().subtract(29, 'days')).getTime();
-var to = new Date(moment()).getTime();
-var dataM = [];
+var receivedData = [];
 var filteredMessage;
+var filteredCount;
+var fromTime;
+var toTime;
 var nanoScrollerSelector = $(".nano");
 
 var meta = {
@@ -37,7 +38,7 @@ var configTable = {
     charts: [{
         type: "table",
         columns: ["timestamp", "Status", "Content", "actions"],
-        columnTitles: ["Event Time Stamp", "Status", "Content", "Actions"]
+        columnTitles: ["Timestamp", "Status", "Content", "Actions"]
     }
     ],
     width: $('body').width(),
@@ -45,11 +46,9 @@ var configTable = {
     padding: {"top": 40, "left": 80, "bottom": 70, "right": 100}
 };
 
-var template = '<a href="#" class="btn padding-reduce-on-grid-view" onclick= "viewFunction({{logTimestamp}},{{content}})"> <span class="fw-stack"> ' +
-    '<i class="fw fw-ring fw-stack-2x"></i> <i class="fw fw-view fw-stack-1x"></i> </span> <span class="hidden-xs">View</span> </a>';
-
 function initialize() {
-    $(canvasDiv).html(gadgetUtil.getDefaultText());
+    $(canvasDiv).html(gadgetUtil.getCustemText("No content to display","Please click on an error category from the above" +
+        " chart to view the log events."));
     nanoScrollerSelector.nanoScroller();
 }
 
@@ -59,24 +58,24 @@ $(document).ready(function () {
 });
 
 function fetch() {
-    dataM.length = 0;
+    receivedData.length = 0;
     var queryInfo;
     queryInfo = {
         tableName: "LOGANALYZER_APIKEY_STATUS",
         searchParams: {
-            query: "status: \"" + filteredMessage + "\"",
+            query: "status: \"" + filteredMessage + "\" AND  _timestamp: [" + fromTime + " TO " + toTime + "]",
             start: 0, //starting index of the matching record set
-            count: 100 //page size for pagination
+            count: filteredCount //page size for pagination
         }
     };
     client.search(queryInfo, function (d) {
         var obj = JSON.parse(d["message"]);
         if (d["status"] === "success") {
             for (var i = 0; i < obj.length; i++) {
-                dataM.push([new Date(obj[i].timestamp).toUTCString(), obj[i].values.status, obj[i].values.content, Mustache.to_html(template, {
-                    logTimestamp: "'" + obj[i].timestamp + "'",
-                    content: "'" + obj[i].values.content + "'"
-                })]);
+                receivedData.push([new Date(obj[i].timestamp).toUTCString(), obj[i].values.status, obj[i].values.content,
+                    "<a href='#' class='btn padding-reduce-on-grid-view' onclick= 'viewFunction(\""+obj[i].timestamp+
+                    "\",\""+obj[i].values.content+"\")'> <span class='fw-stack'><i class='fw fw-ring fw-stack-2x'></i> " +
+                    "<i class='fw fw-view fw-stack-1x'></i> </span> <span class='hidden-xs'>View</span> </a>"]);
             }
             drawTokenStatusTable();
 
@@ -94,7 +93,7 @@ function drawTokenStatusTable() {
             [
                 {
                     "metadata": this.meta,
-                    "data": dataM
+                    "data": receivedData
                 }
             ],
             configTable
@@ -136,6 +135,9 @@ function subscribe(callback) {
 subscribe(function (topic, data, subscriber) {
     $(canvasDiv).html(gadgetUtil.getLoadingText());
     filteredMessage = data["selected"];
+    filteredCount = data["count"];
+    fromTime = data["fromTime"];
+    toTime = data["toTime"];
     fetch();
 });
 

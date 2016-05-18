@@ -20,8 +20,8 @@ var gatewayPort = location.port - 9443 + 8243; //Calculate the port offset based
 var serverUrl = "https://" + location.hostname + ":" + gatewayPort + "/LogAnalyzerRestApi/1.0";
 var client = new AnalyticsClient().init(null, null, serverUrl);
 var canvasDiv = "#canvas";
-var timeFrom = new Date(moment().subtract(29, 'days')).getTime();
-var timeTo = new Date(moment()).getTime();
+var timeFrom = gadgetUtil.timeFrom();
+var timeTo = gadgetUtil.timeTo();
 var receivedData = [];
 var nanoScrollerSelector = $(".nano");
 
