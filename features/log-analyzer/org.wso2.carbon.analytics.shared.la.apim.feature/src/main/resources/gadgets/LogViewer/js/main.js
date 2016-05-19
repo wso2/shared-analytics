@@ -73,11 +73,13 @@ function fetch() {
                     drawLogViewer();
                 }
             }, function (error) {
+                console.log(error);
                 error.message = "Internal server error while data indexing.";
                 onError(error);
             });
         }
     }, function (error) {
+        console.log(error);
         error.message = "Internal server error while data indexing.";
         onError(error);
     });

@@ -104,6 +104,7 @@ function initialize() {
             }
         }
     }, function (error) {
+        console.log(error);
         error.message = "Internal server error while data indexing.";
         onError(error);
     });
@@ -138,6 +139,7 @@ function fetch(start, count) {
                         drawInvalidLoggingCountChart();
                     }
                 }, function (error) {
+                    console.log(error);
                     error.message = "Internal server error while data indexing.";
                     onError(error);
                 });
@@ -149,6 +151,7 @@ function fetch(start, count) {
             }
         }
     }, function (error) {
+        console.log(error);
         error.message = "Internal server error while data indexing.";
         onError(error);
     });
@@ -237,6 +240,7 @@ function drawInvalidLoggingCountChart() {
         $('#paginate').bootstrapPaginator(options);
         $('[data-toggle="tooltip"]').tooltip();
     } catch (error) {
+        console.log(error);
         error.message = "Error while drawing log viewer.";
         error.status = "";
         onError(error);

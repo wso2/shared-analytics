@@ -94,17 +94,19 @@ function fetch() {
                         }
                         drawDeletedArtifactTable();
                     }
-                }, function (msg) {
-                    msg.message = "Internal server error while data indexing.";
-                    onError(msg)
+                }, function (error) {
+                    console.log(error);
+                    error.message = "Internal server error while data indexing.";
+                    onError(error)
                 });
             } else {
                 $(canvasDiv).html(gadgetUtil.getEmptyRecordsText());
             }
         }
-    }, function (msg) {
-        msg.message = "Internal server error while data indexing.";
-        onError(msg)
+    }, function (error) {
+        console.log(error);
+        error.message = "Internal server error while data indexing.";
+        onError(error)
     });
 }
 
@@ -132,10 +134,11 @@ function drawDeletedArtifactTable() {
             '>'
         });
         nanoScrollerSelector[0].nanoscroller.reset();
-    } catch (msg) {
-        msg.message = "Error while drawing table.";
-        msg.status = "";
-        onError(msg)
+    } catch (error) {
+        console.log(error);
+        error.message = "Error while drawing table.";
+        error.status = "";
+        onError(error)
     }
 }
 

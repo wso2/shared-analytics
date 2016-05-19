@@ -82,6 +82,7 @@ function fetch(statusType) {
             }
         }
     }, function (error) {
+        console.log(error);
         error.message = "Internal server error while data indexing.";
         onError(error);
     });
@@ -119,6 +120,7 @@ function redrawApiKeyStatus() {
             chart.insert([receivedData[i]]);
         }
     } catch (error) {
+        console.log(error);
         error.message = "Error while drawing log event chart.";
         error.status = "";
         onError(error);

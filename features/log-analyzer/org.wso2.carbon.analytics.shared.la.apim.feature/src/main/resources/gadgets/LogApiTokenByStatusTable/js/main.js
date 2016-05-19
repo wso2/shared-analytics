@@ -81,6 +81,7 @@ function fetch() {
 
         }
     }, function (error) {
+        console.log(error);
         error.message = "Internal server error while data indexing.";
         onError(error);
     });
@@ -114,6 +115,7 @@ function drawTokenStatusTable() {
             nanoScrollerSelector[0].nanoscroller.reset();
         });
     } catch (error) {
+        console.log(error);
         error.message = "Error while drawing log event chart.";
         error.status = "";
         onError(error);
