@@ -99,12 +99,12 @@ $(function () {
     });
 
     $("#btnLastDay").click(function () {
-        dateLabel.html(moment().subtract(1, 'day').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+        dateLabel.html(moment().subtract(1,'days').startOf('day').format('MMMM D, YYYY'));
         $("#date-select button").removeClass("active");
         $(this).addClass("active");
         message = {
-            timeFrom: new Date(moment().subtract(1, 'day')).getTime(),
-            timeTo: new Date(moment()).getTime(),
+            timeFrom: new Date(moment().subtract(1,'days').startOf('day')).getTime(),
+            timeTo: new Date(moment().subtract(1,'days').endOf('day')).getTime(),
             timeUnit: "Day"
         };
         gadgets.Hub.publish(TOPIC, message);
