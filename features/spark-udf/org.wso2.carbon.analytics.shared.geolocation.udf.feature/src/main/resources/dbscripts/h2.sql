@@ -1,6 +1,6 @@
 CREATE TABLE `BLOCKS` (
-`network` int(10) unsigned DEFAULT NULL,
-  `broadcast` int(10) unsigned DEFAULT NULL,
+`network` long unsigned DEFAULT NULL,
+  `broadcast` long unsigned DEFAULT NULL,
  `geoname_id` int(11) DEFAULT NULL,
   `registered_country_geoname_id` int(11) DEFAULT NULL,
   `represented_country_geoname_id` int(11) DEFAULT NULL,
