@@ -376,7 +376,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
             if (event.getThrowableInformation() != null) {
                 arbitraryDataMap.put(columns[8], stacktrace);
             }
-            Event laEvent = new Event(streamDef, System.currentTimeMillis(), null, null, new String[]{tenantID}, arbitraryDataMap);
+            Event laEvent = new Event(streamDef, date.getTime(), null, null, new String[]{tenantID}, arbitraryDataMap);
             dataPublisher.publish(laEvent);
         }
     }

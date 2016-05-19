@@ -21,7 +21,7 @@ var client = new AnalyticsClient().init(null, null, serverUrl);
 var timeFrom = gadgetUtil.timeFrom();
 var timeTo = gadgetUtil.timeTo();
 var timeUnit = null;
-var gadgetPropertyName = "INVALID_LOGIN_ATTEMPT";
+var gadgetPropertyName = "MESSAGE_LEVEL_ERROR";// "CLASS_LEVEL_ERROR"
 var receivedData = [];
 var receivedOtherData = [];
 var mockData = [];
@@ -61,7 +61,7 @@ function initialize() {
     } else if (diffDays > 30) {
         timeFrame = "WEEKLY";
         var weekNo = 0;
-        var loopCount = Math.ceil((timeTo - timeFrom) / (86400000 * 7)); // 86400000 one day time in milliseconds
+        var loopCount = Math.ceil((timeTo - timeFrom) / (86400000 * 7));// 86400000 one day time in milliseconds
         for (var i = 0; i < loopCount; i++) {
             var firstDayOfMonth = new Date(newFrom);
             firstDayOfMonth.setDate(1);
@@ -76,7 +76,7 @@ function initialize() {
         timeFrame = "DAILY";
         while (!(newFrom.getTime() >= newTo.getTime())) {
             mockData.push([newFrom.toDateString(), 0, "NoEntries", 0]);
-            newFrom.setHours(newFrom.getHours() + 24);
+            newFrom.setDate(newFrom.getDate() + 1);
         }
     }
     tableName = "LOGANALYZER_" + gadgetData.name + "_" + timeFrame;
@@ -112,7 +112,17 @@ function initialize() {
 
 $(document).ready(function () {
     initialize();
+    $("#selector").on('change', onClickSelector);
 });
+
+function onClickSelector() {
+    if (this.value === "Message") {
+        gadgetPropertyName = "MESSAGE_LEVEL_ERROR";
+    } else {
+        gadgetPropertyName = "CLASS_LEVEL_ERROR";
+    }
+    initialize();
+}
 
 function fetch(start, count) {
     receivedData.length = 0;
@@ -130,23 +140,22 @@ function fetch(start, count) {
         if (d["status"] === "success") {
             receivedData = JSON.parse(d["message"]);
             if (receivedData.length > 0 && (start + count) >= totalRecordCount) {
-                drawInvalidLoggingCountChart();
+                drawErrorChart();
             } else if (receivedData.length > 0 && (start + count) < totalRecordCount) {
                 queryInfo = queryBuilder(tableName, query, (start + count), totalRecordCount, sorting);
                 client.search(queryInfo, function (d) {
                     if (d["status"] === "success") {
                         receivedOtherData = JSON.parse(d["message"]);
-                        drawInvalidLoggingCountChart();
+                        drawErrorChart();
                     }
                 }, function (error) {
-                    console.log(error);
                     error.message = "Internal server error while data indexing.";
                     onError(error);
                 });
             } else {
                 $(canvasDiv).empty();
                 $(legendDiv).empty();
-                $('#legendTitle').empty();
+                $(legendTitleDiv).empty();
                 $(canvasDiv).html(gadgetUtil.getEmptyRecordsText());
             }
         }
@@ -157,7 +166,7 @@ function fetch(start, count) {
     });
 }
 
-function drawInvalidLoggingCountChart() {
+function drawErrorChart() {
     try {
         gadgetData.chartConfig.colorScale.length = 0;
         gadgetData.chartConfig.colorDomain.length = 0;
@@ -228,6 +237,7 @@ function drawInvalidLoggingCountChart() {
         //finally draw the chart on the given canvas
         gadgetData.chartConfig.width = $(canvasDiv).width();
         gadgetData.chartConfig.height = $(canvasDiv).height();
+        //gadgetData.chartConfig.colorScale.push(["#95a5a6"]);
         gadgetData.chartConfig.colorDomain.push(["NoEntries"]);
         var vg = new vizg(gadgetData.schema, JSON.parse(JSON.stringify(gadgetData.chartConfig)));
         vg.draw(canvasDiv, [
@@ -280,15 +290,13 @@ function chartDataBuilder() {
     var chartOtherDataTuple;
     if (gadgetData.additionalColumns == null) {
         for (var i = 0; i < receivedData.length; i++) {
-            chartOtherDataTuple = chartDataFormatter(receivedData[i][gadgetData.columns[0]],
-                receivedData[i].values[gadgetData.columns[1]],
+            chartOtherDataTuple = chartDataFormatter(receivedData[i][gadgetData.columns[0]], receivedData[i].values[gadgetData.columns[1]],
                 receivedData[i].values[gadgetData.columns[2]], null);
             chartDataArray.push(chartOtherDataTuple);
             receivedData[i]["day"] = chartOtherDataTuple[0];
         }
         for (var i = 0; i < receivedOtherData.length; i++) {
-            chartOtherDataTuple = chartOtherDataFormatter(receivedOtherData[i][gadgetData.columns[0]],
-                receivedOtherData[i].values[gadgetData.columns[1]], null);
+            chartOtherDataTuple = chartOtherDataFormatter(receivedOtherData[i][gadgetData.columns[0]], receivedOtherData[i].values[gadgetData.columns[1]], null);
             if (otherDataMap.get(chartOtherDataTuple[0]) === undefined) {
                 otherDataMap.set(chartOtherDataTuple[0], chartOtherDataTuple[1]);
             } else {
@@ -301,15 +309,13 @@ function chartDataBuilder() {
         });
     } else {
         for (var i = 0; i < receivedData.length; i++) {
-            chartOtherDataTuple = chartDataFormatter(receivedData[i][gadgetData.columns[0]],
-                receivedData[i].values[gadgetData.columns[1]],
+            chartOtherDataTuple = chartDataFormatter(receivedData[i][gadgetData.columns[0]], receivedData[i].values[gadgetData.columns[1]],
                 receivedData[i].values[gadgetData.columns[2]], receivedData[i].values.week);
             chartDataArray.push(chartOtherDataTuple);
             receivedData[i]["day"] = chartOtherDataTuple[0];
         }
         for (var i = 0; i < receivedOtherData.length; i++) {
-            chartOtherDataTuple = chartOtherDataFormatter(receivedOtherData[i][gadgetData.columns[0]],
-                receivedOtherData[i].values[gadgetData.columns[1]], receivedOtherData[i].values.week);
+            chartOtherDataTuple = chartOtherDataFormatter(receivedOtherData[i][gadgetData.columns[0]], receivedOtherData[i].values[gadgetData.columns[1]], receivedOtherData[i].values.week);
             if (otherDataMap.get(chartOtherDataTuple[0]) === undefined) {
                 otherDataMap.set(chartOtherDataTuple[0], chartOtherDataTuple[1]);
             } else {
@@ -348,8 +354,7 @@ function chartOtherDataFormatter(timestamp, count, additionalInfo) {
     var chartTuple = [];
     var newTimestamp = new Date(timestamp);
     if (timeFrame === "MONTHLY") {
-        chartTuple = [months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear(), count, "Other",
-            months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear()];
+        chartTuple = [months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear(), count, "Other", months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear()];
     } else if (timeFrame === "WEEKLY") {
         chartTuple = ["W" + additionalInfo + " - " + months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear(),
             count, "Other", "W" + additionalInfo + " - " + months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear()];
@@ -373,7 +378,7 @@ function queryBuilder(tableName, query, start, count, sortBy) {
 
 function publish(data) {
     gadgets.Hub.publish(TOPIC_PUB_CONTENT, data);
-}
+};
 
 var onclick = function (event, item) {
     if (item != null) {
@@ -393,8 +398,7 @@ var onclick = function (event, item) {
             }
         } else {
             for (var i = 0; i < receivedData.length; i++) {
-                if (receivedData[i].values[gadgetData.columns[2]] === item.datum[gadgetData.columns[2]] &&
-                    receivedData[i]["day"] === item.datum.day) {
+                if (receivedData[i].values[gadgetData.columns[2]] === item.datum[gadgetData.columns[2]] && receivedData[i]["day"] === item.datum.day) {
                     publish(
                         {
                             "selected": receivedData[i].values[gadgetData.columns[2]],
@@ -422,6 +426,9 @@ subscribe(function (topic, data, subscriber) {
     timeFrom = parseInt(data["timeFrom"]);
     timeTo = parseInt(data["timeTo"]);
     timeUnit = data.timeUnit;
+    if (timeUnit === "Day") {
+        timeTo = timeFrom;
+    }
     initialize();
 });
 

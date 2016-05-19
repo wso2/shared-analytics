@@ -7,13 +7,13 @@
     "url": "store://gadget/LogErrorFilteredMessage/index.xml"
   },
   "notify": {
-    "publisher2": {
+    "publisher": {
       "type": "filter-range",
       "description": "This notifies selected filter"
     }
   },
   "listen": {
-    "subscriber2": {
+    "subscriber": {
       "type": "filter",
       "description": "Used to listen to any filters"
     }

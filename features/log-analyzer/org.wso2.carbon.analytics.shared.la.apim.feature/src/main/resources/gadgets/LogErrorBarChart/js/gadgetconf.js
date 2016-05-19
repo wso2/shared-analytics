@@ -18,13 +18,13 @@
 
 var charts = [
     {
-        name: "APIM_MESSAGE_PROCESSING",
-        columns: ["timestamp", "apiCount", "apiName"],
+        name: "MESSAGE_LEVEL_ERROR",
+        columns: ["timestamp", "messageCount", "message"],
         additionalColumns: ["week"],
-        orderedField: "apiCount",
+        orderedField: "messageCount",
         schema: [{
             "metadata": {
-                "names": ["day", "apiCount", "apiName", "ID"],
+                "names": ["day", "count", "message", "ID"],
                 "types": ["ordinal", "linear", "ordinal", "linear"]
             },
             "data": []
@@ -35,8 +35,8 @@ var charts = [
             colorScale: [],
             colorDomain: [],
             xAxisAngle: true,
-            color: "apiName",
-            charts: [{type: "bar", y: "apiCount", mode: "stack"}],
+            color: "message",
+            charts: [{type: "bar", y: "count", mode: "stack"}],
             width: $('canvas').width(),
             height: $('canvas').height(),
             padding: {"top": 10, "left": 80, "bottom": 70, "right": 50},
@@ -45,7 +45,40 @@ var charts = [
                 "enabled": true,
                 "color": "#e5f2ff",
                 "type": "symbol",
-                "content": ["ID", "apiCount", "day"],
+                "content": ["ID", "count", "day"],
+                "label": true
+            }
+        }
+    },
+    {
+        name: "CLASS_LEVEL_ERROR",
+        columns: ["timestamp", "classCount", "class"],
+        additionalColumns: ["week"],
+        orderedField: "classCount",
+        schema: [{
+            "metadata": {
+                "names": ["day", "count", "class", "ID"],
+                "types": ["ordinal", "linear", "ordinal", "linear"]
+            },
+            "data": []
+        }],
+        "chartConfig": {
+            type: "bar",
+            x: "day",
+            colorScale: [],
+            colorDomain: [],
+            xAxisAngle: true,
+            color: "class",
+            charts: [{type: "bar", y: "count", mode: "stack"}],
+            width: $('canvas').width(),
+            height: $('canvas').height(),
+            padding: {"top": 10, "left": 80, "bottom": 70, "right": 50},
+            legend: false,
+            tooltip: {
+                "enabled": true,
+                "color": "#e5f2ff",
+                "type": "symbol",
+                "content": ["ID", "count", "day"],
                 "label": true
             }
         }

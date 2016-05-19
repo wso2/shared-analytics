@@ -1,29 +1,29 @@
 /*
- * Copyright (c)  2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
+ * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
  */
-var gatewayPort = location.port -9443 + 8243; //Calculate the port offset based gateway port.
-var serverUrl = "https://"+location.hostname +":"+ gatewayPort+"/LogAnalyzerRestApi/1.0";
+var gatewayPort = location.port - 9443 + 8243; //Calculate the port offset based gateway port.
+var serverUrl = "https://" + location.hostname + ":" + gatewayPort + "/LogAnalyzerRestApi/1.0";
 var client = new AnalyticsClient().init(null, null, serverUrl);
-var div = "#chartApiTokenStatus";
+var canvasDiv = "#canvas";
 var table, chart;
-var from = 1460341665000;
-var to = 1460484000000;
+var fromTime = gadgetUtil.timeFrom();
+var toTime = gadgetUtil.timeTo();
 var async_tasks = gadgetConfig.status.length;
-var dataM = [];
+var receivedData = [];
 var initState = true;
 
 
@@ -34,113 +34,111 @@ var meta = {
 
 
 var configChart = {
-    colorScale:["#438CAD","#5CB85C","#EECA5A","#95A5A6"],
+    colorScale: ["#438CAD", "#5CB85C", "#EECA5A", "#95A5A6"],
     type: "bar",
     x: "Status",
-    color:"Status",
+    color: "Status",
     charts: [{y: "Count"}],
     width: $('body').width(),
     height: $('body').height(),
-    padding: { "top": 10, "left": 80, "bottom": 70, "right": 200 }
+    padding: {"top": 10, "left": 80, "bottom": 70, "right": 200}
 };
 
 
 function initialize() {
-    //fetch();
-    $(div).html(getDefaultText());
-}
-
-function getDefaultText() {
-    return '<div class="status-message">'+
-        '<div class="message message-info">'+
-        '<h4><i class="icon fw fw-info"></i>No content to display</h4>'+
-        '<p>Please select a date range to view stats.</p>'+
-        '</div>'+
-        '</div>';
-};
-
-function getEmptyRecordsText() {
-    return '<div class="status-message">'+
-        '<div class="message message-info">'+
-        '<h4><i class="icon fw fw-info"></i>No records found</h4>'+
-        '<p>Please select a date range to view stats.</p>'+
-        '</div>'+
-        '</div>';
+    fetch();
+    $(canvasDiv).html(gadgetUtil.getDefaultText());
 }
 
 $(document).ready(function () {
     initialize();
 });
 
-function fetch(ch) {
-    if (!ch) {
-        dataM.length = 0;
-        ch = 0;
+function fetch(statusType) {
+    if (!statusType) {
+        receivedData.length = 0;
+        statusType = 0;
     }
     var queryInfo = {
         tableName: "LOGANALYZER_APIKEY_STATUS",
         searchParams: {
-            query: "status:" + gadgetConfig.status[ch] + " AND  _timestamp: [" + from + " TO " + to + "]"
+            query: "status:" + gadgetConfig.status[statusType] + " AND  _timestamp: [" + fromTime + " TO " + toTime + "]"
         }
     };
 
     client.searchCount(queryInfo, function (d) {
         if (d["status"] === "success") {
-            dataM.push([gadgetConfig.statusDescription[ch], parseInt(d["message"]), gadgetConfig.status[ch]] );
+            receivedData.push([gadgetConfig.statusDescription[statusType], parseInt(d["message"]), gadgetConfig.status[statusType]]);
             async_tasks--;
             if (async_tasks == 0) {
-                if(!initState){
+                if (!initState) {
                     redrawApiKeyStatus();
-                }else{
+                } else {
                     drawApiKeyStatus();
-                    initState =false;
+                    initState = false;
                 }
             } else {
-                fetch(++ch);
+                fetch(++statusType);
             }
         }
     }, function (error) {
-        console.log("error occured: " + error);
+        console.log(error);
+        error.message = "Internal server error while data indexing.";
+        onError(error);
     });
-    console.log("ch value: " + ch);
+
 }
 
 function drawApiKeyStatus() {
-    $(div).empty();
-    chart = new vizg(
-        [
+    try {
+        $(canvasDiv).empty();
+        chart = new vizg(
+            [
+                {
+                    "metadata": this.meta,
+                    "data": receivedData
+                }
+            ],
+            configChart
+        );
+        chart.draw(canvasDiv, [
             {
-                "metadata": this.meta,
-                "data": dataM
+                type: "click",
+                callback: onclick
             }
-        ],
-        configChart
-    );
-    chart.draw(div, [
-        {
-            type: "click",
-            callback: onclick
-        }
-    ]);
-}
-
-function redrawApiKeyStatus(){
-    for(var i in dataM){
-        chart.insert([dataM[i]]);
+        ]);
+    } catch (error) {
+        error.message = "Error while drawing log event chart.";
+        error.status = "";
+        onError(error);
     }
 }
 
-function publish (data) {
+function redrawApiKeyStatus() {
+    try {
+        for (var i in receivedData) {
+            chart.insert([receivedData[i]]);
+        }
+    } catch (error) {
+        console.log(error);
+        error.message = "Error while drawing log event chart.";
+        error.status = "";
+        onError(error);
+    }
+}
+
+function publish(data) {
     gadgets.Hub.publish("publisher", data);
 };
 
-var onclick = function(event, item) {
+var onclick = function (event, item) {
     if (item != null) {
-        console.log(JSON.stringify(item.datum));
         publish(
             {
-                "filter": gadgetConfig.id,
-                "selected": item.datum.StatusId
+                "selected": item.datum.StatusId,
+                "fromTime": fromTime,
+                "toTime":toTime,
+                "count": item.datum.Count
             }
         );
     }
@@ -155,8 +153,12 @@ function subscribe(callback) {
 }
 
 subscribe(function (topic, data, subscriber) {
-    from = parseInt(data["timeFrom"]);
-    to = parseInt(data["timeTo"]);
+    fromTime = parseInt(data["timeFrom"]);
+    toTime = parseInt(data["timeTo"]);
     async_tasks = gadgetConfig.status.length;
     fetch();
 });
+
+function onError(msg) {
+    $(canvasDiv).html(gadgetUtil.getErrorText(msg));
+}
