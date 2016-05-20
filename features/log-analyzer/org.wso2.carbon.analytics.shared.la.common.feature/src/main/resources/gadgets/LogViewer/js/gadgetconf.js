@@ -21,9 +21,3 @@ var gadgetConfig = {
     "title": "Log Viewer",
     "timeDomain":60000
 };
-
-var serverUrls = [
-    { name: "ESB", svrUrl: "/portal/apis/analytics"},
-    { name: "APIM", svrUrl: "https://"+location.hostname +":"+ location.port +"/admin-dashboard/modules/la/log-analyzer-proxy.jag"}
-
-];

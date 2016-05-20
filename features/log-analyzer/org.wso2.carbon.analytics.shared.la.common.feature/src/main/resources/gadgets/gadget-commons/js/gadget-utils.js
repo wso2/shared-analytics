@@ -19,6 +19,12 @@
  */
 var PARAM_TYPE = "type";
 
+var serverUrls = [
+    { name: "ESB", svrUrl: "/portal/apis/analytics"},
+    { name: "APIM", svrUrl: "https://"+location.hostname +":"+ location.port +"/admin-dashboard/modules/la/log-analyzer-proxy.jag"}
+
+];
+
 function GadgetUtil() {
     var DEFAULT_START_TIME = new Date(moment().subtract(29, 'days')).getTime();
     var DEFAULT_END_TIME = new Date(moment()).getTime();
