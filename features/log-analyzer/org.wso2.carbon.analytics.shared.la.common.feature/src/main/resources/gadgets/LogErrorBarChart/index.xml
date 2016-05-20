@@ -18,16 +18,17 @@
   -->
 
 <Module>
-    <ModulePrefs title="Message Processing Errors" description="Bar chart for displaying Message Processing Errors">
+    <ModulePrefs title="Log Error Bar Chart" description="Log chart for displaying log error level summarized data">
         <Require feature="pubsub-2"/>
         <Require feature="dynamic-height"/>
+        <Require feature="setprefs"/>
     </ModulePrefs>
+    <UserPref name="type" display_name="Gadget Type" required="true" />
     <Content type="html">
         <![CDATA[
             <head>
                 <meta charset="utf-8"/>
-                <title>Message Processing Errors</title>
-
+                <title>Log Error Bar Chart</title>
                 <!-- WSO2 Theme -->
                 <link rel="stylesheet" type="text/css" href="/portal/libs/font-wso2_1.0.0/css/font-wso2.min.css" />
                 <link rel="stylesheet" type="text/css" href="/portal/libs/theme-wso2_1.0/css/theme-wso2.css" />
@@ -51,16 +52,30 @@
                 <script src="../gadget-commons/js/vega.js"></script>
                 <script src="../gadget-commons/js/VizGrammar.js"></script>
 
-                <!--Twitter typeahead-->
-                <script src="../gadget-commons/js/typeahead.bundle.js"></script>
-
                 <!-- Custom -->
                 <script src="js/gadgetconf.js"></script>
                 <script src="js/main.js"></script>
 
+                <!--Twitter typeahead-->
+                <script src="../commons/js/typeahead.bundle.js"></script>
+
             </head>
             <body>
+                <div class="col-sm-12">
+                <table>
+                    <tr>
+                        <td><label class="control-label">Filtering Type </label></td>
+                        <td>
+                            <select id="selector" class="form-control">
+                                <option>Message</option>
+                                <option>Class</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+                </div>
                 <div id="errorDiv"></div>
+
                 <div id= "drawCanvas" class="drawCanvas">
                     <table>
                         <tr>

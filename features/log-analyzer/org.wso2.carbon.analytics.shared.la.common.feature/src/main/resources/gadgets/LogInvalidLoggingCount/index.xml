@@ -18,15 +18,21 @@
   -->
 
 <Module>
-    <ModulePrefs title="Message Processing Errors" description="Bar chart for displaying Message Processing Errors">
+    <ModulePrefs title="Invalid Logging Count"
+                 author="WSO2 LogAnalyzer"
+                 scrolling="true"
+                 tags="InvalidLoggingCount"
+                 description="Invalid Logging Count Implementation">
         <Require feature="pubsub-2"/>
         <Require feature="dynamic-height"/>
+        <Require feature="setprefs"/>
     </ModulePrefs>
+    <UserPref name="type" display_name="Gadget Type" required="true" />
     <Content type="html">
         <![CDATA[
             <head>
                 <meta charset="utf-8"/>
-                <title>Message Processing Errors</title>
+                <title>Invalid Logging Count</title>
 
                 <!-- WSO2 Theme -->
                 <link rel="stylesheet" type="text/css" href="/portal/libs/font-wso2_1.0.0/css/font-wso2.min.css" />
@@ -38,7 +44,7 @@
                 <link rel="stylesheet" type="text/css" href="../commons/css/bootstrap.min.css" />
                 <link rel="stylesheet" type="text/css" href="css/style.css" />
 
-                <!-- jQuery -->
+                <!-- JS -->
                 <script src="../gadget-commons/js/jquery-1.10.2.js"></script>
                 <script src="../gadget-commons/js/moment.min.js"></script>
                 <script src="../gadget-commons/js/gadget-utils.js"></script>

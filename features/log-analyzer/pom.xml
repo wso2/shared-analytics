@@ -31,5 +31,7 @@
 
     <modules>
         <module>org.wso2.carbon.analytics.shared.la.apim.feature</module>
+        <module>org.wso2.carbon.analytics.shared.la.esb.feature</module>
+        <module>org.wso2.carbon.analytics.shared.la.common.feature</module>
     </modules>
 </project>

@@ -1,4 +1,4 @@
 instructions.configure = \
-org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.shared.analytics.common.la.apim_${feature.version}/gadgets,target:${installFolder}/../../deployment/server/jaggeryapps/portal/store/carbon.super/gadget,overwrite:true);\
-org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.shared.la.apim_${feature.version}/dashboard,target:${installFolder}/../../deployment/server/jaggeryapps/portal/extensions/dashboards,overwrite:true);\
-org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.shared.la.apim_${feature.version}/synapse-configs,target:${installFolder}/../../deployment/server/synapse-configs,overwrite:true);\
+org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.analytics.shared.la.apim_${feature.version}/gadgets,target:${installFolder}/../../deployment/server/jaggeryapps/portal/store/carbon.super/gadget,overwrite:true);\
+org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.analytics.shared.la.apim_${feature.version}/dashboard,target:${installFolder}/../../deployment/server/jaggeryapps/portal/extensions/dashboards,overwrite:true);\
+org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.analytics.shared.la.apim_${feature.version}/synapse-configs,target:${installFolder}/../../deployment/server/synapse-configs,overwrite:true);\

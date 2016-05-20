@@ -18,18 +18,20 @@
   -->
 
 <Module>
-    <ModulePrefs title="APIM Key Status Table"
+    <ModulePrefs title="APIM Filtered Messages"
                  author="WSO2 LogAnalyzer"
                  scrolling="true"
-                 tags="APIMKeyStatusTable"
-                 description="API Key status table">
+                 tags="APIMFilteredMessages"
+                 description="Filtered Messages table Implementation">
         <Require feature="pubsub-2"/>
         <Require feature="dynamic-height"/>
+        <Require feature="setprefs"/>
     </ModulePrefs>
+    <UserPref name="type" display_name="Gadget Type" required="true" />
     <Content type="html">
-       <![CDATA[
-       <html>
-           <head>
+        <![CDATA[
+        <html>
+        <head>
             <meta charset="utf-8"/>
             <title>APIM Filtered Messages</title>
 
@@ -60,13 +62,13 @@
             <script src="js/gadgetconf.js"></script>
             <script src="js/main.js"></script>
 
-          </head>
-          <body class="nano">
-            <div class="nano-content">
+        </head>
+            <body class="nano">
+                <div class="nano-content">
                 <div id="canvas" class="add-padding-5x"></div>
-            </div>
-          </body>
-       </html>
+                </div>
+            </body>
+        </html>
         ]]>
     </Content>
 </Module>

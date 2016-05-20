@@ -1,0 +1,2 @@
+instructions.configure = \
+org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.analytics.shared.la.common_${feature.version}/gadgets,target:${installFolder}/../../deployment/server/jaggeryapps/portal/store/carbon.super/gadget,overwrite:true);\
