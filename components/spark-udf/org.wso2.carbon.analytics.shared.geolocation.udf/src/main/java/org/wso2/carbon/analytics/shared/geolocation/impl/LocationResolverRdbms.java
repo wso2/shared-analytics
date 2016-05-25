@@ -42,8 +42,8 @@ public class LocationResolverRdbms extends LocationResolver {
     public static final String SQL_INSERT_LOCATION_INTO_TABLE = "INSERT INTO IP_LOCATION (ip,country_name," +
             "city_name) VALUES (?,?,?)";
     public static final String SQL_SELECT_LOCATION_FROM_LONG_VALUE_OF_IP = "SELECT loc.country_name,loc" +
-            ".subdivision_1_name FROM BLOCKS block , LOCATION loc WHERE ? " + "BETWEEN " + "block.network AND " +
-            "block.broadcast AND block.geoname_id=loc.geoname_id";
+            ".subdivision_1_name FROM BLOCKS block , LOCATION loc WHERE block.network_blocks = ? AND ? BETWEEN block" +
+            ".network AND block.broadcast AND block.geoname_id=loc.geoname_id";
 
     @Override
     public void init() throws GeoLocationResolverException {
@@ -98,7 +98,8 @@ public class LocationResolverRdbms extends LocationResolver {
         ResultSet resultSet = null;
         try {
             statement = connection.prepareStatement(SQL_SELECT_LOCATION_FROM_LONG_VALUE_OF_IP);
-            statement.setLong(1, getIpV4ToLong(ipAddress));
+            statement.setString(1,ipAddress.substring(0,ipAddress.lastIndexOf(".")-2));
+            statement.setLong(2, getIpV4ToLong(ipAddress));
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 location = new Location(resultSet.getString("country_name"), resultSet.getString("subdivision_1_name"),
