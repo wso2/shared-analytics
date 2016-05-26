@@ -1,6 +1,6 @@
 CREATE TABLE `BLOCKS` (
-`network` int(10) unsigned DEFAULT NULL,
-  `broadcast` int(10) unsigned DEFAULT NULL,
+`network` long unsigned DEFAULT NULL,
+  `broadcast` long unsigned DEFAULT NULL,
  `geoname_id` int(11) DEFAULT NULL,
   `registered_country_geoname_id` int(11) DEFAULT NULL,
   `represented_country_geoname_id` int(11) DEFAULT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE `LOCATION` (
   `subdivision_2_name` varchar(1000) DEFAULT NULL,
   `city_name` varchar(1000) DEFAULT NULL,
   `metro_code` int(11) DEFAULT NULL,
-  `time_zone` varchar(10) DEFAULT NULL,
+  `time_zone` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`geoname_id`));
 CREATE TABLE `IP_LOCATION` (
   `ip` varchar(100) NOT NULL,
@@ -34,5 +34,8 @@ CREATE TABLE `IP_LOCATION` (
   PRIMARY KEY (`ip`),
   UNIQUE KEY `ip_UNIQUE` (`ip`)
 );
+
+INSERT INTO LOCATION VALUES (2803476,'en','EU','Europe','DE','Germany','SN','Saxony','','','Zwoenitz',0,'Europe/Berlin');
+INSERT INTO BLOCKS VALUES (3232236032, 3232236287, 2803476,2803476,2803476,1,1,'1',1,1);
 
 
