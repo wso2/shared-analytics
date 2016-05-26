@@ -1,0 +1,15 @@
+{
+  "id": "logServerUpTimeDistribution",
+  "title": "Server up time distribution",
+  "type": "gadget",
+  "thumbnail": "store://gadget/LogServerUpTimeDistribution/img/thumbnail.png",
+  "data": {
+    "url": "store://gadget/LogServerUpTimeDistribution/index.xml"
+  },
+  "listen": {
+    "subscriber": {
+      "type": "date-range",
+      "description": "Used to listen to any date range-selected"
+    }
+  }
+}

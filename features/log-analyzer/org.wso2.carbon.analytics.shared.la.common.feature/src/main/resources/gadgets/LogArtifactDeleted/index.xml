@@ -18,20 +18,22 @@
   -->
 
 <Module>
-    <ModulePrefs title="APIM Key Status Table"
+    <ModulePrefs title="Log APIM Artifact Deleted"
                  author="WSO2 LogAnalyzer"
                  scrolling="true"
-                 tags="APIMKeyStatusTable"
-                 description="API Key status table">
+                 tags="stack,chart,data,visualization"
+                 description="Log Level table Implementation">
         <Require feature="pubsub-2"/>
         <Require feature="dynamic-height"/>
+        <Require feature="setprefs"/>
     </ModulePrefs>
+    <UserPref name="type" display_name="Gadget Type" required="true" />
     <Content type="html">
-       <![CDATA[
-       <html>
-           <head>
+        <![CDATA[
+        <html>
+            <head>
             <meta charset="utf-8"/>
-            <title>APIM Filtered Messages</title>
+            <title>Log APIM Artifact Deleted</title>
 
             <!-- Theme -->
             <link rel="stylesheet" type="text/css" href="/portal/libs/bootstrap_3.3.5/css/bootstrap.min.css" />
@@ -48,9 +50,8 @@
             <script src="../gadget-commons/js/jquery-1.10.2.js"></script>
             <script src="../gadget-commons/js/jquery.dataTables.min.js"></script>
             <script src="../gadget-commons/js/dataTables.bootstrap.js"></script>
-            <script src="../gadget-commons/js/d3.min.js"></script>
-            <script src="../gadget-commons/js/topojson.js"></script>
             <script src="../gadget-commons/js/jquery.nanoscroller.min.js"></script>
+            <script src="../gadget-commons/js/d3.min.js"></script>
             <script src="../gadget-commons/js/vega.js"></script>
             <script src="../gadget-commons/js/VizGrammar.js"></script>
             <script src="../gadget-commons/js/VizGrammarSettings.js"></script>
@@ -60,13 +61,13 @@
             <script src="js/gadgetconf.js"></script>
             <script src="js/main.js"></script>
 
-          </head>
-          <body class="nano">
-            <div class="nano-content">
-                <div id="canvas" class="add-padding-5x"></div>
-            </div>
-          </body>
-       </html>
+            </head>
+            <body class="nano">
+                <div class="nano-content">
+                    <div id="canvas" class="add-padding-5x"></div>
+                </div>
+            </body>
+    </html>
         ]]>
     </Content>
 </Module>

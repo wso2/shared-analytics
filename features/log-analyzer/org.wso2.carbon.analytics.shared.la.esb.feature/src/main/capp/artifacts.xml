@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artifacts>
+    <artifact name="org.wso2.analytics.common.la.esb" version="1.0.0" type="carbon/application">
+        <dependency artifact="ESB_LOGANALYZER_SCRIPT" version="1.0.0" include="true" serverRole="DataAnalyticsServer"/>
+
+        <dependency artifact="GadgetLogErrorCodeDistribution" version="1.0.0" include="true" serverRole="DataAnalyticsServer"/>
+        <dependency artifact="GadgetLogServerUpTimeDistribution" version="1.0.0" include="true" serverRole="DataAnalyticsServer"/>
+        <!-- Dashboard Definition -->
+        <dependency artifact="ESBDashBoard" version="1.0.0" include="true" serverRole="DataAnalyticsServer"/>
+
+        <dependency artifact="LogEventReciever" version="1.0.0" include="true" serverRole="DataAnalyticsServer"/>
+        <dependency artifact="LogEventStream" version="1.0.0" include="true" serverRole="DataAnalyticsServer"/>
+        <dependency artifact="LogEventStore" version="1.0.0" include="true" serverRole="DataAnalyticsServer"/>
+
+    </artifact>
+</artifacts>
