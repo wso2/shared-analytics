@@ -1,6 +1,7 @@
 BEGIN TRANSACTION;
 
 CREATE TABLE BLOCKS (
+network_cidr varchar(45) DEFAULT NULL,
 network bigint DEFAULT NULL,
   broadcast bigint DEFAULT NULL,
  geoname_id bigint DEFAULT NULL,
@@ -10,7 +11,11 @@ network bigint DEFAULT NULL,
   is_satellite_provider smallint DEFAULT '0',
   postal_code varchar(45) DEFAULT NULL,
   latitude double precision DEFAULT NULL,
-  longitude double precision DEFAULT NULL);
+  longitude double precision DEFAULT NULL,
+network_blocks varchar(45) DEFAULT NULL);
+CREATE INDEX idx_blocks_network ON BLOCKS (network);
+CREATE INDEX idx_blocks_broadcast ON BLOCKS (broadcast);
+CREATE INDEX idx_blocks_network_blocks ON BLOCKS (network_blocks);
 CREATE TABLE LOCATION (
   geoname_id int NOT NULL,
   locale_code varchar(10) DEFAULT NULL,
@@ -35,4 +40,3 @@ CREATE TABLE IP_LOCATION (
   CONSTRAINT ip_UNIQUE UNIQUE  (ip)
 );
 commit;
-

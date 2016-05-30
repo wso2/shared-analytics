@@ -1,4 +1,5 @@
 CREATE TABLE BLOCKS (
+network_cidr varchar(45) DEFAULT NULL,
 network NUMBER(10) DEFAULT NULL,
   broadcast NUMBER(10) DEFAULT NULL,
  geoname_id NUMBER(10) DEFAULT NULL,
@@ -8,9 +9,12 @@ network NUMBER(10) DEFAULT NULL,
   is_satellite_provider NUMBER(3) DEFAULT '0',
   postal_code VARCHAR2(45) DEFAULT NULL,
   latitude NUMBER(10,4) DEFAULT NULL,
-  longitude NUMBER(10,4) DEFAULT NULL);
-CREATE INDEX idx_blocks_network ON BLOCKS (network_start_integer);
-CREATE INDEX idx_blocks_broadcast ON BLOCKS (network_last_integer);
+  longitude NUMBER(10,4) DEFAULT NULL,
+network_blocks varchar(45) DEFAULT NULL);
+
+CREATE INDEX idx_blocks_network ON BLOCKS (network);
+CREATE INDEX idx_blocks_broadcast ON BLOCKS (broadcast);
+CREATE INDEX idx_blocks_network_blocks ON BLOCKS (network_blocks);
 CREATE TABLE LOCATION (
   geoname_id NUMBER(10) NOT NULL,
   locale_code VARCHAR2(10) DEFAULT NULL,
