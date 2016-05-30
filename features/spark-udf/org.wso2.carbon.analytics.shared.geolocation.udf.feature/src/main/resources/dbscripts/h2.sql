@@ -9,7 +9,7 @@ CREATE TABLE `BLOCKS` (
   `is_satellite_provider` tinyint(1) DEFAULT '0',
   `postal_code` varchar(45) DEFAULT NULL,
   `latitude` float DEFAULT NULL,
-  `longitude` float DEFAULT NULL),
+  `longitude` float DEFAULT NULL,
   `network_blocks` varchar(45) DEFAULT NULL);
 CREATE INDEX idx_blocks_network ON BLOCKS (`network`);
 CREATE INDEX idx_blocks_broadcast ON BLOCKS (`broadcast`);
