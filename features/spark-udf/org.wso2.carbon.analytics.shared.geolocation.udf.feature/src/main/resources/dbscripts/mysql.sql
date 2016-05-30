@@ -1,4 +1,5 @@
 CREATE TABLE `BLOCKS` (
+`network_cidr` varchar(45) DEFAULT NULL,
 `network` int(10) unsigned DEFAULT NULL,
   `broadcast` int(10) unsigned DEFAULT NULL,
  `geoname_id` int(11) DEFAULT NULL,
@@ -8,10 +9,11 @@ CREATE TABLE `BLOCKS` (
   `is_satellite_provider` tinyint(1) DEFAULT '0',
   `postal_code` varchar(45) DEFAULT NULL,
   `latitude` float DEFAULT NULL,
-  `longitude` float DEFAULT NULL);
+  `longitude` float DEFAULT NULL,
+`network_blocks` varchar(45) DEFAULT NULL);
 CREATE INDEX idx_blocks_network ON BLOCKS (`network`);
 CREATE INDEX idx_blocks_broadcast ON BLOCKS (`broadcast`);
-
+CREATE INDEX idx_blocks_network_blocks ON BLOCKS (`network_blocks`);
 CREATE TABLE `LOCATION` (
   `geoname_id` int(10) unsigned NOT NULL,
   `locale_code` varchar(10) DEFAULT NULL,
@@ -31,8 +33,5 @@ CREATE TABLE `IP_LOCATION` (
   `ip` varchar(100) NOT NULL,
   `country_name` varchar(200) DEFAULT NULL,
   `city_name` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`ip`),
-  UNIQUE KEY `ip_UNIQUE` (`ip`)
-);
-
+  PRIMARY KEY (`ip`));
 
