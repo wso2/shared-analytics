@@ -29,7 +29,4 @@
     <packaging>pom</packaging>
     <name>File Tail component</name>
 
-    <modules>
-        <module>org.wso2.carbon.shared.analytics.data.agents.filetail</module>
-    </modules>
 </project>
