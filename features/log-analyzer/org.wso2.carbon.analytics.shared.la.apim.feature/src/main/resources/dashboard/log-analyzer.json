@@ -8,7 +8,7 @@
   },
   "pages": [
     {
-      "id": "page1",
+      "id": "page0",
       "title": "Overview",
       "layout": {
         "content": {
@@ -118,7 +118,7 @@
       }
     },
     {
-      "id": "page0",
+      "id": "page1",
       "title": "Application Errors",
       "layout": {
         "content": {
