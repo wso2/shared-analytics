@@ -13,7 +13,6 @@ WSO2 Analytics contains powerful common components for real-time, batch, interac
 
 # Available Features
 * Log4J Appender publishing log events to [DAS](http://wso2.com/products/data-analytics-server/)
-* Log Tail Agent listens to given log file and publishing new events to [DAS](http://wso2.com/products/data-analytics-server/)
 * Log Analyzer Dashboard for [APIM](http://wso2.com/api-management/)
 
 
