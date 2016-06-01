@@ -19,11 +19,11 @@ package org.wso2.carbon.analytics.shared.geolocation.dbutil;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.analytics.datasource.core.util.GenericUtils;
 import org.wso2.carbon.analytics.shared.geolocation.exception.GeoLocationResolverException;
+import org.wso2.carbon.ndatasource.common.DataSourceException;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import javax.naming.*;
 import javax.sql.DataSource;
 import java.sql.*;
 
@@ -48,9 +48,9 @@ public class DBUtil {
         synchronized (DBUtil.class) {
             if (dataSource == null) {
                 try {
-                    Context ctx = new InitialContext();
-                    dataSource = (DataSource) ctx.lookup(dataSourceName);
-                } catch (NamingException e) {
+
+                    dataSource = (DataSource) GenericUtils.loadGlobalDataSource(dataSourceName);
+                } catch (DataSourceException e) {
                     String msg = "Couldn't find JDBC Data Source from Data source name" + dataSourceName;
                     throw new GeoLocationResolverException(msg, e);
                 }
