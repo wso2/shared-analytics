@@ -31,7 +31,7 @@
 
     <modules>
         <module>org.wso2.carbon.analytics.shared.spark.common.udf</module>
-        <module>org.wso2.carbon.analytics.shared.spark.geolocation.udf</module>
-        <module>org.wso2.carbon.analytics.shared.spark.useragent.udf</module>
+        <module>org.wso2.carbon.analytics.shared.geolocation.udf</module>
+        <module>org.wso2.carbon.analytics.shared.useragent.udf</module>
     </modules>
 </project>
