@@ -19,12 +19,12 @@
 var charts = [
     {
         name: "INVALID_LOGIN_ATTEMPT",
-        columns: ["timestamp", "InvalidLoginCount", "AgentId"],
+        columns: ["timestamp", "InvalidLoginCount", "tenantID"],
         additionalColumns: ["week"],
         orderedField: "InvalidLoginCount",
         schema: [{
             "metadata": {
-                "names": ["day", "InvalidLoginCount", "AgentId", "ID"],
+                "names": ["day", "InvalidLoginCount", "tenantID", "ID"],
                 "types": ["ordinal", "linear", "ordinal", "linear"]
             },
             "data": []
@@ -35,7 +35,7 @@ var charts = [
             colorScale: [],
             colorDomain: [],
             xAxisAngle: true,
-            color: "AgentId",
+            color: "tenantID",
             charts: [{type: "bar", y: "InvalidLoginCount", mode: "stack"}],
             width: $('canvas').width(),
             height: $('canvas').height(),
