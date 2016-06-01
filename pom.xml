@@ -49,7 +49,6 @@
 	</licenses>
 
 	<modules>
-        <module>components/log-analyzer</module>
         <module>components/log4j</module>
         <module>components/spark-udf</module>
         <module>components/util</module>
