@@ -42,7 +42,7 @@ function fetchInitialRecordCount(){
     var countQueryInfo = {
         tableName: "LOGANALYZER",
         searchParams: {
-            query: "tenantId:#tenantID#",
+            query: "*:* AND tenantId:#tenantID#",
         }
     };
     client.searchCount(countQueryInfo, function(count) {
@@ -67,7 +67,7 @@ function fetchCurrentRecordCount() {
     var countQueryInfo = {
         tableName: "LOGANALYZER",
         searchParams: {
-            query: "tenantId:#tenantID#",
+            query: "*:* AND tenantID:#tenantID#",
         }
     };
 
@@ -93,7 +93,7 @@ function fetchRecords(logCountDifference){
     queryInfo = {
         tableName: "LOGANALYZER",
         searchParams: {
-            query: "tenantId:#tenantID#",
+            query: "*:* AND tenantId:#tenantID#",
             start: 0,
             count: logCountDifference,
             sortBy : [

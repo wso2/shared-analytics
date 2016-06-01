@@ -46,7 +46,7 @@ function fetch(logLevelIndex) {
     var queryInfo = {
         tableName: gadgetConfig.datasource,
         searchParams: {
-            query: "_level:" + gadgetConfig.level[logLevelIndex] + " AND  _eventTimeStamp: [" + from + " TO " + to + "]"
+            query: "_level:" + gadgetConfig.level[logLevelIndex] + " AND  _eventTimeStamp: [" + from + " TO " + to + "] AND tenantID:#tenantID#"
         }
     };
 

@@ -16,9 +16,7 @@
  * under the License.
  */
 
-var gatewayPort = location.port - 9443 + 8243; //Calculate the port offset based gateway port.
-var serverUrl = "https://" + location.hostname + ":" + gatewayPort + "/LogAnalyzerRestApi/1.0";
-var client = new AnalyticsClient().init(null, null, serverUrl);
+var client = new AnalyticsClient().init(null, null, "https://"+location.hostname +":"+ location.port +"/admin-dashboard/modules/la/log-analyzer-proxy.jag");
 var timeFrom = gadgetUtil.timeFrom();
 var timeTo = gadgetUtil.timeTo();
 var timeUnit = null;
@@ -82,7 +80,7 @@ function initialize() {
     }
     tableName = "LOGANALYZER_" + gadgetData.name + "_" + timeFrame;
 
-    var query = "_timestamp: [" + timeFrom + " TO " + timeTo + "]";
+    var query = "_timestamp: [" + timeFrom + " TO " + timeTo + "] AND tenantID:#tenantID#";
     var sorting = [
         {
             field: gadgetData.orderedField,
@@ -118,7 +116,7 @@ $(document).ready(function () {
 function fetch(start, count) {
     receivedData.length = 0;
     receivedOtherData.length = 0;
-    var query = "_timestamp: [" + timeFrom + " TO " + timeTo + "]";
+    var query = "_timestamp: [" + timeFrom + " TO " + timeTo + "] AND tenantID:#tenantID#";
     var sorting = [
         {
             field: gadgetData.orderedField,
@@ -229,6 +227,7 @@ function drawErrorChart() {
         //finally draw the chart on the given canvas
         gadgetData.chartConfig.width = $(canvasDiv).width();
         gadgetData.chartConfig.height = $(canvasDiv).height();
+        gadgetData.chartConfig.colorScale.push(["#95a5a6"]);
         gadgetData.chartConfig.colorDomain.push(["NoEntries"]);
         var vg = new vizg(gadgetData.schema, JSON.parse(JSON.stringify(gadgetData.chartConfig)));
         vg.draw(canvasDiv, [

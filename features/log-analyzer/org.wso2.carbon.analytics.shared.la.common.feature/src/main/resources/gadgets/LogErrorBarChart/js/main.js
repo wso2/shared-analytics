@@ -81,7 +81,7 @@ function initialize() {
     }
     tableName = "LOGANALYZER_" + gadgetData.name + "_" + timeFrame;
 
-    var query = "_timestamp: [" + timeFrom + " TO " + timeTo + "]";
+    var query = "_timestamp: [" + timeFrom + " TO " + timeTo + "] AND tenantID:#tenantID#";
     var sorting = [
         {
             field: gadgetData.orderedField,
@@ -237,7 +237,7 @@ function drawErrorChart() {
         //finally draw the chart on the given canvas
         gadgetData.chartConfig.width = $(canvasDiv).width();
         gadgetData.chartConfig.height = $(canvasDiv).height();
-        //gadgetData.chartConfig.colorScale.push(["#95a5a6"]);
+        gadgetData.chartConfig.colorScale.push(["#95a5a6"]);
         gadgetData.chartConfig.colorDomain.push(["NoEntries"]);
         var vg = new vizg(gadgetData.schema, JSON.parse(JSON.stringify(gadgetData.chartConfig)));
         vg.draw(canvasDiv, [

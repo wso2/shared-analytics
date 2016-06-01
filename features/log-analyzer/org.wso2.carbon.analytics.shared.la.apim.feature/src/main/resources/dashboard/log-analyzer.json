@@ -3,16 +3,12 @@
   "title": "Log Analyzer for APIM",
   "description": "",
   "permissions": {
-    "viewers": [
-      "Internal/everyone"
-    ],
-    "editors": [
-      "Internal/everyone"
-    ]
+    "viewers": ["Internal/everyone"],
+    "editors": ["Internal/everyone"]
   },
   "pages": [
     {
-      "id": "page1",
+      "id": "page0",
       "title": "Overview",
       "layout": {
         "content": {
@@ -50,9 +46,7 @@
                 "title": "Date Range Picker",
                 "type": "gadget",
                 "thumbnail": "store://gadget/Date_Range_Picker/index.png",
-                "data": {
-                  "url": "store://gadget/Date_Range_Picker/index.xml"
-                },
+                "data": {"url": "store://gadget/Date_Range_Picker/index.xml"},
                 "notify": {
                   "range-selected": {
                     "type": "date-range",
@@ -73,9 +67,7 @@
                   "title": "Date Range Picker"
                 },
                 "options": {},
-                "locale_titles": {
-                  "en-US": "Date Range Picker"
-                },
+                "locale_titles": {"en-US": "Date Range Picker"},
                 "settings": {}
               }
             }
@@ -88,9 +80,7 @@
                 "title": "Log Event Chart",
                 "type": "gadget",
                 "thumbnail": "store://gadget/LogEvents/img/thumbnail.png",
-                "data": {
-                  "url": "store://gadget/LogEvents/index.xml"
-                },
+                "data": {"url": "store://gadget/LogEvents/index.xml"},
                 "listen": {
                   "subscriber": {
                     "type": "date-range",
@@ -106,14 +96,19 @@
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
-                  "borders": false,
                   "titlePosition": "left",
                   "title": "Log Events"
                 },
-                "options": {},
-                "locale_titles": {
-                  "en-US": "Log Events"
+                "options": {
+                  "type": {
+                    "type": "STRING",
+                    "title": "Gadget Type",
+                    "value": "APIM",
+                    "options": [],
+                    "required": true
+                  }
                 },
+                "locale_titles": {"en-US": "Log Events"},
                 "settings": {}
               }
             }
@@ -123,7 +118,7 @@
       }
     },
     {
-      "id": "page0",
+      "id": "page1",
       "title": "Application Errors",
       "layout": {
         "content": {
@@ -177,9 +172,7 @@
                 "title": "Date Range Picker",
                 "type": "gadget",
                 "thumbnail": "store://gadget/Date_Range_Picker/index.png",
-                "data": {
-                  "url": "store://gadget/Date_Range_Picker/index.xml"
-                },
+                "data": {"url": "store://gadget/Date_Range_Picker/index.xml"},
                 "notify": {
                   "range-selected": {
                     "type": "date-range",
@@ -200,9 +193,7 @@
                   "title": "Date Range Picker"
                 },
                 "options": {},
-                "locale_titles": {
-                  "en-US": "Date Range Picker"
-                },
+                "locale_titles": {"en-US": "Date Range Picker"},
                 "settings": {}
               }
             }
@@ -215,9 +206,7 @@
                 "title": "Log Error Bar Chart",
                 "type": "gadget",
                 "thumbnail": "store://gadget/LogErrorBarChart/img/thumbnail.png",
-                "data": {
-                  "url": "store://gadget/LogErrorBarChart/index.xml"
-                },
+                "data": {"url": "store://gadget/LogErrorBarChart/index.xml"},
                 "notify": {
                   "publisher": {
                     "type": "filter",
@@ -239,14 +228,19 @@
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
-                  "borders": false,
                   "titlePosition": "left",
                   "title": "Errors Distribution"
                 },
-                "options": {},
-                "locale_titles": {
-                  "en-US": "Errors Distribution"
+                "options": {
+                  "type": {
+                    "type": "STRING",
+                    "title": "Gadget Type",
+                    "value": "APIM",
+                    "options": [],
+                    "required": true
+                  }
                 },
+                "locale_titles": {"en-US": "Errors Distribution"},
                 "settings": {}
               }
             }
@@ -259,9 +253,7 @@
                 "title": "APIM Filtered Messages",
                 "type": "gadget",
                 "thumbnail": "store://gadget/LogErrorFilteredMessage/img/thumbnail.png",
-                "data": {
-                  "url": "store://gadget/LogErrorFilteredMessage/index.xml"
-                },
+                "data": {"url": "store://gadget/LogErrorFilteredMessage/index.xml"},
                 "notify": {
                   "publisher": {
                     "type": "filter-range",
@@ -283,14 +275,19 @@
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
-                  "borders": false,
                   "titlePosition": "left",
                   "title": "Filtered Messages"
                 },
-                "options": {},
-                "locale_titles": {
-                  "en-US": "Filtered Messages"
+                "options": {
+                  "type": {
+                    "type": "STRING",
+                    "title": "Gadget Type",
+                    "value": "APIM",
+                    "options": [],
+                    "required": true
+                  }
                 },
+                "locale_titles": {"en-US": "Filtered Messages"},
                 "settings": {}
               }
             }
@@ -303,9 +300,7 @@
                 "title": "Log Viewer",
                 "type": "gadget",
                 "thumbnail": "store://gadget/LogViewer/index.png",
-                "data": {
-                  "url": "store://gadget/LogViewer/index.xml"
-                },
+                "data": {"url": "store://gadget/LogViewer/index.xml"},
                 "listen": {
                   "subscriber": {
                     "type": "filter-range",
@@ -321,14 +316,19 @@
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
-                  "borders": false,
                   "titlePosition": "left",
                   "title": "Log Viewer"
                 },
-                "options": {},
-                "locale_titles": {
-                  "en-US": "Log Viewer"
+                "options": {
+                  "type": {
+                    "type": "STRING",
+                    "title": "Gadget Type",
+                    "value": "APIM",
+                    "options": [],
+                    "required": true
+                  }
                 },
+                "locale_titles": {"en-US": "Log Viewer"},
                 "settings": {}
               }
             }
@@ -385,9 +385,7 @@
                 "type": "gadget",
                 "category": "Widgets",
                 "thumbnail": "store://gadget/Date_Range_Picker/index.png",
-                "data": {
-                  "url": "store://gadget/Date_Range_Picker/index.xml"
-                },
+                "data": {"url": "store://gadget/Date_Range_Picker/index.xml"},
                 "notify": {
                   "range-selected": {
                     "type": "date-range",
@@ -408,9 +406,7 @@
                   "title": "Date Range Picker"
                 },
                 "options": {},
-                "locale_titles": {
-                  "en-US": "Date Range Picker"
-                },
+                "locale_titles": {"en-US": "Date Range Picker"},
                 "settings": {}
               }
             }
@@ -423,9 +419,7 @@
                 "title": "Deployed Artifacts",
                 "type": "gadget",
                 "thumbnail": "store://gadget/LogArtifactDeployed/img/thumbnail.png",
-                "data": {
-                  "url": "store://gadget/LogArtifactDeployed/index.xml"
-                },
+                "data": {"url": "store://gadget/LogArtifactDeployed/index.xml"},
                 "listen": {
                   "subscriber": {
                     "type": "date-range",
@@ -441,14 +435,19 @@
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
-                  "borders": false,
                   "titlePosition": "left",
                   "title": "Deployed Artifacts"
                 },
-                "options": {},
-                "locale_titles": {
-                  "en-US": "Deployed Artifacts"
+                "options": {
+                  "type": {
+                    "type": "STRING",
+                    "title": "Gadget Type",
+                    "value": "APIM",
+                    "options": [],
+                    "required": true
+                  }
                 },
+                "locale_titles": {"en-US": "Deployed Artifacts"},
                 "settings": {}
               }
             }
@@ -461,9 +460,7 @@
                 "title": "APIM Artifact Deleted",
                 "type": "gadget",
                 "thumbnail": "store://gadget/LogArtifactDeleted/img/thumbnail.png",
-                "data": {
-                  "url": "store://gadget/LogArtifactDeleted/index.xml"
-                },
+                "data": {"url": "store://gadget/LogArtifactDeleted/index.xml"},
                 "listen": {
                   "subscriber": {
                     "type": "date-range",
@@ -479,14 +476,19 @@
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
-                  "borders": false,
                   "titlePosition": "left",
                   "title": "Deleted Artifacts"
                 },
-                "options": {},
-                "locale_titles": {
-                  "en-US": "Deleted Artifacts"
+                "options": {
+                  "type": {
+                    "type": "STRING",
+                    "title": "Gadget Type",
+                    "value": "APIM",
+                    "options": [],
+                    "required": true
+                  }
                 },
+                "locale_titles": {"en-US": "Deleted Artifacts"},
                 "settings": {}
               }
             }
@@ -535,9 +537,7 @@
                 "type": "gadget",
                 "category": "Widgets",
                 "thumbnail": "store://gadget/Date_Range_Picker/index.png",
-                "data": {
-                  "url": "store://gadget/Date_Range_Picker/index.xml"
-                },
+                "data": {"url": "store://gadget/Date_Range_Picker/index.xml"},
                 "notify": {
                   "range-selected": {
                     "type": "date-range",
@@ -570,9 +570,7 @@
                 "title": "Invalid Login Count",
                 "type": "gadget",
                 "thumbnail": "store://gadget/LogInvalidLoggingCount/img/thumbnail.png",
-                "data": {
-                  "url": "store://gadget/LogInvalidLoggingCount/index.xml"
-                },
+                "data": {"url": "store://gadget/LogInvalidLoggingCount/index.xml"},
                 "notify": {
                   "publisher": {
                     "type": "filter",
@@ -594,14 +592,19 @@
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
-                  "borders": false,
                   "titlePosition": "left",
                   "title": "Invalid Login Count"
                 },
-                "options": {},
-                "locale_titles": {
-                  "en-US": "Invalid Login Count"
+                "options": {
+                  "type": {
+                    "type": "STRING",
+                    "title": "Gadget Type",
+                    "value": "APIM",
+                    "options": [],
+                    "required": true
+                  }
                 },
+                "locale_titles": {"en-US": "Invalid Login Count"},
                 "settings": {}
               }
             }
@@ -650,9 +653,7 @@
                 "type": "gadget",
                 "category": "Widgets",
                 "thumbnail": "store://gadget/Date_Range_Picker/index.png",
-                "data": {
-                  "url": "store://gadget/Date_Range_Picker/index.xml"
-                },
+                "data": {"url": "store://gadget/Date_Range_Picker/index.xml"},
                 "notify": {
                   "range-selected": {
                     "type": "date-range",
@@ -673,9 +674,7 @@
                   "title": "Date Range Picker"
                 },
                 "options": {},
-                "locale_titles": {
-                  "en-US": "Date Range Picker"
-                },
+                "locale_titles": {"en-US": "Date Range Picker"},
                 "settings": {}
               }
             }
@@ -688,9 +687,7 @@
                 "title": "ERRORs in API Message Processing",
                 "type": "gadget",
                 "thumbnail": "store://gadget/LogAPIMMessageProcessing/img/thumbnail.png",
-                "data": {
-                  "url": "store://gadget/LogAPIMMessageProcessing/index.xml"
-                },
+                "data": {"url": "store://gadget/LogAPIMMessageProcessing/index.xml"},
                 "listen": {
                   "subscriber": {
                     "type": "date-range",
@@ -711,9 +708,7 @@
                   "title": "ERRORs in API Message Processing"
                 },
                 "options": {},
-                "locale_titles": {
-                  "en-US": "ERRORs in API Message Processing"
-                },
+                "locale_titles": {"en-US": "ERRORs in API Message Processing"},
                 "settings": {}
               }
             }
@@ -778,9 +773,7 @@
                 "type": "gadget",
                 "category": "Widgets",
                 "thumbnail": "store://gadget/Date_Range_Picker/index.png",
-                "data": {
-                  "url": "store://gadget/Date_Range_Picker/index.xml"
-                },
+                "data": {"url": "store://gadget/Date_Range_Picker/index.xml"},
                 "notify": {
                   "range-selected": {
                     "type": "date-range",
@@ -801,9 +794,7 @@
                   "title": "Date Range Picker"
                 },
                 "options": {},
-                "locale_titles": {
-                  "en-US": "Date Range Picker"
-                },
+                "locale_titles": {"en-US": "Date Range Picker"},
                 "settings": {}
               }
             }
@@ -816,9 +807,7 @@
                 "title": "API Token Status",
                 "type": "gadget",
                 "thumbnail": "store://gadget/LogApiTokenByStatus/img/thumbnail.png",
-                "data": {
-                  "url": "store://gadget/LogApiTokenByStatus/index.xml"
-                },
+                "data": {"url": "store://gadget/LogApiTokenByStatus/index.xml"},
                 "notify": {
                   "publisher": {
                     "type": "api-key-filter",
@@ -845,9 +834,7 @@
                   "title": "API Token Status"
                 },
                 "options": {},
-                "locale_titles": {
-                  "en-US": "API Token Status"
-                },
+                "locale_titles": {"en-US": "API Token Status"},
                 "settings": {}
               }
             }
@@ -860,9 +847,7 @@
                 "title": "API Key Status Table",
                 "type": "gadget",
                 "thumbnail": "store://gadget/LogApiTokenByStatusTable/img/thumbnail.png",
-                "data": {
-                  "url": "store://gadget/LogApiTokenByStatusTable/index.xml"
-                },
+                "data": {"url": "store://gadget/LogApiTokenByStatusTable/index.xml"},
                 "notify": {
                   "publisher": {
                     "type": "filter-range",
@@ -888,9 +873,7 @@
                   "title": "API Key Status"
                 },
                 "options": {},
-                "locale_titles": {
-                  "en-US": "API Key Status"
-                },
+                "locale_titles": {"en-US": "API Key Status"},
                 "settings": {}
               }
             }
@@ -903,9 +886,7 @@
                 "title": "Log Viewer",
                 "type": "gadget",
                 "thumbnail": "store://gadget/LogViewer/index.png",
-                "data": {
-                  "url": "store://gadget/LogViewer/index.xml"
-                },
+                "data": {"url": "store://gadget/LogViewer/index.xml"},
                 "listen": {
                   "subscriber": {
                     "type": "filter-range",
@@ -921,14 +902,71 @@
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
-                  "borders": false,
                   "titlePosition": "left",
                   "title": "Log Viewer"
                 },
-                "locale_titles": {
-                  "en-US": "Log Viewer"
+                "locale_titles": {"en-US": "Log Viewer"},
+                "settings": {},
+                "options": {
+                  "type": {
+                    "type": "STRING",
+                    "title": "Gadget Type",
+                    "value": "APIM",
+                    "options": [],
+                    "required": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "anon": {}
+      }
+    },
+    {
+      "id": "page6",
+      "title": "Live Log Viewer",
+      "layout": {
+        "content": {
+          "loggedIn": {
+            "blocks": [
+              {
+                "id": "7d8074704d9a3c81174d577910e23333",
+                "x": 0,
+                "y": 0,
+                "width": 12,
+                "height": 11,
+                "banner": false
+              }
+            ]
+          }
+        },
+        "fluidLayout": false
+      },
+      "isanon": false,
+      "content": {
+        "default": {
+          "7d8074704d9a3c81174d577910e23333": [
+            {
+              "id": "liveLogViewer-0",
+              "content": {
+                "id": "liveLogViewer",
+                "title": "Live Log viewer",
+                "type": "gadget",
+                "thumbnail": "store://gadget/LiveLogViewer/img/thumbnail.png",
+                "data": {"url": "store://gadget/LiveLogViewer/index.xml"},
+                "listen": {
+                  "subscriber": {
+                    "type": "date-range",
+                    "description": "Used to listen to any date range-selected"
+                  }
                 },
-                "settings": {}
+                "styles": {
+                  "title": "Live Log viewer",
+                  "borders": true
+                },
+                "options": {},
+                "locale_titles": {}
               }
             }
           ]
@@ -937,6 +975,13 @@
       }
     }
   ],
+  "menu": [{
+             "id": "landing",
+             "isanon": false,
+             "ishidden": false,
+             "title": "Home",
+             "subordinates": []
+           }],
   "identityServerUrl": "",
   "accessTokenUrl": "",
   "apiKey": "",
