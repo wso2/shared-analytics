@@ -72,7 +72,7 @@
   							<goal>p2-feature-gen</goal>
   						</goals>
   						<configuration>
-  							<id>org.wso2.carbon.analytics.shared.common.util</id>
+  							<id>org.wso2.carbon.analytics.shared.spark.common.udf</id>
   							<propertiesFile>../../etc/feature.properties</propertiesFile>
   							<adviceFile>
   								<properties>
