@@ -22,35 +22,27 @@
 
     <parent>
         <groupId>org.wso2.carbon.analytics.shared</groupId>
-        <artifactId>log4j</artifactId>
+        <artifactId>util</artifactId>
         <version>1.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>org.wso2.carbon.analytics.shared.data.agents.log4j</artifactId>
-    <name>WSO2 - Shared Analytics Log4J appender</name>
+    <artifactId>org.wso2.carbon.analytics.shared.util</artifactId>
+    <name>Util - Time</name>
     <packaging>bundle</packaging>
-    <description>Analytics Log4J appender</description>
 
     <dependencies>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
+            <groupId>org.wso2.orbit.joda-time</groupId>
+            <artifactId>joda-time</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.analytics-common</groupId>
-            <artifactId>org.wso2.carbon.databridge.commons</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon.commons</groupId>
-            <artifactId>org.wso2.carbon.logging.service</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon.analytics-common</groupId>
-            <artifactId>org.wso2.carbon.databridge.agent</artifactId>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
         </dependency>
     </dependencies>
+
 
     <build>
         <plugins>
@@ -60,7 +52,7 @@
                 <artifactId>maven-scr-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>generate-scr-scrdescriptor</id>
+                        <id>generate-scr-descriptor</id>
                         <goals>
                             <goal>scr</goal>
                         </goals>
@@ -75,37 +67,17 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
+                        <Private-Package></Private-Package>
                         <Export-Package>
-                            org.wso2.carbon.analytics.shared.data.agents.log4j.*
+                            org.wso2.carbon.analytics.shared.util.*
                         </Export-Package>
                         <Import-Package>
-                            org.apache.log4j.*,
-                            org.apache.log4j.spi,
-                            org.wso2.carbon.base.*,
-                            org.wso2.carbon.context.*,
-                            org.wso2.carbon.databridge.agent.*,
-                            org.wso2.carbon.databridge.commons.*,
-                            org.wso2.carbon.logging.service.*,
-                            org.wso2.carbon.user.*,
-                            org.wso2.carbon.utils.*,
+                            org.apache.commons.logging.*,
+                            org.wso2.orbit.joda-time.*,
                             *;resolution:=optional
                         </Import-Package>
-                        <DynamicImport-Package>*</DynamicImport-Package>
                     </instructions>
                 </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>2.4.1</version>
-                <executions>
-                    <execution>
-                        <id>auto-clean</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>clean</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

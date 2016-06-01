@@ -22,35 +22,59 @@
 
     <parent>
         <groupId>org.wso2.carbon.analytics.shared</groupId>
-        <artifactId>log4j</artifactId>
+        <artifactId>log-analyzer</artifactId>
         <version>1.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>org.wso2.carbon.analytics.shared.data.agents.log4j</artifactId>
-    <name>WSO2 - Shared Analytics Log4J appender</name>
+    <artifactId>org.wso2.carbon.analytics.shared.la.apim</artifactId>
+    <name>WSO2 - Analytics APIM bridge component</name>
     <packaging>bundle</packaging>
-    <description>Analytics Log4J appender</description>
 
     <dependencies>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
+            <groupId>org.apache.synapse</groupId>
+            <artifactId>synapse-extensions</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.analytics-common</groupId>
-            <artifactId>org.wso2.carbon.databridge.commons</artifactId>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.commons</groupId>
-            <artifactId>org.wso2.carbon.logging.service</artifactId>
+            <groupId>org.wso2.carbon.apimgt</groupId>
+            <artifactId>org.wso2.carbon.apimgt.impl</artifactId>
+            <version>6.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.analytics-common</groupId>
-            <artifactId>org.wso2.carbon.databridge.agent</artifactId>
+            <groupId>org.apache.synapse</groupId>
+            <artifactId>synapse-core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.axis2</groupId>
+                    <artifactId>axis2-codegen</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.osgi</groupId>
+            <artifactId>org.eclipse.osgi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.osgi</groupId>
+            <artifactId>org.eclipse.osgi.services</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
+
 
     <build>
         <plugins>
@@ -75,22 +99,19 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
+                        <Private-Package>org.wso2.carbon.analytics.shared.la.apim.internal</Private-Package>
                         <Export-Package>
-                            org.wso2.carbon.analytics.shared.data.agents.log4j.*
+                            !org.wso2.carbon.analytics.shared.la.apim.internal.*,
+                            org.wso2.carbon.analytics.shared.la.apim
                         </Export-Package>
                         <Import-Package>
-                            org.apache.log4j.*,
-                            org.apache.log4j.spi,
-                            org.wso2.carbon.base.*,
-                            org.wso2.carbon.context.*,
-                            org.wso2.carbon.databridge.agent.*,
-                            org.wso2.carbon.databridge.commons.*,
-                            org.wso2.carbon.logging.service.*,
-                            org.wso2.carbon.user.*,
-                            org.wso2.carbon.utils.*,
-                            *;resolution:=optional
+                            org.apache.synapse.*,
+                            org.apache.axis2.context.*,
+                            org.wso2.carbon.apimgt.impl.*,
+                            org.apache.commons.codec.*,
+                            org.apache.commons.logging.*,
+                            org.osgi.service.component.*,
                         </Import-Package>
-                        <DynamicImport-Package>*</DynamicImport-Package>
                     </instructions>
                 </configuration>
             </plugin>
