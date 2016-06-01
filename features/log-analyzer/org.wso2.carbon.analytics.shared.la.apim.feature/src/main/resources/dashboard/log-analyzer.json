@@ -922,8 +922,66 @@
         },
         "anon": {}
       }
+    },
+    {
+      "id": "page6",
+      "title": "Live Log Viewer",
+      "layout": {
+        "content": {
+          "loggedIn": {
+            "blocks": [
+              {
+                "id": "7d8074704d9a3c81174d577910e23333",
+                "x": 0,
+                "y": 0,
+                "width": 12,
+                "height": 11,
+                "banner": false
+              }
+            ]
+          }
+        },
+        "fluidLayout": false
+      },
+      "isanon": false,
+      "content": {
+        "default": {
+          "7d8074704d9a3c81174d577910e23333": [
+            {
+              "id": "liveLogViewer-0",
+              "content": {
+                "id": "liveLogViewer",
+                "title": "Live Log viewer",
+                "type": "gadget",
+                "thumbnail": "store://gadget/LiveLogViewer/img/thumbnail.png",
+                "data": {"url": "store://gadget/LiveLogViewer/index.xml"},
+                "listen": {
+                  "subscriber": {
+                    "type": "date-range",
+                    "description": "Used to listen to any date range-selected"
+                  }
+                },
+                "styles": {
+                  "title": "Live Log viewer",
+                  "borders": true
+                },
+                "options": {},
+                "locale_titles": {}
+              }
+            }
+          ]
+        },
+        "anon": {}
+      }
     }
   ],
+  "menu": [{
+             "id": "landing",
+             "isanon": false,
+             "ishidden": false,
+             "title": "Home",
+             "subordinates": []
+           }],
   "identityServerUrl": "",
   "accessTokenUrl": "",
   "apiKey": "",

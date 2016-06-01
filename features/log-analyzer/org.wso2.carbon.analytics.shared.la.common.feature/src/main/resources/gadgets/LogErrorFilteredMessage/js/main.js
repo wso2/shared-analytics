@@ -63,7 +63,7 @@ function fetch() {
     queryInfo = {
         tableName: "LOGANALYZER",
         searchParams: {
-            query: filteringByField + ": \"" + filteredMessage + "\" AND  _eventTimeStamp: [" + fromTime + " TO " + toTime + "] AND _level: \"ERROR\"",
+            query: filteringByField + ": \"" + filteredMessage + "\" AND  _eventTimeStamp: [" + fromTime + " TO " + toTime + "] AND _level: \"ERROR\" AND tenantID:#tenantID#",
             start: 0, //starting index of the matching record set
             count: filteredCount //page size for pagination
         }

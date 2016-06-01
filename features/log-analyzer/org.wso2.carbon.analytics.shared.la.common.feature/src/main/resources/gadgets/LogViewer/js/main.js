@@ -42,7 +42,7 @@ function fetch() {
     var queryForSearchCount = {
         tableName: "LOGANALYZER",
         searchParams: {
-            query: "_eventTimeStamp: [" + from + " TO " + to + "]",
+            query: "_eventTimeStamp: [" + from + " TO " + to + "] AND tenantID:#tenantID#",
         }
     };
 
@@ -52,7 +52,7 @@ function fetch() {
             queryInfo = {
                 tableName: "LOGANALYZER",
                 searchParams: {
-                    query: "_eventTimeStamp: [" + from + " TO " + to + "]",
+                    query: "_eventTimeStamp: [" + from + " TO " + to + "] AND tenantID:#tenantID#",
                     start: 0, //starting index of the matching record set
                     count: totalRecordCount //page size for pagination
                 }

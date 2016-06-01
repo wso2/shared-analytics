@@ -60,7 +60,7 @@ function fetch() {
     var queryForSearchCount = {
         tableName: "LOGANALYZER_APIM_ARTIFACT_DELETED_DAILY",
         searchParams: {
-            query: "_timestamp: [" + timeFrom + " TO " + timeTo + "]",
+            query: "_timestamp: [" + timeFrom + " TO " + timeTo + "] AND tenantID:#tenantID#",
         }
     };
 
@@ -72,7 +72,7 @@ function fetch() {
                     tableName: "LOGANALYZER_APIM_ARTIFACT_DELETED_DAILY",
                     searchParams: {
                         groupByField: "artifact",
-                        query: "_timestamp: [" + timeFrom + " TO " + timeTo + "]",
+                        query: "_timestamp: [" + timeFrom + " TO " + timeTo + "] AND tenantID:#tenantID#",
                         aggregateFields: [
                             {
                                 fields: ["artifactCount"], //Array of field names used as variables for aggregateFunction

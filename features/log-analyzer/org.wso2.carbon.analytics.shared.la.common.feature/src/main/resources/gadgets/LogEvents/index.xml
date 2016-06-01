@@ -41,8 +41,8 @@
 
 
                 <!-- CSS -->
-                <link rel="stylesheet" type="text/css" href="../commons/css/gadget.css" />
-                <link rel="stylesheet" type="text/css" href="../commons/css/bootstrap.min.css" />
+                <link rel="stylesheet" type="text/css" href="../gadget-commons/css/gadget.css" />
+                <link rel="stylesheet" type="text/css" href="../gadget-commons/css/bootstrap.min.css" />
                 <link rel="stylesheet" type="text/css" href="css/style.css" />
 
                 <!-- JS -->

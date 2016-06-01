@@ -41,8 +41,8 @@
 
                 <!-- CSS -->
                 <link rel="stylesheet" type="text/css" href="/portal/libs/bootstrap_3.3.5/css/bootstrap.min.css" />
-                <link rel="stylesheet" type="text/css" href="../commons/css/nanoscroller.css" />
-                <link rel="stylesheet" type="text/css" href="../commons/css/gadget.css" />
+                <link rel="stylesheet" type="text/css" href="../gadget-commons/css/nanoscroller.css" />
+                <link rel="stylesheet" type="text/css" href="../gadget-commons/css/gadget.css" />
 
                 <!-- Custom CSS -->
                 <link rel="stylesheet" type="text/css" href="css/style.css">
