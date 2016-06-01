@@ -16,9 +16,7 @@
  * under the License.
  */
 
-var gatewayPort = location.port - 9443 + 8243; //Calculate the port offset based gateway port.
-var serverUrl = "https://" + location.hostname + ":" + gatewayPort + "/LogAnalyzerRestApi/1.0";
-var client = new AnalyticsClient().init(null, null, serverUrl);
+var client = new AnalyticsClient().init(null, null, "https://"+location.hostname +":"+ location.port +"/admin-dashboard/modules/la/log-analyzer-proxy.jag");
 var timeFrom = gadgetUtil.timeFrom();
 var timeTo = gadgetUtil.timeTo();
 var timeUnit = null;
@@ -229,6 +227,7 @@ function drawErrorChart() {
         //finally draw the chart on the given canvas
         gadgetData.chartConfig.width = $(canvasDiv).width();
         gadgetData.chartConfig.height = $(canvasDiv).height();
+        gadgetData.chartConfig.colorScale.push(["#95a5a6"]);
         gadgetData.chartConfig.colorDomain.push(["NoEntries"]);
         var vg = new vizg(gadgetData.schema, JSON.parse(JSON.stringify(gadgetData.chartConfig)));
         vg.draw(canvasDiv, [

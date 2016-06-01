@@ -16,9 +16,7 @@
  * under the License.
  */
 
-var gatewayPort = location.port - 9443 + 8243; //Calculate the port offset based gateway port.
-var serverUrl = "https://" + location.hostname + ":" + gatewayPort + "/LogAnalyzerRestApi/1.0";
-var client = new AnalyticsClient().init(null, null, serverUrl);
+var client = new AnalyticsClient().init(null, null, "https://"+location.hostname +":"+ location.port +"/admin-dashboard/modules/la/log-analyzer-proxy.jag");
 var canvasDiv = "#canvas";
 var receivedData = [];
 var filteredMessage;

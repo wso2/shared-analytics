@@ -228,6 +228,7 @@ function drawInvalidLoggingCountChart() {
         //finally draw the chart on the given canvas
         gadgetData.chartConfig.width = $(canvasDiv).width();
         gadgetData.chartConfig.height = $(canvasDiv).height();
+        gadgetData.chartConfig.colorScale.push(["#95a5a6"]);
         gadgetData.chartConfig.colorDomain.push(["NoEntries"]);
         var vg = new vizg(gadgetData.schema, JSON.parse(JSON.stringify(gadgetData.chartConfig)));
         vg.draw(canvasDiv, [
