@@ -28,7 +28,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>org.wso2.carbon.analytics.shared.util</artifactId>
+    <artifactId>org.wso2.analytics.shared.util</artifactId>
     <name>Util - Time</name>
     <packaging>bundle</packaging>
 
@@ -69,7 +69,7 @@
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Private-Package></Private-Package>
                         <Export-Package>
-                            org.wso2.carbon.analytics.shared.util.*
+                            org.wso2.analytics.shared.util.*
                         </Export-Package>
                         <Import-Package>
                             org.apache.commons.logging.*,
