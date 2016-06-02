@@ -54,6 +54,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * WSO2 carbon log appender for publishing tenant aware logging events to the DAS server.
+ */
 public class LogEventAppender extends AppenderSkeleton implements Appender {
     private static final Logger log = Logger.getLogger(LogEventAppender.class);
     private ArrayBlockingQueue<TenantAwareLoggingEvent> loggingEvents;
@@ -85,7 +88,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     private ConditionalLayoutWrapper instanceLayout = new ConditionalLayoutWrapper();
 
     /**
-     * This is the method invoke by log4j when log appender initiating
+     * Log appender activator option by log4j framework.
      */
     @Override
     public void activateOptions() {
@@ -169,7 +172,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     }
 
     /**
-     * terminate the log appender resources when appender is close
+     * Log4j framework shutting down the log appender resources.
      */
     public void close() {
         if(scheduler != null) {
@@ -190,7 +193,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     }
 
     /**
-     * This is the method invoke by log4j when log event triggered
+     * Append the log event by log4j framework.
      */
     @Override
     protected void append(LoggingEvent event) {
@@ -234,9 +237,9 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     }
 
     /**
-     * This method is use for getting tenant from domain
-     * @param tenantDomain tenant domain name
-     * @return tenant id
+     * Retrieve the tenant domain.
+     * @param tenantDomain tenant domain name.
+     * @return tenant id.
      * @throws UserStoreException
      */
     public int getTenantIdForDomain(String tenantDomain) throws UserStoreException {
@@ -356,8 +359,8 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         }
 
         /**
-         * This method use for publish the log using thrift
-         * @param event log event which is wrapped TenantAwareLoggingEvent
+         * Publishing the log event using thrift client.
+         * @param event log event which is wrapped TenantAwareLoggingEvent.
          * @throws ParseException
          */
         private void publishLogEvent(TenantAwareLoggingEvent event) throws ParseException {
