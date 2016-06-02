@@ -68,8 +68,8 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
-                            org.wso2.analytics.shared.util.*,
-                            org.wso2.analytics.shared.util
+                            org.wso2.analytics.shared.util.time.*,
+                            org.wso2.analytics.shared.util.time
                         </Export-Package>
                         <Import-Package>
                             org.apache.commons.logging.*,

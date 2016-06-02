@@ -16,7 +16,7 @@
 * under the License.
 */
 
-package org.wso2.carbon.analytics.shared.util.time;
+package org.wso2.analytics.shared.util.time;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,7 +28,7 @@ import org.joda.time.Hours;
 import org.joda.time.Minutes;
 import org.joda.time.Months;
 import org.joda.time.MutableDateTime;
-import org.wso2.carbon.analytics.shared.util.time.bean.TimeRange;
+import org.wso2.analytics.shared.util.time.bean.TimeRange;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

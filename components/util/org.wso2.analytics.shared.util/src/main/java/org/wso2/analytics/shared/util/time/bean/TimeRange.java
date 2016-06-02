@@ -16,7 +16,7 @@
 * under the License.
 */
 
-package org.wso2.carbon.analytics.shared.util.time.bean;
+package org.wso2.analytics.shared.util.time.bean;
 
 public class TimeRange {
 

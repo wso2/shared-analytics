@@ -16,7 +16,7 @@
 * under the License.
 */
 
-package org.wso2.carbon.analytics.shared.util.time;
+package org.wso2.analytics.shared.util.time;
 
 public enum RangeUnit {
     SECOND, MINUTE, HOUR, DAY, MONTH
