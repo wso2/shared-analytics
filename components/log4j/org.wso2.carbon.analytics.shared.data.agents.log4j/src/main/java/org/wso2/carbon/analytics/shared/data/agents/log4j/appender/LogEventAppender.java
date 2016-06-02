@@ -84,7 +84,9 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     private ConditionalLayoutWrapper ipLayout = new ConditionalLayoutWrapper();
     private ConditionalLayoutWrapper instanceLayout = new ConditionalLayoutWrapper();
 
-
+    /**
+     * This is the method invoke by log4j when log appender initiating
+     */
     @Override
     public void activateOptions() {
         loggingEvents = new ArrayBlockingQueue<>(processingLimit);
@@ -166,6 +168,9 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         }
     }
 
+    /**
+     * terminate the log appender resources when appender is close
+     */
     public void close() {
         if(scheduler != null) {
             scheduler.shutdown();
@@ -184,6 +189,9 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         }
     }
 
+    /**
+     * This is the method invoke by log4j when log event triggered
+     */
     @Override
     protected void append(LoggingEvent event) {
         Logger logger = Logger.getLogger(event.getLoggerName());
@@ -225,6 +233,12 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         }
     }
 
+    /**
+     * This method is use for getting tenant from domain
+     * @param tenantDomain tenant domain name
+     * @return tenant id
+     * @throws UserStoreException
+     */
     public int getTenantIdForDomain(String tenantDomain) throws UserStoreException {
         int tenantId;
         TenantManager tenantManager = LoggingServiceComponent.getTenantManager();
@@ -341,6 +355,11 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
             }
         }
 
+        /**
+         * This method use for publish the log using thrift
+         * @param event log event which is wrapped TenantAwareLoggingEvent
+         * @throws ParseException
+         */
         private void publishLogEvent(TenantAwareLoggingEvent event) throws ParseException {
             String tenantID = tenantIDLayout.format(event);
             String serverName = serverNameLayout.format(event);
