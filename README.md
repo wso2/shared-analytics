@@ -3,7 +3,7 @@
 | Branch | Build Status |
 | :------------ |:-------------
 | master | [![Build Status](https://wso2.org/jenkins/job/shared-analytics/badge/icon)](https://wso2.org/jenkins/job/shared-analytics) |
-| [1.0.x](https://github.com/wso2/shared-analytics/tree/release-1.0.x) | [![Build Status](https://wso2.org/jenkins/job/shared-analytics_release-1.0.x/badge/icon)](https://wso2.org/jenkins/job/shared-analytics_release-1.0.x) |
+
 
 
 Shared analytics contains reusable components and features which is bundled along with products related to WSO2 Analytics.
