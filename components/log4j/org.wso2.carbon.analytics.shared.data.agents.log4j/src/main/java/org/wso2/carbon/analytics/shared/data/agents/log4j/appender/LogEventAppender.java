@@ -54,6 +54,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * WSO2 carbon log appender for publishing tenant aware logging events to the DAS server.
+ */
 public class LogEventAppender extends AppenderSkeleton implements Appender {
     private static final Logger log = Logger.getLogger(LogEventAppender.class);
     private ArrayBlockingQueue<TenantAwareLoggingEvent> loggingEvents;
@@ -84,7 +87,9 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     private ConditionalLayoutWrapper ipLayout = new ConditionalLayoutWrapper();
     private ConditionalLayoutWrapper instanceLayout = new ConditionalLayoutWrapper();
 
-
+    /**
+     * Log appender activator option by log4j framework.
+     */
     @Override
     public void activateOptions() {
         loggingEvents = new ArrayBlockingQueue<>(processingLimit);
@@ -166,6 +171,9 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         }
     }
 
+    /**
+     * Log4j framework shutting down the log appender resources.
+     */
     public void close() {
         if(scheduler != null) {
             scheduler.shutdown();
@@ -184,6 +192,9 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         }
     }
 
+    /**
+     * Append the log event by log4j framework.
+     */
     @Override
     protected void append(LoggingEvent event) {
         Logger logger = Logger.getLogger(event.getLoggerName());
@@ -225,6 +236,12 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         }
     }
 
+    /**
+     * Retrieve the tenant domain.
+     * @param tenantDomain tenant domain name.
+     * @return tenant id.
+     * @throws UserStoreException
+     */
     public int getTenantIdForDomain(String tenantDomain) throws UserStoreException {
         int tenantId;
         TenantManager tenantManager = LoggingServiceComponent.getTenantManager();
@@ -341,6 +358,11 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
             }
         }
 
+        /**
+         * Publishing the log event using thrift client.
+         * @param event log event which is wrapped TenantAwareLoggingEvent.
+         * @throws ParseException
+         */
         private void publishLogEvent(TenantAwareLoggingEvent event) throws ParseException {
             String tenantID = tenantIDLayout.format(event);
             String serverName = serverNameLayout.format(event);
