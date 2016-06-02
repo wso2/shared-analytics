@@ -29,7 +29,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.analytics.shared.util</artifactId>
-    <name>Util - Time</name>
+    <name>WSO2 - Common Utilities for Analytics</name>
     <packaging>bundle</packaging>
 
     <dependencies>
