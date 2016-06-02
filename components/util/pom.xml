@@ -30,6 +30,6 @@
     <name>Util</name>
 
     <modules>
-        <module>org.wso2.carbon.analytics.shared.util</module>
+        <module>org.wso2.analytics.shared.util</module>
     </modules>
 </project>
