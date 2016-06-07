@@ -72,9 +72,11 @@ function fetch() {
         var obj = JSON.parse(d["message"]);
         if (d["status"] === "success") {
             for (var i = 0; i < obj.length; i++) {
+                var msg = obj[i].values._content.replace('\n',"");
+                msg = msg.replace(/[\r\n]/g, "");
                 receivedData.push([obj[i].values._content, obj[i].values._class, new Date(obj[i].values._eventTimeStamp).toUTCString(),
-                    "<a href='#' class='btn padding-reduce-on-grid-view' onclick= 'viewFunction(\""+obj[i].values._eventTimeStamp+"\",\""+obj[i].values._content+"\")'> <span class='fw-stack'> " +
-                    "<i class='fw fw-ring fw-stack-2x'></i> <i class='fw fw-view fw-stack-1x'></i> </span> <span class='hidden-xs'>View</span> </a>"]);
+                    '<a href="#" class="btn padding-reduce-on-grid-view" onclick= "viewFunction(\''+obj[i].values._eventTimeStamp+'\',\''+msg+'\')"> <span class="fw-stack"> ' +
+                    '<i class="fw fw-ring fw-stack-2x"></i> <i class="fw fw-view fw-stack-1x"></i> </span> <span class="hidden-xs">View</span> </a>']);
             }
             drawLogErrorFilteredTable();
         }
