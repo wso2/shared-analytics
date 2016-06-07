@@ -54,7 +54,7 @@ function initialize() {
     var diffDays = daysBetween(new Date(timeFrom), new Date(timeTo));
     if (diffDays > 90) {
         timeFrame = "MONTHLY";
-        while (!(newFrom.getTime() >= newTo.getTime())) {
+        while (!(newFrom.getTime() > newTo.getTime())) {
             mockData.push([months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries", 0]);
             newFrom.setMonth(newFrom.getMonth() + 1);
         }
@@ -74,7 +74,7 @@ function initialize() {
         }
     } else {
         timeFrame = "DAILY";
-        while (!(newFrom.getTime() >= newTo.getTime())) {
+        while (!(newFrom.getTime() > newTo.getTime())) {
             mockData.push([newFrom.toDateString(), 0, "NoEntries", 0]);
             newFrom.setDate(newFrom.getDate() + 1);
         }
@@ -127,7 +127,7 @@ function onClickSelector() {
 function fetch(start, count) {
     receivedData.length = 0;
     receivedOtherData.length = 0;
-    var query = "_timestamp: [" + timeFrom + " TO " + timeTo + "]";
+    var query = "_timestamp: [" + timeFrom + " TO " + timeTo + "] AND tenantID:#tenantID#";
     var sorting = [
         {
             field: gadgetData.orderedField,
@@ -217,21 +217,23 @@ function drawErrorChart() {
         $(legendTitleDiv).append("<div style='position: absolute;top: 16px;left: 750px;'>Legend</div><div style='position:" +
             " absolute;top: 16px;left: 750px;'>Legend</div>");
         for (var i = 0; i < summarizeData.length; i++) {
-            if (summarizeData[i][2] != "NoEntries") {
-                drawLegend(summarizeData[i][2], summarizeData[i][3]);
-            }
+            drawLegend(summarizeData[i][2], summarizeData[i][3]);
         }
 
         var drawingChartData = [];
         for (var i = 0; i < mockData.length; i++) {
+            var isFound =false;
             for (var j = 0; j < summarizeData.length; j++) {
                 if (mockData[i][0] === summarizeData[j][0]) {
                     drawingChartData.push(summarizeData[j]);
-                } else {
-                    drawingChartData.push(mockData[i]);
+                    isFound =true;
                 }
             }
+            if(!isFound){
+                drawingChartData.push(mockData[i]);
+            }
         }
+
         gadgetData.schema[0].data = drawingChartData;
 
         //finally draw the chart on the given canvas
