@@ -98,12 +98,15 @@ public class LocationResolverRdbms extends LocationResolver {
         ResultSet resultSet = null;
         try {
             statement = connection.prepareStatement(SQL_SELECT_LOCATION_FROM_LONG_VALUE_OF_IP);
-            statement.setString(1,ipAddress.substring(0,ipAddress.lastIndexOf(".")-2));
-            statement.setLong(2, getIpV4ToLong(ipAddress));
-            resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                location = new Location(resultSet.getString("country_name"), resultSet.getString("subdivision_1_name"),
-                        ipAddress);
+            if (ipAddress != null && ipAddress.split(".").length>=4){
+                statement.setString(1, ipAddress.substring(0, ipAddress.substring(0, ipAddress.lastIndexOf("."))
+                        .lastIndexOf(".")));
+                statement.setLong(2, getIpV4ToLong(ipAddress));
+                resultSet = statement.executeQuery();
+                if (resultSet.next()) {
+                    location = new Location(resultSet.getString("country_name"), resultSet.getString("subdivision_1_name"),
+                            ipAddress);
+                }
             }
         } catch (SQLException e) {
             throw new GeoLocationResolverException("Error while getting the location from database", e);
