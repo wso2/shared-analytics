@@ -98,7 +98,7 @@ public class LocationResolverRdbms extends LocationResolver {
         ResultSet resultSet = null;
         try {
             statement = connection.prepareStatement(SQL_SELECT_LOCATION_FROM_LONG_VALUE_OF_IP);
-            if (ipAddress != null && ipAddress.split(".").length>=4){
+            if (ipAddress != null && ipAddress.split("\\.").length>=4){
                 statement.setString(1, ipAddress.substring(0, ipAddress.substring(0, ipAddress.lastIndexOf("."))
                         .lastIndexOf(".")));
                 statement.setLong(2, getIpV4ToLong(ipAddress));
