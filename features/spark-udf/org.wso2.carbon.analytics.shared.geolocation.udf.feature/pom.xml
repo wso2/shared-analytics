@@ -57,7 +57,7 @@
 							</tasks>
 						</configuration>
 					</execution>
-					<execution>
+					<!--execution>
 						<id>create-geolocation-database</id>
 						<phase>package</phase>
 						<goals>
@@ -78,7 +78,7 @@
 								<echo message="##################### END ########################" />
 							</tasks>
 						</configuration>
-					</execution>
+					</execution-->
 				</executions>
 			</plugin>
 
