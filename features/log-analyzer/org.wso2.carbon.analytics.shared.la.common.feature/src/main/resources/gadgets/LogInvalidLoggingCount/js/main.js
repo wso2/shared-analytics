@@ -54,8 +54,8 @@ function initialize() {
     var diffDays = daysBetween(new Date(timeFrom), new Date(timeTo));
     if (diffDays > 90) {
         timeFrame = "MONTHLY";
-        while (!(newFrom.getTime() >= newTo.getTime())) {
-            mockData.push([months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries", 0]);
+        while (!(newFrom.getTime() > newTo.getTime())) {
+            mockData.push([months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries"]);
             newFrom.setMonth(newFrom.getMonth() + 1);
         }
     } else if (diffDays > 30) {
@@ -66,16 +66,16 @@ function initialize() {
             var firstDayOfMonth = new Date(newFrom);
             firstDayOfMonth.setDate(1);
             weekNo = (moment(newFrom).week()) - moment(firstDayOfMonth.getTime()).week() + 1;
-            mockData.push(["W" + (weekNo == 0 ? 1 : weekNo) + " - " + months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries", 0]);
+            mockData.push(["W" + (weekNo == 0 ? 1 : weekNo) + " - " + months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries"]);
             newFrom.setDate(newFrom.getDate() + 7);
             if (newFrom.getMonth() != firstDayOfMonth.getMonth()) {
-                mockData.push(["W" + (1) + " - " + months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries", 0]);
+                mockData.push(["W" + (1) + " - " + months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries"]);
             }
         }
     } else {
         timeFrame = "DAILY";
-        while (!(newFrom.getTime() >= newTo.getTime())) {
-            mockData.push([newFrom.toDateString(), 0, "NoEntries", 0]);
+        while (!(newFrom.getTime() > newTo.getTime())) {
+            mockData.push([newFrom.toDateString(), 0, "NoEntries"]);
             newFrom.setHours(newFrom.getHours() + 24);
         }
     }
@@ -209,18 +209,21 @@ function drawInvalidLoggingCountChart() {
             " absolute;top: 16px;left: 750px;'>Legend</div>");
         for (var i = 0; i < summarizeData.length; i++) {
             if (summarizeData[i][2] != "NoEntries") {
-                drawLegend(summarizeData[i][2], summarizeData[i][3]);
+                drawLegend(summarizeData[i][2]);
             }
         }
 
         var drawingChartData = [];
         for (var i = 0; i < mockData.length; i++) {
+            var isFound =false;
             for (var j = 0; j < summarizeData.length; j++) {
                 if (mockData[i][0] === summarizeData[j][0]) {
                     drawingChartData.push(summarizeData[j]);
-                } else {
-                    drawingChartData.push(mockData[i]);
+                    isFound =true;
                 }
+            }
+            if(!isFound){
+                drawingChartData.push(mockData[i]);
             }
         }
         gadgetData.schema[0].data = drawingChartData;
@@ -228,6 +231,8 @@ function drawInvalidLoggingCountChart() {
         //finally draw the chart on the given canvas
         gadgetData.chartConfig.width = $(canvasDiv).width();
         gadgetData.chartConfig.height = $(canvasDiv).height();
+        gadgetData.chartConfig.colorScale.push("#95a5a6");
+        gadgetData.chartConfig.colorDomain.push("NoEntries");
         var vg = new vizg(gadgetData.schema, JSON.parse(JSON.stringify(gadgetData.chartConfig)));
         vg.draw(canvasDiv, [
             {
@@ -246,7 +251,7 @@ function drawInvalidLoggingCountChart() {
     }
 }
 
-function drawLegend(fullContext, id) {
+function drawLegend(fullContext) {
     var bulletColor;
     var subContext;
     if (legendMap.get(fullContext) === undefined) {
@@ -256,15 +261,15 @@ function drawLegend(fullContext, id) {
         } else {
             bulletColor = chartColorScale[legendMap.size];
             if (fullContext.length > 57) {
-                subContext = "ID " + id + " - " + fullContext.substring(0, 57) + "...";
+                subContext = fullContext.substring(0, 57) + "...";
             } else {
-                subContext = "ID " + id + " - " + fullContext;
+                subContext = fullContext;
             }
         }
         legendMap.set(fullContext, (legendMap.size + 1));
         $(legendDiv).append(createLegendList(bulletColor, fullContext, subContext));
-        gadgetData.chartConfig.colorScale.push([bulletColor]);
-        gadgetData.chartConfig.colorDomain.push([fullContext]);
+        gadgetData.chartConfig.colorScale.push(bulletColor);
+        gadgetData.chartConfig.colorDomain.push(fullContext);
     }
 }
 
@@ -326,19 +331,13 @@ function chartDataBuilder() {
 function chartDataFormatter(timestamp, count, context, additionalInfo) {
     var chartTuple = [];
     var newTimestamp = new Date(timestamp);
-    var contextHashValue = hashCode(context);
-    if (receivedDataIdMap.get(contextHashValue) === undefined) {
-        var messageID = "ID" + (receivedDataIdMap.size + 1) + " -" + context;
-        receivedDataIdMap.set(contextHashValue, [receivedDataIdMap.size + 1, messageID]);
-    }
     if (timeFrame === "MONTHLY") {
-        chartTuple = [months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear(), count, context,
-            receivedDataIdMap.get(contextHashValue)[0]];
+        chartTuple = [months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear(), count, context];
     } else if (timeFrame === "WEEKLY") {
         chartTuple = ["W" + additionalInfo + " - " + months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear(),
-            count, context, receivedDataIdMap.get(contextHashValue)[0]];
+            count, context];
     } else {
-        chartTuple = [newTimestamp.toDateString(), count, context, receivedDataIdMap.get(contextHashValue)[0]];
+        chartTuple = [newTimestamp.toDateString(), count, context];
     }
     return chartTuple;
 }
@@ -347,13 +346,12 @@ function chartOtherDataFormatter(timestamp, count, additionalInfo) {
     var chartTuple = [];
     var newTimestamp = new Date(timestamp);
     if (timeFrame === "MONTHLY") {
-        chartTuple = [months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear(), count, "Other",
-            months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear()];
+        chartTuple = [months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear(), count, "Other"];
     } else if (timeFrame === "WEEKLY") {
         chartTuple = ["W" + additionalInfo + " - " + months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear(),
-            count, "Other", "W" + additionalInfo + " - " + months[newTimestamp.getMonth()] + " - " + newTimestamp.getFullYear()];
+            count, "Other"];
     } else {
-        chartTuple = [newTimestamp.toDateString(), count, "Other", newTimestamp.toDateString()];
+        chartTuple = [newTimestamp.toDateString(), count, "Other"];
     }
     return chartTuple;
 }
@@ -437,23 +435,6 @@ function daysBetween(date1, date2) {
 
     // Convert back to days and return
     return Math.round(difference_ms / one_day);
-}
-
-
-function hashCode(str) {
-    var hash = 0;
-    if (str.length == 0) return hash;
-    for (var i = 0; i < str.length; i++) {
-        var char = str.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash; // Convert to 32bit integer
-    }
-    return zeroPad(Math.abs(hash), 13);
-}
-
-function zeroPad(num, places) {
-    var zero = places - num.toString().length + 1;
-    return Array(+(zero > 0 && zero)).join("0") + num;
 }
 
 function getNextWeekDay(timeStamp) {
