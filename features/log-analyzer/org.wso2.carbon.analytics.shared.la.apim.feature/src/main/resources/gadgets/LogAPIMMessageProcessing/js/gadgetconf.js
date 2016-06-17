@@ -24,8 +24,8 @@ var charts = [
         orderedField: "apiCount",
         schema: [{
             "metadata": {
-                "names": ["day", "apiCount", "apiName", "ID"],
-                "types": ["ordinal", "linear", "ordinal", "linear"]
+                "names": ["day", "apiCount", "apiName"],
+                "types": ["ordinal", "linear", "ordinal"]
             },
             "data": []
         }],
@@ -45,7 +45,7 @@ var charts = [
                 "enabled": true,
                 "color": "#e5f2ff",
                 "type": "symbol",
-                "content": ["ID", "apiCount", "day"],
+                "content": ["apiName", "apiCount", "day"],
                 "label": true
             }
         }
