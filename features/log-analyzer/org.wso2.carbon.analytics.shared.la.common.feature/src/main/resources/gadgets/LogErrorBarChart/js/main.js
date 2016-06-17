@@ -39,7 +39,7 @@ var legendTitleDiv = "#legendTitle";
 var errorDiv = "#errorDiv";
 var gadgetData;
 var globalPage = 1;
-var chartColorScale = ["#1abc9c", "#3498db", "#9b59b6", "#f1c40f", "#e67e22", "#e74c3c", "#2c3e50", "#2ecc71", "#F16272"];
+var chartColorScale = ["#1abc9c", "#3498db", "#9b59b6", "#f1c40f", "#e67e22", "#e74c3c", "#2c3e50", "#2ecc71", "#F16272","#bcbd22"];
 
 function initialize() {
     gadgetData = gadgetUtil.getChart(gadgetPropertyName);
@@ -214,8 +214,7 @@ function drawErrorChart() {
         //perform necessary transformation on input data
         var summarizeData = chartDataBuilder();
         $(legendTitleDiv).empty();
-        $(legendTitleDiv).append("<div style='position: absolute;top: 16px;left: 750px;'>Legend</div><div style='position:" +
-            " absolute;top: 16px;left: 750px;'>Legend</div>");
+        $(legendTitleDiv).append("<div style='position:absolute;top: 16px;left: "+(gadgetData.chartConfig.width-50)+";'>Legend</div>");
         for (var i = 0; i < summarizeData.length; i++) {
             drawLegend(summarizeData[i][2], summarizeData[i][3]);
         }
@@ -235,12 +234,8 @@ function drawErrorChart() {
         }
 
         gadgetData.schema[0].data = drawingChartData;
-
-        //finally draw the chart on the given canvas
-        gadgetData.chartConfig.width = $(canvasDiv).width();
-        gadgetData.chartConfig.height = $(canvasDiv).height();
-        gadgetData.chartConfig.colorScale.push(["#95a5a6"]);
-        gadgetData.chartConfig.colorDomain.push(["NoEntries"]);
+        gadgetData.chartConfig.colorScale.push("#95a5a6");
+        gadgetData.chartConfig.colorDomain.push("NoEntries");
         var vg = new vizg(gadgetData.schema, JSON.parse(JSON.stringify(gadgetData.chartConfig)));
         vg.draw(canvasDiv, [
             {
@@ -276,8 +271,8 @@ function drawLegend(fullContext, id) {
         }
         legendMap.set(fullContext, (legendMap.size + 1));
         $(legendDiv).append(createLegendList(bulletColor, fullContext, subContext));
-        gadgetData.chartConfig.colorScale.push([bulletColor]);
-        gadgetData.chartConfig.colorDomain.push([fullContext]);
+        gadgetData.chartConfig.colorScale.push(bulletColor);
+        gadgetData.chartConfig.colorDomain.push(fullContext);
     }
 }
 
@@ -383,35 +378,43 @@ function publish(data) {
 };
 
 var onclick = function (event, item) {
+    var selectedDataArray = [];
+    var tempFromTime;
     if (item != null) {
         if (item.datum[gadgetData.columns[2]] === "Other") {
             for (var i = 0; i < receivedOtherData.length; i++) {
                 if (receivedOtherData[i]["day"] === item.datum.day) {
-                    publish(
-                        {
-                            "selected": receivedOtherData[i].values[gadgetData.columns[2]],
-                            "fromTime": receivedOtherData[i][gadgetData.columns[0]],
-                            "toTime": getToTime(receivedOtherData[i][gadgetData.columns[0]]),
-                            "count": item.datum.count,
-                            "filter": gadgetPropertyName
-                        }
-                    );
+                    selectedDataArray.push([receivedOtherData[i].values[gadgetData.columns[2]], receivedOtherData[i].values[gadgetData.columns[1]]]);
+                    if(tempFromTime === undefined){
+                        tempFromTime = receivedOtherData[i][gadgetData.columns[0]];
+                    }
                 }
             }
+            publish(
+                {
+                    "selected": selectedDataArray,
+                    "fromTime": tempFromTime,
+                    "toTime": getToTime(tempFromTime),
+                    "filter": gadgetPropertyName
+                }
+            );
         } else {
             for (var i = 0; i < receivedData.length; i++) {
                 if (receivedData[i].values[gadgetData.columns[2]] === item.datum[gadgetData.columns[2]] && receivedData[i]["day"] === item.datum.day) {
-                    publish(
-                        {
-                            "selected": receivedData[i].values[gadgetData.columns[2]],
-                            "fromTime": receivedData[i][gadgetData.columns[0]],
-                            "toTime": getToTime(receivedData[i][gadgetData.columns[0]]),
-                            "count": item.datum.count,
-                            "filter": gadgetPropertyName
-                        }
-                    );
+                    selectedDataArray.push([receivedData[i].values[gadgetData.columns[2]], receivedData[i].values[gadgetData.columns[1]]]);
+                    if(tempFromTime === undefined){
+                        tempFromTime = receivedData[i][gadgetData.columns[0]];
+                    }
                 }
             }
+            publish(
+                {
+                    "selected": selectedDataArray,
+                    "fromTime": tempFromTime,
+                    "toTime": getToTime(tempFromTime),
+                    "filter": gadgetPropertyName
+                }
+            );
         }
     }
 };
