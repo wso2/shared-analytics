@@ -8,7 +8,7 @@
   },
   "pages": [
     {
-      "id": "page0",
+      "id": "overview",
       "title": "Overview",
       "layout": {
         "content": {
@@ -118,7 +118,7 @@
       }
     },
     {
-      "id": "page1",
+      "id": "application-errors",
       "title": "Application Errors",
       "layout": {
         "content": {
@@ -338,8 +338,8 @@
       }
     },
     {
-      "id": "page2",
-      "title": "Artifact Deployment Stats",
+      "id": "api-deployment-stats",
+      "title": "API Deployment Stats",
       "layout": {
         "content": {
           "loggedIn": {
@@ -447,7 +447,7 @@
                     "required": true
                   }
                 },
-                "locale_titles": {"en-US": "Deployed Artifacts"},
+                "locale_titles": {"en-US": "Deployed APIs"},
                 "settings": {}
               }
             }
@@ -488,7 +488,7 @@
                     "required": true
                   }
                 },
-                "locale_titles": {"en-US": "Deleted Artifacts"},
+                "locale_titles": {"en-US": "Deleted APIs"},
                 "settings": {}
               }
             }
@@ -498,8 +498,8 @@
       }
     },
     {
-      "id": "page3",
-      "title": "Login Stats",
+      "id": "login-errors",
+      "title": "Login Errors",
       "layout": {
         "content": {
           "loggedIn": {
@@ -614,7 +614,7 @@
       }
     },
     {
-      "id": "page4",
+      "id": "number-of-api-failures",
       "title": "Number of API Failures",
       "layout": {
         "content": {
@@ -718,7 +718,7 @@
       }
     },
     {
-      "id": "page5",
+      "id": "access-token-errors",
       "title": "Access Token Errors",
       "layout": {
         "content": {
@@ -924,7 +924,7 @@
       }
     },
     {
-      "id": "page6",
+      "id": "live-log-viewer",
       "title": "Live Log Viewer",
       "layout": {
         "content": {
@@ -951,7 +951,7 @@
               "id": "liveLogViewer-0",
               "content": {
                 "id": "liveLogViewer",
-                "title": "Live Log viewer",
+                "title": "Filtered Logs for Tenant",
                 "type": "gadget",
                 "thumbnail": "store://gadget/LiveLogViewer/img/thumbnail.png",
                 "data": {"url": "store://gadget/LiveLogViewer/index.xml"},
@@ -976,12 +976,12 @@
     }
   ],
   "menu": [{
-             "id": "landing",
-             "isanon": false,
-             "ishidden": false,
-             "title": "Home",
-             "subordinates": []
-           }],
+    "id": "landing",
+    "isanon": false,
+    "ishidden": false,
+    "title": "Home",
+    "subordinates": []
+  }],
   "identityServerUrl": "",
   "accessTokenUrl": "",
   "apiKey": "",
