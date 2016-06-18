@@ -605,8 +605,8 @@
 
 	<properties>
         <carbon.kernel.version>4.4.3</carbon.kernel.version>
-        <carbon.analytics.version>1.0.6-beta</carbon.analytics.version>
-        <carbon.analytics.common.version>5.0.12-beta</carbon.analytics.common.version>
+        <carbon.analytics.version>1.0.6-beta4</carbon.analytics.version>
+        <carbon.analytics.common.version>5.1.0-alpha</carbon.analytics.common.version>
         <carbon.automationutils.version>4.4.1</carbon.automationutils.version>
         <carbon.automation.version>4.4.2</carbon.automation.version>
         <carbon.data.version>4.3.4</carbon.data.version>
