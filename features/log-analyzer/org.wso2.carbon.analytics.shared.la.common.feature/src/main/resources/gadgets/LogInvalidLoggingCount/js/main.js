@@ -104,9 +104,14 @@ function initialize() {
             }
         }
     }, function (error) {
-        console.log(error);
-        error.message = "Internal server error while data indexing.";
-        onError(error);
+        if(error === undefined){
+            onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
+            console.log("Analytics server not found : Please troubleshoot connection problems.");
+        }else{
+            error.message = "Internal server error while data indexing.";
+            onError(error);
+            console.log(error);
+        }
     });
 }
 
@@ -139,9 +144,14 @@ function fetch(start, count) {
                         drawInvalidLoggingCountChart();
                     }
                 }, function (error) {
-                    console.log(error);
-                    error.message = "Internal server error while data indexing.";
-                    onError(error);
+                    if(error === undefined){
+                        onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
+                        console.log("Analytics server not found : Please troubleshoot connection problems.");
+                    }else{
+                        error.message = "Internal server error while data indexing.";
+                        onError(error);
+                        console.log(error);
+                    }
                 });
             } else {
                 $(canvasDiv).empty();
@@ -151,9 +161,14 @@ function fetch(start, count) {
             }
         }
     }, function (error) {
-        console.log(error);
-        error.message = "Internal server error while data indexing.";
-        onError(error);
+        if(error === undefined){
+            onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
+            console.log("Analytics server not found : Please troubleshoot connection problems.");
+        }else{
+            error.message = "Internal server error while data indexing.";
+            onError(error);
+            console.log(error);
+        }
     });
 }
 
@@ -205,8 +220,7 @@ function drawInvalidLoggingCountChart() {
         //perform necessary transformation on input data
         var summarizeData = chartDataBuilder();
         $(legendTitleDiv).empty();
-        $(legendTitleDiv).append("<div style='position: absolute;top: 16px;left: 750px;'>Legend</div><div style='position:" +
-            " absolute;top: 16px;left: 750px;'>Legend</div>");
+        $(legendTitleDiv).append("<div style='position:absolute;top: 16px;left: "+(gadgetData.chartConfig.width-50)+";'>Legend</div>");
         for (var i = 0; i < summarizeData.length; i++) {
             if (summarizeData[i][2] != "NoEntries") {
                 drawLegend(summarizeData[i][2]);
@@ -229,8 +243,6 @@ function drawInvalidLoggingCountChart() {
         gadgetData.schema[0].data = drawingChartData;
 
         //finally draw the chart on the given canvas
-        gadgetData.chartConfig.width = $(canvasDiv).width();
-        gadgetData.chartConfig.height = $(canvasDiv).height();
         gadgetData.chartConfig.colorScale.push("#95a5a6");
         gadgetData.chartConfig.colorDomain.push("NoEntries");
         var vg = new vizg(gadgetData.schema, JSON.parse(JSON.stringify(gadgetData.chartConfig)));
@@ -462,6 +474,13 @@ function onError(msg) {
     $(legendDiv).empty();
     $(legendTitleDiv).empty();
     $(canvasDiv).html(gadgetUtil.getErrorText(msg));
+}
+
+function onErrorCustom(title, message) {
+    $(canvasDiv).empty();
+    $(legendDiv).empty();
+    $(legendTitleDiv).empty();
+    $(canvasDiv).html(gadgetUtil.getCustemText(title, message));
 }
 
 function createLegendList(bulletColor, fullContext, subContext){

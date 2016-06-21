@@ -54,7 +54,7 @@ function initialize() {
     var diffDays = daysBetween(new Date(timeFrom), new Date(timeTo));
     if (diffDays > 90) {
         timeFrame = "MONTHLY";
-        while (!(newFrom.getTime() > newTo.getTime())) {
+        while (newFrom.getTime() < newTo.getTime()) {
             mockData.push([months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries", 0]);
             newFrom.setMonth(newFrom.getMonth() + 1);
         }
@@ -74,7 +74,7 @@ function initialize() {
         }
     } else {
         timeFrame = "DAILY";
-        while (!(newFrom.getTime() > newTo.getTime())) {
+        while (newFrom.getTime() < newTo.getTime()) {
             mockData.push([newFrom.toDateString(), 0, "NoEntries", 0]);
             newFrom.setDate(newFrom.getDate() + 1);
         }
@@ -104,9 +104,14 @@ function initialize() {
             }
         }
     }, function (error) {
-        console.log(error);
-        error.message = "Internal server error while data indexing.";
-        onError(error);
+        if(error === undefined){
+            onErrorCustom("Analytics server not Found.", "Please troubleshoot connection problems.");
+            console.log("Analytics server not Found : Please troubleshoot connection problems.");
+        }else{
+            error.message = "Internal server error while data indexing.";
+            onError(error);
+            console.log(error);
+        }
     });
 }
 
@@ -160,9 +165,14 @@ function fetch(start, count) {
             }
         }
     }, function (error) {
-        console.log(error);
-        error.message = "Internal server error while data indexing.";
-        onError(error);
+        if(error === undefined){
+            onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
+            console.log("Analytics server not found : Please troubleshoot connection problems.");
+        }else{
+            error.message = "Internal server error while data indexing.";
+            onError(error);
+            console.log(error);
+        }
     });
 }
 
@@ -494,6 +504,13 @@ function onError(msg) {
     $(legendDiv).empty();
     $(legendTitleDiv).empty();
     $(canvasDiv).html(gadgetUtil.getErrorText(msg));
+}
+
+function onErrorCustom(title, message) {
+    $(canvasDiv).empty();
+    $(legendDiv).empty();
+    $(legendTitleDiv).empty();
+    $(canvasDiv).html(gadgetUtil.getCustemText(title, message));
 }
 
 function createLegendList(bulletColor, fullContext, subContext){
