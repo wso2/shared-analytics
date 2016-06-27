@@ -87,22 +87,24 @@ function fetch() {
 
 function drawLogViewer() {
     $(canvasDiv).empty();
-    var selectedDiv = "logViewer";
+    var selectedDiv = "";
     for (var i = 0; i < receivedData.length; i++) {
+        var receivedContent = receivedData[i][0].content;
+        receivedContent = receivedContent.replace(/[\r\n]/g, "");
         if (receivedData[i][0].level === "ERROR") {
-            if (receivedData[i][0].content === filteredMessage && receivedData[i][0].timestamp === filteredTime) {
+            if (receivedContent === filteredMessage && receivedData[i][0].timestamp === filteredTime) {
                 $(canvasDiv).append(createLogList("selectedError",receivedData[i][0]));
+                selectedDiv = "selectedError";
             } else {
                 $(canvasDiv).append(createLogList("logError",receivedData[i][0]));
             }
-            selectedDiv = "selectedError";
         } else if (receivedData[i][0].level === "WARN") {
-            if (receivedData[i][0].content === filteredMessage && receivedData[i][0].timestamp === filteredTime) {
+            if (receivedContent === filteredMessage && receivedData[i][0].timestamp === filteredTime) {
                 $(canvasDiv).append(createLogList("selectedWarn",receivedData[i][0]));
+                selectedDiv = "selectedWarn";
             } else {
                 $(canvasDiv).append(createLogList("logWarn",receivedData[i][0]));
             }
-            selectedDiv = "selectedWarn";
         } else if (receivedData[i][0].level === "DEBUG") {
             $(canvasDiv).append(createLogList("logDebug",receivedData[i][0]));
         }else if (receivedData[i][0].level === "FATAL") {

@@ -92,6 +92,19 @@ public class DateTimeUDF implements CarbonUDF {
         }
     }
 
+    public String getWeekStartingTime(Integer year, Integer month, Integer weekNo) {
+        synchronized (cal) {
+            cal.set(Calendar.YEAR, year);
+            cal.set(Calendar.MONTH, month - 1);
+            cal.set(Calendar.WEEK_OF_MONTH, weekNo);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            return String.valueOf(cal.getTimeInMillis());
+        }
+    }
+
     public String getDateStartingTime(Integer year, Integer month, Integer date) {
         synchronized (cal) {
             cal.set(Calendar.YEAR, year);

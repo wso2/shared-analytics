@@ -39,7 +39,7 @@ var legendTitleDiv = "#legendTitle";
 var errorDiv = "#errorDiv";
 var gadgetData;
 var globalPage = 1;
-var chartColorScale = ["#1abc9c", "#3498db", "#9b59b6", "#f1c40f", "#e67e22", "#e74c3c", "#2c3e50", "#2ecc71", "#F16272"];
+var chartColorScale = ["#1abc9c", "#3498db", "#9b59b6", "#f1c40f", "#e67e22", "#e74c3c", "#2c3e50", "#2ecc71", "#F16272","#bcbd22"];
 
 function initialize() {
     gadgetData = gadgetUtil.getChart(gadgetPropertyName);
@@ -54,27 +54,30 @@ function initialize() {
     var diffDays = daysBetween(new Date(timeFrom), new Date(timeTo));
     if (diffDays > 90) {
         timeFrame = "MONTHLY";
-        while (!(newFrom.getTime() >= newTo.getTime())) {
+        while (newFrom.getTime() <= newTo.getTime()) {
             mockData.push([months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries", 0]);
             newFrom.setMonth(newFrom.getMonth() + 1);
         }
     } else if (diffDays > 30) {
         timeFrame = "WEEKLY";
+        timeFrom = new Date(moment(timeFrom).startOf('Week')).getTime();
+        timeTo = new Date(moment(timeTo).endOf('Week')).getTime();
         var weekNo = 0;
-        var loopCount = Math.ceil((timeTo - timeFrom) / (86400000 * 7));// 86400000 one day time in milliseconds
-        for (var i = 0; i < loopCount; i++) {
+        while (newFrom.getTime() < newTo.getTime()) {
             var firstDayOfMonth = new Date(newFrom);
             firstDayOfMonth.setDate(1);
             weekNo = (moment(newFrom).week()) - moment(firstDayOfMonth.getTime()).week() + 1;
             mockData.push(["W" + (weekNo == 0 ? 1 : weekNo) + " - " + months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries", 0]);
-            newFrom.setDate(newFrom.getDate() + 7);
+            newFrom = new Date(moment(newFrom).endOf('Week'));
+            newTo = new Date(moment(newTo).endOf('Week'));
+            newFrom.setDate(newFrom.getDate() + 1);
             if (newFrom.getMonth() != firstDayOfMonth.getMonth()) {
-                mockData.push(["W" + (1) + " - " + months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries", 0]);
+                mockData.push(["W" + (1) + " - " + months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries"]);
             }
         }
     } else {
         timeFrame = "DAILY";
-        while (!(newFrom.getTime() >= newTo.getTime())) {
+        while (newFrom.getTime() <= newTo.getTime()) {
             mockData.push([newFrom.toDateString(), 0, "NoEntries", 0]);
             newFrom.setDate(newFrom.getDate() + 1);
         }
@@ -104,9 +107,14 @@ function initialize() {
             }
         }
     }, function (error) {
-        console.log(error);
-        error.message = "Internal server error while data indexing.";
-        onError(error);
+        if(error === undefined){
+            onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
+            console.log("Analytics server not found : Please troubleshoot connection problems.");
+        }else{
+            error.message = "Internal server error while data indexing.";
+            onError(error);
+            console.log(error);
+        }
     });
 }
 
@@ -127,7 +135,7 @@ function onClickSelector() {
 function fetch(start, count) {
     receivedData.length = 0;
     receivedOtherData.length = 0;
-    var query = "_timestamp: [" + timeFrom + " TO " + timeTo + "]";
+    var query = "_timestamp: [" + timeFrom + " TO " + timeTo + "] AND tenantID:#tenantID#";
     var sorting = [
         {
             field: gadgetData.orderedField,
@@ -149,8 +157,14 @@ function fetch(start, count) {
                         drawErrorChart();
                     }
                 }, function (error) {
-                    error.message = "Internal server error while data indexing.";
-                    onError(error);
+                    if(error === undefined){
+                        onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
+                        console.log("Analytics server not found : Please troubleshoot connection problems.");
+                    }else{
+                        error.message = "Internal server error while data indexing.";
+                        onError(error);
+                        console.log(error);
+                    }
                 });
             } else {
                 $(canvasDiv).empty();
@@ -160,9 +174,14 @@ function fetch(start, count) {
             }
         }
     }, function (error) {
-        console.log(error);
-        error.message = "Internal server error while data indexing.";
-        onError(error);
+        if(error === undefined){
+            onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
+            console.log("Analytics server not found : Please troubleshoot connection problems.");
+        }else{
+            error.message = "Internal server error while data indexing.";
+            onError(error);
+            console.log(error);
+        }
     });
 }
 
@@ -214,31 +233,28 @@ function drawErrorChart() {
         //perform necessary transformation on input data
         var summarizeData = chartDataBuilder();
         $(legendTitleDiv).empty();
-        $(legendTitleDiv).append("<div style='position: absolute;top: 16px;left: 750px;'>Legend</div><div style='position:" +
-            " absolute;top: 16px;left: 750px;'>Legend</div>");
+        $(legendTitleDiv).append("<div style='position:absolute;top: 16px;left: "+(gadgetData.chartConfig.width-50)+";'>Legend</div>");
         for (var i = 0; i < summarizeData.length; i++) {
-            if (summarizeData[i][2] != "NoEntries") {
-                drawLegend(summarizeData[i][2], summarizeData[i][3]);
-            }
+            drawLegend(summarizeData[i][2], summarizeData[i][3]);
         }
 
         var drawingChartData = [];
         for (var i = 0; i < mockData.length; i++) {
+            var isFound =false;
             for (var j = 0; j < summarizeData.length; j++) {
                 if (mockData[i][0] === summarizeData[j][0]) {
                     drawingChartData.push(summarizeData[j]);
-                } else {
-                    drawingChartData.push(mockData[i]);
+                    isFound =true;
                 }
             }
+            if(!isFound){
+                drawingChartData.push(mockData[i]);
+            }
         }
-        gadgetData.schema[0].data = drawingChartData;
 
-        //finally draw the chart on the given canvas
-        gadgetData.chartConfig.width = $(canvasDiv).width();
-        gadgetData.chartConfig.height = $(canvasDiv).height();
-        gadgetData.chartConfig.colorScale.push(["#95a5a6"]);
-        gadgetData.chartConfig.colorDomain.push(["NoEntries"]);
+        gadgetData.schema[0].data = drawingChartData;
+        gadgetData.chartConfig.colorScale.push("#95a5a6");
+        gadgetData.chartConfig.colorDomain.push("NoEntries");
         var vg = new vizg(gadgetData.schema, JSON.parse(JSON.stringify(gadgetData.chartConfig)));
         vg.draw(canvasDiv, [
             {
@@ -274,8 +290,8 @@ function drawLegend(fullContext, id) {
         }
         legendMap.set(fullContext, (legendMap.size + 1));
         $(legendDiv).append(createLegendList(bulletColor, fullContext, subContext));
-        gadgetData.chartConfig.colorScale.push([bulletColor]);
-        gadgetData.chartConfig.colorDomain.push([fullContext]);
+        gadgetData.chartConfig.colorScale.push(bulletColor);
+        gadgetData.chartConfig.colorDomain.push(fullContext);
     }
 }
 
@@ -381,35 +397,43 @@ function publish(data) {
 };
 
 var onclick = function (event, item) {
+    var selectedDataArray = [];
+    var tempFromTime;
     if (item != null) {
         if (item.datum[gadgetData.columns[2]] === "Other") {
             for (var i = 0; i < receivedOtherData.length; i++) {
                 if (receivedOtherData[i]["day"] === item.datum.day) {
-                    publish(
-                        {
-                            "selected": receivedOtherData[i].values[gadgetData.columns[2]],
-                            "fromTime": receivedOtherData[i][gadgetData.columns[0]],
-                            "toTime": getToTime(receivedOtherData[i][gadgetData.columns[0]]),
-                            "count": item.datum.count,
-                            "filter": gadgetPropertyName
-                        }
-                    );
+                    selectedDataArray.push([receivedOtherData[i].values[gadgetData.columns[2]], receivedOtherData[i].values[gadgetData.columns[1]]]);
+                    if(tempFromTime === undefined){
+                        tempFromTime = receivedOtherData[i][gadgetData.columns[0]];
+                    }
                 }
             }
+            publish(
+                {
+                    "selected": selectedDataArray,
+                    "fromTime": getFromTime(tempFromTime),
+                    "toTime": getToTime(tempFromTime),
+                    "filter": gadgetPropertyName
+                }
+            );
         } else {
             for (var i = 0; i < receivedData.length; i++) {
                 if (receivedData[i].values[gadgetData.columns[2]] === item.datum[gadgetData.columns[2]] && receivedData[i]["day"] === item.datum.day) {
-                    publish(
-                        {
-                            "selected": receivedData[i].values[gadgetData.columns[2]],
-                            "fromTime": receivedData[i][gadgetData.columns[0]],
-                            "toTime": getToTime(receivedData[i][gadgetData.columns[0]]),
-                            "count": item.datum.count,
-                            "filter": gadgetPropertyName
-                        }
-                    );
+                    selectedDataArray.push([receivedData[i].values[gadgetData.columns[2]], receivedData[i].values[gadgetData.columns[1]]]);
+                    if(tempFromTime === undefined){
+                        tempFromTime = receivedData[i][gadgetData.columns[0]];
+                    }
                 }
             }
+            publish(
+                {
+                    "selected": selectedDataArray,
+                    "fromTime": getFromTime(tempFromTime),
+                    "toTime": getToTime(tempFromTime),
+                    "filter": gadgetPropertyName
+                }
+            );
         }
     }
 };
@@ -464,11 +488,6 @@ function zeroPad(num, places) {
     return Array(+(zero > 0 && zero)).join("0") + num;
 }
 
-function getNextWeekDay(timeStamp) {
-    var dateWithWeek = new Date(moment().week(moment(timeStamp).week()).endOf('Week'));
-    return dateWithWeek;
-}
-
 function getToTime(toTime) {
     var duration;
     toTime = new Date(toTime);
@@ -479,9 +498,17 @@ function getToTime(toTime) {
         duration = toTime.getMonth() + 1;
         toTime.setMonth(duration);
     } else if (timeFrame === "WEEKLY") {
-        toTime = getNextWeekDay(toTime);
+        toTime = new Date(moment(toTime).endOf('Week'));
     }
     return toTime.getTime();
+}
+
+function getFromTime(fromTime) {
+    fromTime = new Date(fromTime);
+    if (timeFrame === "WEEKLY") {
+        fromTime = new Date(moment(fromTime).startOf('Week'));
+    }
+    return fromTime.getTime();
 }
 
 function onError(msg) {
@@ -489,6 +516,13 @@ function onError(msg) {
     $(legendDiv).empty();
     $(legendTitleDiv).empty();
     $(canvasDiv).html(gadgetUtil.getErrorText(msg));
+}
+
+function onErrorCustom(title, message) {
+    $(canvasDiv).empty();
+    $(legendDiv).empty();
+    $(legendTitleDiv).empty();
+    $(canvasDiv).html(gadgetUtil.getCustemText(title, message));
 }
 
 function createLegendList(bulletColor, fullContext, subContext){

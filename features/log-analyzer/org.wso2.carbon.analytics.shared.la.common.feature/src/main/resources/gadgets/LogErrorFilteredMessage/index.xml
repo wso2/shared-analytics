@@ -65,7 +65,11 @@
         </head>
             <body class="nano">
                 <div class="nano-content">
-                <div id="canvas" class="add-padding-5x"></div>
+                <div id="canvas"></div>
+                    <div id="canvasForDataTable" class="add-padding-5x">
+                    <table id="tblMessages" class="table" cellspacing="0" width="100%">
+                    </table>
+                    </div>
                 </div>
             </body>
         </html>

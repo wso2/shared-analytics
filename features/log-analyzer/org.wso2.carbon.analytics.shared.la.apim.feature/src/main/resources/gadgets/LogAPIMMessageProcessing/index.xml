@@ -65,7 +65,7 @@
                     <table>
                         <tr>
                             <td>
-                               <div id="canvas" style="height: 306px;width: 781px;"></div>
+                               <div id="canvas"></div>
                             </td>
                             <td>
                                 <div>

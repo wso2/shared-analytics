@@ -23,6 +23,7 @@ var toTime = gadgetUtil.timeTo();
 var async_tasks = gadgetConfig.status.length;
 var receivedData = [];
 var initState = true;
+var recordCount = 0;
 
 
 var meta = {
@@ -66,23 +67,31 @@ function fetch(statusType) {
 
     client.searchCount(queryInfo, function (d) {
         if (d["status"] === "success") {
+            recordCount = recordCount + parseInt(d["message"]);
             receivedData.push([gadgetConfig.statusDescription[statusType], parseInt(d["message"]), gadgetConfig.status[statusType]]);
             async_tasks--;
             if (async_tasks == 0) {
                 if (!initState) {
                     redrawApiKeyStatus();
+                    recordCount = 0;
                 } else {
                     drawApiKeyStatus();
                     initState = false;
+                    recordCount = 0;
                 }
             } else {
                 fetch(++statusType);
             }
         }
     }, function (error) {
-        console.log(error);
-        error.message = "Internal server error while data indexing.";
-        onError(error);
+        if(error === undefined){
+            onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
+            console.log("Analytics server not found : Please troubleshoot connection problems.");
+        }else{
+            error.message = "Internal server error while data indexing.";
+            onError(error);
+            console.log(error);
+        }
     });
 
 }
@@ -90,21 +99,25 @@ function fetch(statusType) {
 function drawApiKeyStatus() {
     try {
         $(canvasDiv).empty();
-        chart = new vizg(
-            [
+        if(recordCount>0){
+            chart = new vizg(
+                [
+                    {
+                        "metadata": this.meta,
+                        "data": receivedData
+                    }
+                ],
+                configChart
+            );
+            chart.draw(canvasDiv, [
                 {
-                    "metadata": this.meta,
-                    "data": receivedData
+                    type: "click",
+                    callback: onclick
                 }
-            ],
-            configChart
-        );
-        chart.draw(canvasDiv, [
-            {
-                type: "click",
-                callback: onclick
-            }
-        ]);
+            ]);
+        }else{
+            $(canvasDiv).html(gadgetUtil.getEmptyRecordsText());
+        }
     } catch (error) {
         error.message = "Error while drawing log event chart.";
         error.status = "";
@@ -114,8 +127,12 @@ function drawApiKeyStatus() {
 
 function redrawApiKeyStatus() {
     try {
-        for (var i in receivedData) {
-            chart.insert([receivedData[i]]);
+        if(recordCount>0){
+            for (var i in receivedData) {
+                chart.insert([receivedData[i]]);
+            }
+        }else{
+            $(canvasDiv).html(gadgetUtil.getEmptyRecordsText());
         }
     } catch (error) {
         console.log(error);
@@ -159,4 +176,8 @@ subscribe(function (topic, data, subscriber) {
 
 function onError(msg) {
     $(canvasDiv).html(gadgetUtil.getErrorText(msg));
+}
+
+function onErrorCustom(title, message) {
+    $(canvasDiv).html(gadgetUtil.getCustemText(title, message));
 }

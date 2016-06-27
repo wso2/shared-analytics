@@ -37,8 +37,8 @@ var charts = [
             xAxisAngle: true,
             color: "message",
             charts: [{type: "bar", y: "count", mode: "stack"}],
-            width: $('canvas').width(),
-            height: $('canvas').height(),
+            width: $(document).width()/1.27,
+            height: $(document).height()/1.2,
             padding: {"top": 10, "left": 80, "bottom": 70, "right": 50},
             legend: false,
             tooltip: {
@@ -70,8 +70,8 @@ var charts = [
             xAxisAngle: true,
             color: "class",
             charts: [{type: "bar", y: "count", mode: "stack"}],
-            width: $('canvas').width(),
-            height: $('canvas').height(),
+            width: $(document).width()/1.27,
+            height: $(document).height()/1.2,
             padding: {"top": 10, "left": 80, "bottom": 70, "right": 50},
             legend: false,
             tooltip: {

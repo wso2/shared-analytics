@@ -24,8 +24,8 @@ var charts = [
         orderedField: "apiCount",
         schema: [{
             "metadata": {
-                "names": ["day", "apiCount", "apiName", "ID"],
-                "types": ["ordinal", "linear", "ordinal", "linear"]
+                "names": ["day", "count", "apiName"],
+                "types": ["ordinal", "linear", "ordinal"]
             },
             "data": []
         }],
@@ -36,16 +36,16 @@ var charts = [
             colorDomain: [],
             xAxisAngle: true,
             color: "apiName",
-            charts: [{type: "bar", y: "apiCount", mode: "stack"}],
-            width: $('canvas').width(),
-            height: $('canvas').height(),
+            charts: [{type: "bar", y: "count", mode: "stack"}],
+            width: $(document).width()/1.27,
+            height: $(document).height()/1.05,
             padding: {"top": 10, "left": 80, "bottom": 70, "right": 50},
             legend: false,
             tooltip: {
                 "enabled": true,
                 "color": "#e5f2ff",
                 "type": "symbol",
-                "content": ["ID", "apiCount", "day"],
+                "content": ["apiName", "count", "day"],
                 "label": true
             }
         }

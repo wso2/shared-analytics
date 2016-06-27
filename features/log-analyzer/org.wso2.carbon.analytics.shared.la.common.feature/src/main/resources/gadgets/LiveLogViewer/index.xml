@@ -29,24 +29,19 @@
     <Content type="html">
         <![CDATA[
         <html>
-        <head>
-        <title>Live log viewer</title>
-        <link rel="stylesheet" href="css/style.css" type="text/css"/>
-        <meta charset="utf-8">
-
-
-
-        <script src="../gadget-commons/js/jquery-1.10.2.js"></script>
+            <head>
+                <title>Live log viewer</title>
+                <link rel="stylesheet" href="css/style.css" type="text/css"/>
+                <meta charset="utf-8">
+                <script src="../gadget-commons/js/jquery-1.10.2.js"></script>
                 <script src="../gadget-commons/js/carbon-analytics.js"></script>
                 <script src="js/ptty.jquery.min.js"></script>
-    </head>
-    <body bgcolor="#000000">
-        <div id="terminal"/>
-
-
-        <script src="js/main.js"></script>
-    </body>
-</html>
+            </head>
+            <body bgcolor="#000000">
+                <div id="terminal"/>
+                <script src="js/main.js"></script>
+            </body>
+        </html>
         ]]>
     </Content>
 </Module>

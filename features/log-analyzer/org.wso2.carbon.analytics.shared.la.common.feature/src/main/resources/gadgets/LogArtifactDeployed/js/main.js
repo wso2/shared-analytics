@@ -94,18 +94,28 @@ function fetch() {
                         drawDeployedArtifactTable();
                     }
                 }, function (error) {
-                    console.log(error);
-                    error.message = "Internal server error while data indexing.";
-                    onError(error);
+                    if(error === undefined){
+                        onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
+                        console.log("Analytics server not found : Please troubleshoot connection problems.");
+                    }else{
+                        error.message = "Internal server error while data indexing.";
+                        onError(error);
+                        console.log(error);
+                    }
                 });
             } else {
                 $(canvasDiv).html(gadgetUtil.getEmptyRecordsText());
             }
         }
     }, function (error) {
-        console.log(error);
-        error.message = "Internal server error while data indexing.";
-        onError(error);
+        if(error === undefined){
+            onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
+            console.log("Analytics server not found : Please troubleshoot connection problems.");
+        }else{
+            error.message = "Internal server error while data indexing.";
+            onError(error);
+            console.log(error);
+        }
     });
 }
 
@@ -157,4 +167,8 @@ subscribe(function (topic, data, subscriber) {
 
 function onError(msg) {
     $(canvasDiv).html(gadgetUtil.getErrorText(msg));
+}
+
+function onErrorCustom(title, message) {
+    $(canvasDiv).html(gadgetUtil.getCustemText(title, message));
 }
