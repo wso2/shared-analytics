@@ -54,27 +54,30 @@ function initialize() {
     var diffDays = daysBetween(new Date(timeFrom), new Date(timeTo));
     if (diffDays > 90) {
         timeFrame = "MONTHLY";
-        while (newFrom.getTime() < newTo.getTime()) {
+        while (newFrom.getTime() <= newTo.getTime()) {
             mockData.push([months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries", 0]);
             newFrom.setMonth(newFrom.getMonth() + 1);
         }
     } else if (diffDays > 30) {
         timeFrame = "WEEKLY";
+        timeFrom = new Date(moment(timeFrom).startOf('Week')).getTime();
+        timeTo = new Date(moment(timeTo).endOf('Week')).getTime();
         var weekNo = 0;
-        var loopCount = Math.ceil((timeTo - timeFrom) / (86400000 * 7));// 86400000 one day time in milliseconds
-        for (var i = 0; i < loopCount; i++) {
+        while (newFrom.getTime() < newTo.getTime()) {
             var firstDayOfMonth = new Date(newFrom);
             firstDayOfMonth.setDate(1);
             weekNo = (moment(newFrom).week()) - moment(firstDayOfMonth.getTime()).week() + 1;
             mockData.push(["W" + (weekNo == 0 ? 1 : weekNo) + " - " + months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries", 0]);
-            newFrom.setDate(newFrom.getDate() + 7);
+            newFrom = new Date(moment(newFrom).endOf('Week'));
+            newTo = new Date(moment(newTo).endOf('Week'));
+            newFrom.setDate(newFrom.getDate() + 1);
             if (newFrom.getMonth() != firstDayOfMonth.getMonth()) {
-                mockData.push(["W" + (1) + " - " + months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries", 0]);
+                mockData.push(["W" + (1) + " - " + months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries"]);
             }
         }
     } else {
         timeFrame = "DAILY";
-        while (newFrom.getTime() < newTo.getTime()) {
+        while (newFrom.getTime() <= newTo.getTime()) {
             mockData.push([newFrom.toDateString(), 0, "NoEntries", 0]);
             newFrom.setDate(newFrom.getDate() + 1);
         }
@@ -105,8 +108,8 @@ function initialize() {
         }
     }, function (error) {
         if(error === undefined){
-            onErrorCustom("Analytics server not Found.", "Please troubleshoot connection problems.");
-            console.log("Analytics server not Found : Please troubleshoot connection problems.");
+            onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
+            console.log("Analytics server not found : Please troubleshoot connection problems.");
         }else{
             error.message = "Internal server error while data indexing.";
             onError(error);
@@ -154,8 +157,14 @@ function fetch(start, count) {
                         drawErrorChart();
                     }
                 }, function (error) {
-                    error.message = "Internal server error while data indexing.";
-                    onError(error);
+                    if(error === undefined){
+                        onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
+                        console.log("Analytics server not found : Please troubleshoot connection problems.");
+                    }else{
+                        error.message = "Internal server error while data indexing.";
+                        onError(error);
+                        console.log(error);
+                    }
                 });
             } else {
                 $(canvasDiv).empty();
@@ -403,7 +412,7 @@ var onclick = function (event, item) {
             publish(
                 {
                     "selected": selectedDataArray,
-                    "fromTime": tempFromTime,
+                    "fromTime": getFromTime(tempFromTime),
                     "toTime": getToTime(tempFromTime),
                     "filter": gadgetPropertyName
                 }
@@ -420,7 +429,7 @@ var onclick = function (event, item) {
             publish(
                 {
                     "selected": selectedDataArray,
-                    "fromTime": tempFromTime,
+                    "fromTime": getFromTime(tempFromTime),
                     "toTime": getToTime(tempFromTime),
                     "filter": gadgetPropertyName
                 }
@@ -479,11 +488,6 @@ function zeroPad(num, places) {
     return Array(+(zero > 0 && zero)).join("0") + num;
 }
 
-function getNextWeekDay(timeStamp) {
-    var dateWithWeek = new Date(moment().week(moment(timeStamp).week()).endOf('Week'));
-    return dateWithWeek;
-}
-
 function getToTime(toTime) {
     var duration;
     toTime = new Date(toTime);
@@ -494,9 +498,17 @@ function getToTime(toTime) {
         duration = toTime.getMonth() + 1;
         toTime.setMonth(duration);
     } else if (timeFrame === "WEEKLY") {
-        toTime = getNextWeekDay(toTime);
+        toTime = new Date(moment(toTime).endOf('Week'));
     }
     return toTime.getTime();
+}
+
+function getFromTime(fromTime) {
+    fromTime = new Date(fromTime);
+    if (timeFrame === "WEEKLY") {
+        fromTime = new Date(moment(fromTime).startOf('Week'));
+    }
+    return fromTime.getTime();
 }
 
 function onError(msg) {

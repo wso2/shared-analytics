@@ -53,27 +53,30 @@ function initialize() {
     var diffDays = daysBetween(new Date(timeFrom), new Date(timeTo));
     if (diffDays > 90) {
         timeFrame = "MONTHLY";
-        while (newFrom.getTime() < newTo.getTime()) {
+        while (newFrom.getTime() <= newTo.getTime()) {
             mockData.push([months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries"]);
             newFrom.setMonth(newFrom.getMonth() + 1);
         }
     } else if (diffDays > 30) {
         timeFrame = "WEEKLY";
+        timeFrom = new Date(moment(timeFrom).startOf('Week')).getTime();
+        timeTo = new Date(moment(timeTo).endOf('Week')).getTime();
         var weekNo = 0;
-        var loopCount = Math.ceil((timeTo - timeFrom) / (86400000 * 7)); // One day time in milliseconds
-        for (var i = 0; i < loopCount; i++) {
+        while (newFrom.getTime() < newTo.getTime()) {
             var firstDayOfMonth = new Date(newFrom);
             firstDayOfMonth.setDate(1);
             weekNo = (moment(newFrom).week()) - moment(firstDayOfMonth.getTime()).week() + 1;
-            mockData.push(["W" + (weekNo == 0 ? 1 : weekNo) + " - " + months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries"]);
-            newFrom.setDate(newFrom.getDate() + 7);
+            mockData.push(["W" + (weekNo == 0 ? 1 : weekNo) + " - " + months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries", 0]);
+            newFrom = new Date(moment(newFrom).endOf('Week'));
+            newTo = new Date(moment(newTo).endOf('Week'));
+            newFrom.setDate(newFrom.getDate() + 1);
             if (newFrom.getMonth() != firstDayOfMonth.getMonth()) {
                 mockData.push(["W" + (1) + " - " + months[newFrom.getMonth()] + " - " + newFrom.getFullYear(), 0, "NoEntries"]);
             }
         }
     } else {
         timeFrame = "DAILY";
-        while (newFrom.getTime() < newTo.getTime()) {
+        while (newFrom.getTime() <= newTo.getTime()) {
             mockData.push([newFrom.toDateString(), 0, "NoEntries"]);
             newFrom.setHours(newFrom.getHours() + 24);
         }
@@ -384,35 +387,43 @@ function publish(data) {
 };
 
 var onclick = function (event, item) {
+    var selectedDataArray = [];
+    var tempFromTime;
     if (item != null) {
         if (item.datum[gadgetData.columns[2]] === "Other") {
             for (var i = 0; i < receivedOtherData.length; i++) {
                 if (receivedOtherData[i]["day"] === item.datum.day) {
-                    publish(
-                        {
-                            "selected": receivedOtherData[i].values[gadgetData.columns[2]],
-                            "fromTime": receivedOtherData[i][gadgetData.columns[0]],
-                            "toTime": getToTime(receivedOtherData[i][gadgetData.columns[0]]),
-                            "count": item.datum.count,
-                            "filter": gadgetPropertyName
-                        }
-                    );
+                    selectedDataArray.push([receivedOtherData[i].values[gadgetData.columns[2]], receivedOtherData[i].values[gadgetData.columns[1]]]);
+                    if(tempFromTime === undefined){
+                        tempFromTime = receivedOtherData[i][gadgetData.columns[0]];
+                    }
                 }
             }
+            publish(
+                {
+                    "selected": selectedDataArray,
+                    "fromTime": getFromTime(tempFromTime),
+                    "toTime": getToTime(tempFromTime),
+                    "filter": gadgetPropertyName
+                }
+            );
         } else {
             for (var i = 0; i < receivedData.length; i++) {
                 if (receivedData[i].values[gadgetData.columns[2]] === item.datum[gadgetData.columns[2]] && receivedData[i]["day"] === item.datum.day) {
-                    publish(
-                        {
-                            "selected": receivedData[i].values[gadgetData.columns[2]],
-                            "fromTime": receivedData[i][gadgetData.columns[0]],
-                            "toTime": getToTime(receivedData[i][gadgetData.columns[0]]),
-                            "count": item.datum.count,
-                            "filter": gadgetPropertyName
-                        }
-                    );
+                    selectedDataArray.push([receivedData[i].values[gadgetData.columns[2]], receivedData[i].values[gadgetData.columns[1]]]);
+                    if(tempFromTime === undefined){
+                        tempFromTime = receivedData[i][gadgetData.columns[0]];
+                    }
                 }
             }
+            publish(
+                {
+                    "selected": selectedDataArray,
+                    "fromTime": getFromTime(tempFromTime),
+                    "toTime": getToTime(tempFromTime),
+                    "filter": gadgetPropertyName
+                }
+            );
         }
     }
 };
@@ -429,6 +440,9 @@ subscribe(function (topic, data, subscriber) {
     timeFrom = parseInt(data["timeFrom"]);
     timeTo = parseInt(data["timeTo"]);
     timeUnit = data.timeUnit;
+    if (timeUnit === "Day") {
+        timeTo = timeFrom;
+    }
     initialize();
 });
 
@@ -447,11 +461,6 @@ function daysBetween(date1, date2) {
     return Math.round(difference_ms / one_day);
 }
 
-function getNextWeekDay(timeStamp) {
-    var dateWithWeek = new Date(moment().week(moment(timeStamp).week()).endOf('Week'));
-    return dateWithWeek;
-}
-
 function getToTime(toTime) {
     var duration;
     toTime = new Date(toTime);
@@ -462,9 +471,17 @@ function getToTime(toTime) {
         duration = toTime.getMonth() + 1;
         toTime.setMonth(duration);
     } else if (timeFrame === "WEEKLY") {
-        toTime = getNextWeekDay(toTime);
+        toTime = new Date(moment(toTime).endOf('Week'));
     }
     return toTime.getTime();
+}
+
+function getFromTime(fromTime) {
+    fromTime = new Date(fromTime);
+    if (timeFrame === "WEEKLY") {
+        fromTime = new Date(moment(fromTime).startOf('Week'));
+    }
+    return fromTime.getTime();
 }
 
 function onError(msg) {

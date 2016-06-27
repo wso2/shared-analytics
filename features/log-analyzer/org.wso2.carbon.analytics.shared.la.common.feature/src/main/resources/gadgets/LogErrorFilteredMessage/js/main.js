@@ -61,7 +61,7 @@ function fetch(messageElement, countElement) {
                     '<i class="fw fw-ring fw-stack-2x"></i> <i class="fw fw-view fw-stack-1x"></i> </span> <span class="hidden-xs">View</span> </a>']);
             }
             if(iteratorCount < filteredMessageArray.length){
-                fetch(filteredMessageArray[iteratorCount][0], filteredMessageArray[iteratorCount][1]);
+                fetch(filteredMessageArray[iteratorCount][0].replace(/\"/g, "\\\""), filteredMessageArray[iteratorCount][1]);
             }else{
                 drawLogErrorFilteredTable();
             }
