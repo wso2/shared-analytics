@@ -25,8 +25,8 @@ var receivedData = [];
 var nanoScrollerSelector = $(".nano");
 
 var meta = {
-    "names": ["apiArtifact", "Frequency"],
-    "types": ["ordinal", "linear"]
+    "names": ["user","apiArtifact","version", "Frequency"],
+    "types": ["ordinal","ordinal","ordinal", "linear"]
 };
 
 var configTable = {
@@ -35,8 +35,8 @@ var configTable = {
     charts: [{
         type: "table",
         y: "Frequency",
-        columns: ["apiArtifact", "Frequency"],
-        columnTitles: ["APIM Artifact", "Frequency"]
+        columns: ["user", "apiArtifact", "version", "Frequency"],
+        columnTitles: ["User", "API", "Version", "Frequency"]
     }
     ],
     width: $('body').width(),
@@ -88,10 +88,24 @@ function fetch() {
                 client.searchWithAggregates(queryInfo, function (d) {
                     var obj = JSON.parse(d["message"]);
                     if (d["status"] === "success") {
-                        for (var i = 0; i < obj.length; i++) {
-                            receivedData.push([obj[i].values.artifact, obj[i].values.artifactCountSum]);
+                        try{
+                            for (var i = 0; i < obj.length; i++) {
+                                var ignorePattern = new RegExp(/_WSO2/);
+                                var userPattern = new RegExp(/.*(?=--)/);
+                                var artifactPattern = new RegExp(/--(.*):/);
+                                var versionPattern = new RegExp(/:(.*)/);
+                                var artifact = obj[i].values.artifact;
+                                if(artifact != null && !ignorePattern.test(artifact)){
+                                    receivedData.push([userPattern.exec(artifact), artifactPattern.exec(artifact)[1], versionPattern.exec(artifact)[1], obj[i].values.artifactCountSum]);
+                                }
+                            }
+                            drawDeletedArtifactTable();
+                        }catch (error){
+                            error.message = "Internal server error while data indexing.";
+                            error.status = "Failure";
+                            onError(error);
+                            console.log(error);
                         }
-                        drawDeletedArtifactTable();
                     }
                 }, function (error) {
                     if(error === undefined){
