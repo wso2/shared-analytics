@@ -30,6 +30,10 @@
     color:#00CCFF;
 }
 
+.logLevel {
+    color: #ffffff;
+}
+
 .logClassName {
     color: #dddd00;
 }
