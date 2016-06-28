@@ -90,10 +90,10 @@ function fetch() {
                     if (d["status"] === "success") {
                         try{
                             for (var i = 0; i < obj.length; i++) {
-                                var ignorePattern = new RegExp(/_WSO2/);
-                                var userPattern = new RegExp(/.*(?=--)/);
-                                var artifactPattern = new RegExp(/--(.*):/);
-                                var versionPattern = new RegExp(/:(.*)/);
+                                var ignorePattern = new RegExp(gadgetConfig.tableFieldsFilterPatterns.ignoreCase);
+                                var userPattern = new RegExp(gadgetConfig.tableFieldsFilterPatterns.user);
+                                var artifactPattern = new RegExp(gadgetConfig.tableFieldsFilterPatterns.artifact);
+                                var versionPattern = new RegExp(gadgetConfig.tableFieldsFilterPatterns.version);
                                 var artifact = obj[i].values.artifact;
                                 if(artifact != null && !ignorePattern.test(artifact)){
                                     receivedData.push([userPattern.exec(artifact), artifactPattern.exec(artifact)[1], versionPattern.exec(artifact)[1], obj[i].values.artifactCountSum]);
