@@ -81,7 +81,7 @@ $(function () {
 
     $(datePickerBtn).daterangepicker({
         "timePicker": false,
-        "autoApply": true,
+        "autoApply": false,
         "alwaysShowCalendars": true,
         "opens": "left"
     });
