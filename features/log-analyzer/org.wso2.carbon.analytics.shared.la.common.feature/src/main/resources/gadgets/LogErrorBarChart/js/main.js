@@ -62,6 +62,8 @@ function initialize() {
         timeFrame = "WEEKLY";
         timeFrom = new Date(moment(timeFrom).startOf('Week')).getTime();
         timeTo = new Date(moment(timeTo).endOf('Week')).getTime();
+        newFrom = new Date(timeFrom);
+        newTo = new Date(timeTo);
         var weekNo = 0;
         while (newFrom.getTime() < newTo.getTime()) {
             var firstDayOfMonth = new Date(newFrom);
