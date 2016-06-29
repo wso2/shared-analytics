@@ -30,6 +30,10 @@
     color:#00CCFF;
 }
 
+.logLevel {
+    color: #ffffff;
+}
+
 .logClassName {
     color: #dddd00;
 }
@@ -40,7 +44,6 @@
 
 .livelog a {
     color:#00FF00;
-    text-underline;
 }
 
 .livelog {

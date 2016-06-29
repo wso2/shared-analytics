@@ -17,7 +17,7 @@
  */
 var client = new AnalyticsClient().init(null, null, "https://"+location.hostname +":"+ location.port +"/admin-dashboard/modules/la/log-analyzer-proxy.jag");
 var logLineArray = [];
-var template = '<span class="logLine"><div class="logTimeStamp">{{time}}</div><div class="logClassName">{{className}}</div><div class="logContent">{{content}}</div><div class="logTrace">{{trace}}</div></span>';
+var template = '<span class="logLine"><div class="logTimeStamp">{{time}}</div><div class="logLevel">{{level}}</div><div class="logClassName">{{className}}</div><div class="logContent">{{content}}</div><div class="logTrace">{{trace}}</div></span>';
 var initialRecordCount = -1;
 var currentRecordCount;
 var $ptty;
@@ -119,6 +119,7 @@ function fetchRecords(logCountDifference){
 
                 var lineItem = {
                     time: tempDay,
+                    level: obj[i].values._level,
                     className: obj[i].values._class,
                     content: obj[i].values._content,
                     trace: obj[i].values._trace
@@ -144,5 +145,5 @@ function writeToLogViewer(dataLine) {
 }
 
 function createLogList(templateData){
-    return '<span class="logLine"><div class="logTimeStamp">' +templateData.time + '</div><div class="logClassName">' + templateData.className + '</div><div class="logContent">' + templateData.content + '</div><div class="logTrace">' + templateData.trace + '</div></span>';
+    return '<span class="logLine"><div class="logTimeStamp">' +templateData.time + '</div><div class="logLevel">'+templateData.level+'</div><div class="logClassName">' + templateData.className + '</div><div class="logContent">' + templateData.content + '</div><div class="logTrace">' + templateData.trace + '</div></span>';
 }

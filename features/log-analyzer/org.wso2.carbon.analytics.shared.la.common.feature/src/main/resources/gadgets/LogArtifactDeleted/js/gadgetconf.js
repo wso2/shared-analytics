@@ -19,4 +19,10 @@
 var gadgetConfig = {
     "id": "logAPIMArtifactDeleted",
     "title": "logAPIMArtifactDeleted",
+    "tableFieldsFilterPatterns":{
+        "ignoreCase":/_WSO2/,
+        "user":/.*(?=--)/,
+        "artifact":/--(.*):/,
+        "version":/:(.*)/
+    }
 };
