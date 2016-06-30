@@ -16,7 +16,7 @@
  * under the License.
  */
 
-var client = new AnalyticsClient().init(null, null, "https://"+location.hostname +":"+ location.port +"/admin-dashboard/modules/la/log-analyzer-proxy.jag");
+var client = new AnalyticsClient().init(null, null, "https://"+location.hostname +":"+ location.port +"/admin/modules/la/log-analyzer-proxy.jag");
 var timeFrom = gadgetUtil.timeFrom();
 var timeTo = gadgetUtil.timeTo();
 var timeUnit = null;

@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var client = new AnalyticsClient().init(null, null, "https://"+location.hostname +":"+ location.port +"/admin-dashboard/modules/la/log-analyzer-proxy.jag");
+var client = new AnalyticsClient().init(null, null, "https://"+location.hostname +":"+ location.port +"/admin/modules/la/log-analyzer-proxy.jag");
 var canvasDiv = "#canvas";
 var table, chart;
 var fromTime = gadgetUtil.timeFrom();
