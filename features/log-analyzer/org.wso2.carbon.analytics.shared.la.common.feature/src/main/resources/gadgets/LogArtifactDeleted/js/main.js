@@ -99,7 +99,11 @@ function fetch() {
                                     receivedData.push([userPattern.exec(artifact), artifactPattern.exec(artifact)[1], versionPattern.exec(artifact)[1], obj[i].values.artifactCountSum]);
                                 }
                             }
-                            drawDeletedArtifactTable();
+                            if(receivedData.length >0){
+                                drawDeletedArtifactTable();
+                            }else{
+                                $(canvasDiv).html(gadgetUtil.getEmptyRecordsText());
+                            }
                         }catch (error){
                             error.message = "Internal server error while data indexing.";
                             error.status = "Failure";
