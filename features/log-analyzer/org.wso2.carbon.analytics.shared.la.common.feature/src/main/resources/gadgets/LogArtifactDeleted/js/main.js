@@ -99,9 +99,9 @@ function fetch() {
                                     receivedData.push([userPattern.exec(artifact), artifactPattern.exec(artifact)[1], versionPattern.exec(artifact)[1], obj[i].values.artifactCountSum]);
                                 }
                             }
-                            if(receivedData.length >0){
+                            if (receivedData.length > 0) {
                                 drawDeletedArtifactTable();
-                            }else{
+                            } else {
                                 $(canvasDiv).html(gadgetUtil.getEmptyRecordsText());
                             }
                         }catch (error){
