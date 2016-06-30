@@ -21,7 +21,7 @@ var PARAM_TYPE = "type";
 
 var serverUrls = [
     { name: "ESB", svrUrl: "/portal/apis/analytics"},
-    { name: "APIM", svrUrl: "https://"+location.hostname +":"+ location.port +"/admin-dashboard/modules/la/log-analyzer-proxy.jag"}
+    { name: "APIM", svrUrl: "https://"+location.hostname +":"+ location.port +"/admin/modules/la/log-analyzer-proxy.jag"}
 
 ];
 
