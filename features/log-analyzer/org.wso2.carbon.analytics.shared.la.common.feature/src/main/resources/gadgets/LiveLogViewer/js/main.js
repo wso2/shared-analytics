@@ -15,7 +15,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var client = new AnalyticsClient().init(null, null, "https://"+location.hostname +":"+ location.port +"/admin/modules/la/log-analyzer-proxy.jag");
+var prefs = new gadgets.Prefs();
+var svrUrl = gadgetUtil.getGadgetSvrUrl(prefs.getString(PARAM_TYPE));
+var client = new AnalyticsClient().init(null,null,svrUrl);
 var logLineArray = [];
 var template = '<span class="logLine"><div class="logTimeStamp">{{time}}</div><div class="logLevel">{{level}}</div><div class="logClassName">{{className}}</div><div class="logContent">{{content}}</div><div class="logTrace">{{trace}}</div></span>';
 var initialRecordCount = -1;
@@ -42,7 +44,7 @@ function fetchInitialRecordCount(){
     var countQueryInfo = {
         tableName: "LOGANALYZER",
         searchParams: {
-            query: "*:* AND tenantId:#tenantID#",
+            query: "*:*",
         }
     };
     client.searchCount(countQueryInfo, function(count) {
@@ -67,7 +69,7 @@ function fetchCurrentRecordCount() {
     var countQueryInfo = {
         tableName: "LOGANALYZER",
         searchParams: {
-            query: "*:* AND tenantID:#tenantID#",
+            query: "*:*",
         }
     };
 
@@ -93,7 +95,7 @@ function fetchRecords(logCountDifference){
     queryInfo = {
         tableName: "LOGANALYZER",
         searchParams: {
-            query: "*:* AND tenantId:#tenantID#",
+            query: "*:*",
             start: 0,
             count: logCountDifference,
             sortBy : [

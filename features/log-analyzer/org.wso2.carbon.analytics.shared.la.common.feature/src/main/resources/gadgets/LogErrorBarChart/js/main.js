@@ -86,7 +86,7 @@ function initialize() {
     }
     tableName = "LOGANALYZER_" + gadgetData.name + "_" + timeFrame;
 
-    var query = "_timestamp: [" + timeFrom + " TO " + timeTo + "] AND tenantID:#tenantID#";
+    var query = "_timestamp: [" + timeFrom + " TO " + timeTo + "]";
     var sorting = [
         {
             field: gadgetData.orderedField,
@@ -137,7 +137,7 @@ function onClickSelector() {
 function fetch(start, count) {
     receivedData.length = 0;
     receivedOtherData.length = 0;
-    var query = "_timestamp: [" + timeFrom + " TO " + timeTo + "] AND tenantID:#tenantID#";
+    var query = "_timestamp: [" + timeFrom + " TO " + timeTo + "]";
     var sorting = [
         {
             field: gadgetData.orderedField,

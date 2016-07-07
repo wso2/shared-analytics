@@ -4,7 +4,7 @@
         <dependency artifact="ESB_LOGANALYZER_SCRIPT" version="1.0.0" include="true" serverRole="DataAnalyticsServer"/>
 
         <dependency artifact="GadgetLogErrorCodeDistribution" version="1.0.0" include="true" serverRole="DataAnalyticsServer"/>
-        <dependency artifact="GadgetLogServerUpTimeDistribution" version="1.0.0" include="true" serverRole="DataAnalyticsServer"/>
+
         <!-- Dashboard Definition -->
         <dependency artifact="ESBDashBoard" version="1.0.0" include="true" serverRole="DataAnalyticsServer"/>
 
