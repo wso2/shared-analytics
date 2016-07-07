@@ -4,7 +4,7 @@
     <property name="project-name" value="${ant.project.name}"/>
     <property name="res-dir" value="src/main/resources"/>
     <property name="target-dir" value="target"/>
-    <property name="jaggery-api-dir" value="src/main/jaggeryapi"/>
+    <property name="jaggery-api-dir" value="src/main/jaggery-api"/>
 
     <property name="ANALYTICS_ESB_dir" value="src/main/capp"/>
     <property name="ANALYTICS_ESB_capp" value="org_wso2_carbon_analytics_la_esb-1.0.0"/>
@@ -15,7 +15,7 @@
 
     <target name="pre-configure">
         <mkdir dir="${target-dir}"/>
-
+        <copy file="${jaggery-api-dir}/log-analytics.jag" todir="${res-dir}"/>
     </target>
 
     <target name="zip" depends="clean,pre-configure">

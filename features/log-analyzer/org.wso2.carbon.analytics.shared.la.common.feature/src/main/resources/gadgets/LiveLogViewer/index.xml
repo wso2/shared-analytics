@@ -25,7 +25,9 @@
                  description="Log Level table Implementation">
         <Require feature="pubsub-2"/>
         <Require feature="dynamic-height"/>
+        <Require feature="setprefs"/>
     </ModulePrefs>
+    <UserPref name="type" display_name="Gadget Type" required="true" />
     <Content type="html">
         <![CDATA[
         <html>
@@ -35,6 +37,8 @@
                 <meta charset="utf-8">
                 <script src="../gadget-commons/js/jquery-1.10.2.js"></script>
                 <script src="../gadget-commons/js/carbon-analytics.js"></script>
+                <script src="../gadget-commons/js/moment.min.js"></script>
+                <script src="../gadget-commons/js/gadget-utils.js"></script>
                 <script src="js/ptty.jquery.min.js"></script>
             </head>
             <body bgcolor="#000000">
