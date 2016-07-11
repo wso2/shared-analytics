@@ -38,7 +38,7 @@ var legendTitleDiv = "#legendTitle";
 var errorDiv = "#errorDiv";
 var gadgetData;
 var globalPage = 1;
-var chartColorScale = ["#1abc9c", "#3498db", "#9b59b6", "#f1c40f", "#e67e22", "#e74c3c", "#2c3e50", "#2ecc71", "#F16272"];
+var chartColorScale = ["#1abc9c", "#3498db", "#9b59b6", "#f1c40f", "#e67e22", "#e74c3c", "#2c3e50", "#2ecc71", "#F16272", "#bcbd22"];
 
 function initialize() {
     gadgetData = gadgetUtil.getChart(gadgetPropertyName);
