@@ -222,24 +222,14 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
                 tenantEvent = new TenantAwareLoggingEvent(event.fqnOfCategoryClass, logger, event.timeStamp,
                         event.getLevel(), event.getMessage(), null);
             }
-            tenantId = AccessController.doPrivileged(new PrivilegedAction<Integer>() {
-                public Integer run() {
-                    return CarbonContext.getThreadLocalCarbonContext().getTenantId();
-                }
+            String tenantDomain = AccessController.doPrivileged(new PrivilegedAction<String>() {
+                        public String run() {
+                            return CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
+                        }
             });
-            if (tenantId == MultitenantConstants.INVALID_TENANT_ID) {
-                String tenantDomain = TenantDomainSetter.getTenantDomain();
-                if (tenantDomain != null && !tenantDomain.equals("")) {
-                    try {
-                        tenantId = getTenantIdForDomain(tenantDomain);
-                    } catch (UserStoreException e) {
-                        System.err.println("Cannot find tenant id for the given tenant domain.");
-                        e.printStackTrace();
-                    }
-                }
-            }
+
             appName = CarbonContext.getThreadLocalCarbonContext().getApplicationName();
-            tenantEvent.setTenantId(String.valueOf(tenantId));
+            tenantEvent.setTenantId(String.valueOf(tenantDomain));
             if (appName != null) {
                 tenantEvent.setServiceName(CarbonContext.getThreadLocalCarbonContext().getApplicationName());
             } else if (serviceName != null) {

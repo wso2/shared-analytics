@@ -1,6 +1,6 @@
 {
   "id": "logAPIMMessageProcessing",
-  "title": "ERRORs in API Message Processing",
+  "title": "Errors in API Message Processing",
   "type": "gadget",
   "thumbnail": "store://gadget/LogAPIMMessageProcessing/img/thumbnail.png",
   "data": {
