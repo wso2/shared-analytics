@@ -18,13 +18,13 @@
 
 package org.wso2.carbon.analytics.shared.data.agents.log4j.appender;
 
-
 import org.apache.log4j.Appender;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggingEvent;
-import org.wso2.carbon.context.CarbonContext;
+import org.wso2.carbon.analytics.shared.data.agents.log4j.appender.ds.LogAppenderServiceValueHolder;
 import org.wso2.carbon.analytics.shared.data.agents.log4j.util.TenantAwarePatternLayout;
+import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.databridge.agent.DataPublisher;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAgentConfigurationException;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAuthenticationException;
@@ -36,10 +36,11 @@ import org.wso2.carbon.logging.service.internal.LoggingServiceComponent;
 import org.wso2.carbon.logging.service.util.LoggingConstants;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.core.tenant.TenantManager;
-import org.wso2.carbon.utils.CarbonUtils;
 import org.wso2.carbon.utils.logging.TenantAwareLoggingEvent;
 import org.wso2.carbon.utils.logging.handler.TenantDomainSetter;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
+import org.wso2.securevault.SecretResolver;
+import org.wso2.securevault.SecretResolverFactory;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -67,7 +68,6 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     private int maxTolerableConsecutiveFailure;
     private int processingLimit = 100;
     private String streamDef;
-    private String truststorePath;
     private String authURLs;
     private int tenantId;
     private String serviceName;
@@ -95,35 +95,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         loggingEvents = new ArrayBlockingQueue<>(processingLimit);
         scheduler = Executors.newScheduledThreadPool(10);
         scheduler.scheduleWithFixedDelay(new LogPublisherTask(), 10, 10, TimeUnit.MILLISECONDS);
-
-        truststorePath = CarbonUtils.getCarbonHome() + truststorePath;
-        System.setProperty("javax.net.ssl.trustStore", truststorePath);
-        System.setProperty("javax.net.ssl.trustStorePassword", "wso2carbon");
         serviceName = TenantDomainSetter.getServiceName();
-
-        try {
-            dataPublisher = new DataPublisher("Thrift", url, authURLs, userName, password);
-        } catch (DataEndpointAgentConfigurationException e) {
-            log.error(
-                    "Invalid urls passed for receiver and auth, and hence expected to fail " + e
-                            .getMessage(), e);
-        } catch (DataEndpointException e) {
-            log.error(
-                    "Error while trying to publish events to data receiver " + e
-                            .getMessage(), e);
-        } catch (DataEndpointConfigurationException e) {
-            log.error(
-                    "Invalid urls passed for receiver and auth, and hence expected to fail " + e
-                            .getMessage(), e);
-        } catch (DataEndpointAuthenticationException e) {
-            log.error(
-                    "Error while trying to login to data receiver : " + e
-                            .getMessage(), e);
-        } catch (TransportException e) {
-            log.error(
-                    "Thrift transport exception occurred " + e
-                            .getMessage(), e);
-        }
 
         List<String> patterns = Arrays.asList(columnList.split(","));
         for (String pattern : patterns) {
@@ -171,11 +143,49 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         }
     }
 
+    private void publisherInitializer() {
+        Properties passwordProperty = new Properties();
+        passwordProperty.put("log4j.appender.DAS_AGENT.password", password);
+        SecretResolver secretResolver = SecretResolverFactory.create(passwordProperty);
+        String secretAlias = "log4j.appender.DAS_AGENT.password";
+        //Checking the log4j appender DAS credentials.
+        if (secretResolver != null && secretResolver.isInitialized()) {
+            if (secretResolver.isTokenProtected(secretAlias)) {
+                password = secretResolver.resolve(secretAlias);
+            } else {
+                password = (String) passwordProperty.get(secretAlias);
+            }
+        }
+        try {
+            dataPublisher = new DataPublisher("Thrift", url, authURLs, userName, password);
+        } catch (DataEndpointAgentConfigurationException e) {
+            log.error(
+                    "Invalid urls passed for receiver and auth, and hence expected to fail " + e
+                            .getMessage(), e);
+        } catch (DataEndpointException e) {
+            log.error(
+                    "Error while trying to publish events to data receiver " + e
+                            .getMessage(), e);
+        } catch (DataEndpointConfigurationException e) {
+            log.error(
+                    "Invalid urls passed for receiver and auth, and hence expected to fail " + e
+                            .getMessage(), e);
+        } catch (DataEndpointAuthenticationException e) {
+            log.error(
+                    "Error while trying to login to data receiver : " + e
+                            .getMessage(), e);
+        } catch (TransportException e) {
+            log.error(
+                    "Thrift transport exception occurred " + e
+                            .getMessage(), e);
+        }
+    }
+
     /**
      * Log4j framework shutting down the log appender resources.
      */
     public void close() {
-        if(scheduler != null) {
+        if (scheduler != null) {
             scheduler.shutdown();
             try {
                 scheduler.awaitTermination(10, TimeUnit.SECONDS);
@@ -197,47 +207,55 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
      */
     @Override
     protected void append(LoggingEvent event) {
-        Logger logger = Logger.getLogger(event.getLoggerName());
-        TenantAwareLoggingEvent tenantEvent;
-        if (event.getThrowableInformation() != null) {
-            tenantEvent = new TenantAwareLoggingEvent(event.fqnOfCategoryClass, logger, event.timeStamp,
-                    event.getLevel(), event.getMessage(), event.getThrowableInformation().getThrowable());
-        } else {
-            tenantEvent = new TenantAwareLoggingEvent(event.fqnOfCategoryClass, logger, event.timeStamp,
-                    event.getLevel(), event.getMessage(), null);
-        }
-        tenantId = AccessController.doPrivileged(new PrivilegedAction<Integer>() {
-            public Integer run() {
-                return CarbonContext.getThreadLocalCarbonContext().getTenantId();
+        // Checking the configuration context service for wait DAS appender until proper server initialization.
+        if (LogAppenderServiceValueHolder.getConfigurationContextService() != null) {
+            if (dataPublisher == null) {
+                publisherInitializer();
             }
-        });
-        if (tenantId == MultitenantConstants.INVALID_TENANT_ID) {
-            String tenantDomain = TenantDomainSetter.getTenantDomain();
-            if (tenantDomain != null && !tenantDomain.equals("")) {
-                try {
-                    tenantId = getTenantIdForDomain(tenantDomain);
-                } catch (UserStoreException e) {
-                    System.err.println("Cannot find tenant id for the given tenant domain.");
-                    e.printStackTrace();
+
+            Logger logger = Logger.getLogger(event.getLoggerName());
+            TenantAwareLoggingEvent tenantEvent;
+            if (event.getThrowableInformation() != null) {
+                tenantEvent = new TenantAwareLoggingEvent(event.fqnOfCategoryClass, logger, event.timeStamp,
+                        event.getLevel(), event.getMessage(), event.getThrowableInformation().getThrowable());
+            } else {
+                tenantEvent = new TenantAwareLoggingEvent(event.fqnOfCategoryClass, logger, event.timeStamp,
+                        event.getLevel(), event.getMessage(), null);
+            }
+            tenantId = AccessController.doPrivileged(new PrivilegedAction<Integer>() {
+                public Integer run() {
+                    return CarbonContext.getThreadLocalCarbonContext().getTenantId();
+                }
+            });
+            if (tenantId == MultitenantConstants.INVALID_TENANT_ID) {
+                String tenantDomain = TenantDomainSetter.getTenantDomain();
+                if (tenantDomain != null && !tenantDomain.equals("")) {
+                    try {
+                        tenantId = getTenantIdForDomain(tenantDomain);
+                    } catch (UserStoreException e) {
+                        System.err.println("Cannot find tenant id for the given tenant domain.");
+                        e.printStackTrace();
+                    }
                 }
             }
-        }
-        appName = CarbonContext.getThreadLocalCarbonContext().getApplicationName();
-        tenantEvent.setTenantId(String.valueOf(tenantId));
-        if (appName != null) {
-            tenantEvent.setServiceName(CarbonContext.getThreadLocalCarbonContext().getApplicationName());
-        } else if (serviceName != null) {
-            tenantEvent.setServiceName(serviceName);
-        } else {
-            tenantEvent.setServiceName("");
-        }
-        if (!loggingEvents.offer(tenantEvent)) {
-            log.warn("Logging events queue exceed the process limits");
+            appName = CarbonContext.getThreadLocalCarbonContext().getApplicationName();
+            tenantEvent.setTenantId(String.valueOf(tenantId));
+            if (appName != null) {
+                tenantEvent.setServiceName(CarbonContext.getThreadLocalCarbonContext().getApplicationName());
+            } else if (serviceName != null) {
+                tenantEvent.setServiceName(serviceName);
+            } else {
+                tenantEvent.setServiceName("");
+            }
+            if (!loggingEvents.offer(tenantEvent)) {
+                log.warn("Logging events queue exceed the process limits");
+            }
         }
     }
 
     /**
      * Retrieve the tenant domain.
+     *
      * @param tenantDomain tenant domain name.
      * @return tenant id.
      * @throws UserStoreException
@@ -319,14 +337,6 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         this.processingLimit = processingLimit;
     }
 
-    public String getTruststorePath() {
-        return truststorePath;
-    }
-
-    public void setTruststorePath(String truststorePath) {
-        this.truststorePath = truststorePath;
-    }
-
     public String getAuthURLs() {
         return authURLs;
     }
@@ -360,6 +370,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
 
         /**
          * Publishing the log event using thrift client.
+         *
          * @param event log event which is wrapped TenantAwareLoggingEvent.
          * @throws ParseException
          */
