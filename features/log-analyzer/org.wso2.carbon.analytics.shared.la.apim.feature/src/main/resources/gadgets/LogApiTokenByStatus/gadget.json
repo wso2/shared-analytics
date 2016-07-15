@@ -1,6 +1,6 @@
 {
   "id": "logApiTokenByStatus",
-  "title": "Log API Token Status",
+  "title": "Errors Distribution",
   "type": "gadget",
   "thumbnail": "store://gadget/LogApiTokenByStatus/img/thumbnail.png",
   "data": {
