@@ -36,7 +36,7 @@ import org.wso2.carbon.logging.service.internal.LoggingServiceComponent;
 import org.wso2.carbon.logging.service.util.LoggingConstants;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.core.tenant.TenantManager;
-import org.wso2.carbon.utils.logging.TenantAwareLoggingEvent;
+import org.wso2.carbon.analytics.shared.data.agents.log4j.util.TenantDomainAwareLoggingEvent;
 import org.wso2.carbon.utils.logging.handler.TenantDomainSetter;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 import org.wso2.securevault.SecretResolver;
@@ -60,7 +60,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class LogEventAppender extends AppenderSkeleton implements Appender {
     private static final Logger log = Logger.getLogger(LogEventAppender.class);
-    private ArrayBlockingQueue<TenantAwareLoggingEvent> loggingEvents;
+    private ArrayBlockingQueue<TenantDomainAwareLoggingEvent> loggingEvents;
     private String url;
     private String password;
     private String userName;
@@ -70,6 +70,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     private String streamDef;
     private String authURLs;
     private int tenantId;
+    private String tenantDomain;
     private String serviceName;
     private String appName;
     private boolean isStackTrace = false;
@@ -78,6 +79,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     private DataPublisher dataPublisher;
     private ScheduledExecutorService scheduler;
     private ConditionalLayoutWrapper tenantIDLayout = new ConditionalLayoutWrapper();
+    private ConditionalLayoutWrapper tenantDomainLayout = new ConditionalLayoutWrapper();
     private ConditionalLayoutWrapper serverNameLayout = new ConditionalLayoutWrapper();
     private ConditionalLayoutWrapper appNameLayout = new ConditionalLayoutWrapper();
     private ConditionalLayoutWrapper logTimeLayout = new ConditionalLayoutWrapper();
@@ -100,6 +102,10 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         List<String> patterns = Arrays.asList(columnList.split(","));
         for (String pattern : patterns) {
             switch (pattern) {
+                case "%D":
+                    tenantDomainLayout.setWrappedLayout(new TenantAwarePatternLayout("%D"));
+                    tenantDomainLayout.setEnable(true);
+                    break;
                 case "%T":
                     tenantIDLayout.setWrappedLayout(new TenantAwarePatternLayout("%T"));
                     tenantIDLayout.setEnable(true);
@@ -214,12 +220,12 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
             }
 
             Logger logger = Logger.getLogger(event.getLoggerName());
-            TenantAwareLoggingEvent tenantEvent;
+            TenantDomainAwareLoggingEvent tenantEvent;
             if (event.getThrowableInformation() != null) {
-                tenantEvent = new TenantAwareLoggingEvent(event.fqnOfCategoryClass, logger, event.timeStamp,
+                tenantEvent = new TenantDomainAwareLoggingEvent(event.fqnOfCategoryClass, logger, event.timeStamp,
                         event.getLevel(), event.getMessage(), event.getThrowableInformation().getThrowable());
             } else {
-                tenantEvent = new TenantAwareLoggingEvent(event.fqnOfCategoryClass, logger, event.timeStamp,
+                tenantEvent = new TenantDomainAwareLoggingEvent(event.fqnOfCategoryClass, logger, event.timeStamp,
                         event.getLevel(), event.getMessage(), null);
             }
             tenantId = AccessController.doPrivileged(new PrivilegedAction<Integer>() {
@@ -227,8 +233,16 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
                     return CarbonContext.getThreadLocalCarbonContext().getTenantId();
                 }
             });
+
+            tenantDomain = AccessController.doPrivileged(new PrivilegedAction<String>() {
+                public String run() {
+                    return CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
+                }
+            });
+
+            tenantEvent.setTenantDomain(tenantDomain);
+
             if (tenantId == MultitenantConstants.INVALID_TENANT_ID) {
-                String tenantDomain = TenantDomainSetter.getTenantDomain();
                 if (tenantDomain != null && !tenantDomain.equals("")) {
                     try {
                         tenantId = getTenantIdForDomain(tenantDomain);
@@ -352,8 +366,8 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         public void run() {
             try {
                 for (int i = 0; i < loggingEvents.size(); i++) {
-                    TenantAwareLoggingEvent tenantAwareLoggingEvent = loggingEvents.take();
-                    publishLogEvent(tenantAwareLoggingEvent);
+                    TenantDomainAwareLoggingEvent tenantDomainAwareLoggingEvent = loggingEvents.take();
+                    publishLogEvent(tenantDomainAwareLoggingEvent);
                 }
             } catch (Throwable t) {
                 System.err.println("FATAL: LogEventAppender Cannot publish log events");
@@ -374,8 +388,9 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
          * @param event log event which is wrapped TenantAwareLoggingEvent.
          * @throws ParseException
          */
-        private void publishLogEvent(TenantAwareLoggingEvent event) throws ParseException {
+        private void publishLogEvent(TenantDomainAwareLoggingEvent event) throws ParseException {
             String tenantID = tenantIDLayout.format(event);
+            String tenantDomain = tenantDomainLayout.format(event);
             String serverName = serverNameLayout.format(event);
             String appName = appNameLayout.format(event);
             String logTime = logTimeLayout.format(event);
@@ -409,7 +424,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
             if (event.getThrowableInformation() != null) {
                 arbitraryDataMap.put(columns[8], stacktrace);
             }
-            Event laEvent = new Event(streamDef, date.getTime(), null, null, new String[]{tenantID}, arbitraryDataMap);
+            Event laEvent = new Event(streamDef, date.getTime(), null, null, new String[]{tenantDomain}, arbitraryDataMap);
             dataPublisher.publish(laEvent);
         }
     }
@@ -426,7 +441,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
             isEnable = enable;
         }
 
-        public String format(TenantAwareLoggingEvent event) {
+        public String format(TenantDomainAwareLoggingEvent event) {
             if (isEnable) {
                 return wrappedLayout.format(event);
             }
