@@ -1,0 +1,15 @@
+{
+  "id": "Live_Log_Viewer",
+  "title": "Live Log viewer",
+  "type": "gadget",
+  "thumbnail": "store://gadget/Live_Log_Viewer/img/thumbnail.png",
+  "data": {
+    "url": "store://gadget/Live_Log_Viewer/index.xml"
+  },
+  "listen": {
+    "subscriber": {
+      "type": "date-range",
+      "description": "Used to listen to any date range-selected"
+    }
+  }
+}

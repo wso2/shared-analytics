@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <artifact name="GadgetLogErrorCodeDistribution" version="1.0.0" type="dashboards/gadget" serverRole="DataAnalyticsServer">
-    <file>LogErrorCodeDistribution</file>
+    <file>Log_Error_Code_Distribution</file>
 </artifact>
 
