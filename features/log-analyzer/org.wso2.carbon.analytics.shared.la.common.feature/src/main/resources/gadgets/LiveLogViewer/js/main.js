@@ -117,7 +117,7 @@ function fetchRecords(logCountDifference){
         var obj = JSON.parse(data["message"]);
         if (data["status"] === "success") {
             for (var i = 0; i < obj.length; i++) {
-                var tempDay = new Date(parseInt(obj[i].values._eventTimeStamp)).toUTCString();
+                var tempDay = new Date(parseInt(obj[i].values._eventTimeStamp)).toString();
 
                 var lineItem = {
                     time: tempDay,
