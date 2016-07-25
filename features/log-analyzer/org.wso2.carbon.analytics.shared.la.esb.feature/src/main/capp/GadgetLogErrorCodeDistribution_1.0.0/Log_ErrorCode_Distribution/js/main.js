@@ -533,4 +533,3 @@ function createLegendList(bulletColor, fullContext, subContext){
         "<circle cx='5' cy='5' r='6' fill="+bulletColor+"/></svg><span class='textContext'><a class='legendTooltip' " +
         "data-toggle='tooltip' data-placement='bottom' title=\""+fullContext+"\" style='cursor:default'>"+subContext+"</a></span></li></ul>";
 }
-}

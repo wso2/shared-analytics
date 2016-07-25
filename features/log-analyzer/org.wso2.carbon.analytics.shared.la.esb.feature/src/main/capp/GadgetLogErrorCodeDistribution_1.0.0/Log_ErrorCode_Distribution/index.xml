@@ -58,7 +58,7 @@
                 <script src="js/main.js"></script>
 
                 <!--Twitter typeahead-->
-                <script src="../commons/js/typeahead.bundle.js"></script>
+                <script src="../gadget-commons/js/typeahead.bundle.js"></script>
 
             </head>
             <body>
