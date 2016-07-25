@@ -16,17 +16,6 @@
  * under the License.
  */
 
-var gadgetConfig = {
-    "id": "logErrorByClass",
-    "title": "logErrorByClass",
-    "datasource": "LOGANALYZER_SUMARIES",
-    "type": "batch",
-    "level": ["ERROR","INFO","WARN","DEBUG"],
-    "maxUpdateValue": 10,
-    "chartConfig": {"yAxis": 2, "xAxis": 1, "chartType": "bar"},
-    "domain": "carbon.super"
-};
-
 var charts = [
     {
         name: "ERROR_CODE_DISTRIBUTION",
