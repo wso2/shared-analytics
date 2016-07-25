@@ -91,7 +91,7 @@
                             org.wso2.carbon.analytics.shared.common.udf*
                         </Export-Package>
                         <Import-Package>
-                            org.wso2.carbon.analytics.spark.core.*; version="[1.1.0,3.0.0)",
+                            org.wso2.carbon.analytics.spark.core.*,
                             *;resolution:=optional
                         </Import-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>
