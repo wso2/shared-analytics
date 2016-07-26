@@ -123,17 +123,7 @@ function initialize() {
 
 $(document).ready(function () {
     initialize();
-    $("#selector").on('change', onClickSelector);
 });
-
-function onClickSelector() {
-    if (this.value === "Message") {
-        gadgetPropertyName = "ERROR_CODE_DISTRIBUTION";
-    } else {
-        gadgetPropertyName = "CLASS_LEVEL_ERROR";
-    }
-    initialize();
-}
 
 function fetch(start, count) {
     receivedData.length = 0;

@@ -62,19 +62,7 @@
 
             </head>
             <body>
-                <div class="col-sm-12">
-                <table>
-                    <tr>
-                        <td><label class="control-label">Filtering Type </label></td>
-                        <td>
-                            <select id="selector" class="form-control">
-                                <option>Message</option>
-                                <option>Class</option>
-                            </select>
-                        </td>
-                    </tr>
-                </table>
-                </div>
+
                 <div id="errorDiv"></div>
 
                 <div id= "drawCanvas" class="drawCanvas">

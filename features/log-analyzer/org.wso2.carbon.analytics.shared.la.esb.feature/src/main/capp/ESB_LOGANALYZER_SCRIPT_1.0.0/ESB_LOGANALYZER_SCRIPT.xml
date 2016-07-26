@@ -162,12 +162,12 @@
         "LOGANALYZER_ARTIFACT_DEPLOYMENT_MONTHLY", schema "TenantID string -i, Artifact string -i, ArtifactCount int -i, _timestamp
         long -i");
 
-        INSERT OVERWRITE table artifactDeploymentMonthly SELECT temp.tenantID AS TenantID, temp.artifact AS Artifact, SUM(temp.ArtifactCount) AS
+        INSERT OVERWRITE table artifactDeploymentMonthly SELECT temp.TenantID AS TenantID, temp.Artifact AS Artifact, SUM(temp.ArtifactCount) AS
         ArtifactCount, getMonthStartingTime(temp.byYear, temp.byMonth) AS _timestamp FROM (SELECT
         Artifact AS Artifact, getYear(_timestamp) AS byYear, getMonth(_timestamp) AS byMonth, first(ArtifactCount) as
-        ArtifactCount, tenantID AS tenantID FROM
-        artifactDeploymentDaily GROUP BY tenantID, Artifact, _timestamp ORDER BY
-        _timestamp)temp GROUP BY temp.tenantID, temp.Artifact, temp.byYear, temp.byMonth ORDER BY temp.byYear,
+        ArtifactCount, TenantID AS TenantID FROM
+        artifactDeploymentDaily GROUP BY TenantID, Artifact, _timestamp ORDER BY
+        _timestamp)temp GROUP BY temp.TenantID, temp.Artifact, temp.byYear, temp.byMonth ORDER BY temp.byYear,
         temp.byMonth;
 
         CREATE TEMPORARY TABLE artifactDeploymentWeekly USING CarbonAnalytics OPTIONS (tableName
