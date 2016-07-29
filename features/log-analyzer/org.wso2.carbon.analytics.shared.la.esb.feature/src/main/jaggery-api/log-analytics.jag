@@ -75,7 +75,7 @@
     var AnalyticsCache = Packages.org.wso2.carbon.analytics.jsservice.AnalyticsCachedJSServiceConnector.AnalyticsCache;
     var cacheTimeoutSeconds = 5;
     var loggedInUser = null;
-    var tenantId = null;
+    var tenantDomain = null;
 
     var tables = ["LOGANALYZER",
 		  "LOGANALYZER_APIM_ARTIFACT_DELETED_DAILY",
@@ -84,15 +84,21 @@
                   "LOGANALYZER_APIM_ARTIFACT_DEPLOYED_DAILY",
                   "LOGANALYZER_APIM_ARTIFACT_DEPLOYED_MONTHLY",
                   "LOGANALYZER_APIM_ARTIFACT_DEPLOYED_WEEKLY",
-                  "MESSAGE_LEVEL_ERROR_DAILY",
-                  "MESSAGE_LEVEL_ERROR_MONTHLY",
-                  "MESSAGE_LEVEL_ERROR_WEEKLY",
-                  "CLASS_LEVEL_ERROR_DAILY",
-                  "CLASS_LEVEL_ERROR_MONTHLY",
-                  "CLASS_LEVEL_ERROR_WEEKLY",
+                  "LOGANALYZER_MESSAGE_LEVEL_ERROR_DAILY",
+                  "LOGANALYZER_MESSAGE_LEVEL_ERROR_MONTHLY",
+                  "LOGANALYZER_MESSAGE_LEVEL_ERROR_WEEKLY",
+                  "LOGANALYZER_CLASS_LEVEL_ERROR_DAILY",
+                  "LOGANALYZER_CLASS_LEVEL_ERROR_MONTHLY",
+                  "LOGANALYZER_CLASS_LEVEL_ERROR_WEEKLY",
                   "LOGANALYZER_ERROR_CODE_DISTRIBUTION_DAILY",
                   "LOGANALYZER_ERROR_CODE_DISTRIBUTION_WEEKLY",
-                  "LOGANALYZER_ERROR_CODE_DISTRIBUTION_MONTHLY"];
+                  "LOGANALYZER_ERROR_CODE_DISTRIBUTION_MONTHLY",
+                  "LOGANALYZER_ARTIFACT_DEPLOYMENT_DAILY",
+                  "LOGANALYZER_ARTIFACT_DEPLOYMENT_MONTHLY",
+                  "LOGANALYZER_ARTIFACT_DEPLOYMENT_WEEKLY",
+                  "LOGANALYZER_ARTIFACT_DELETED_DAILY,
+                  "LOGANALYZER_ARTIFACT_DELETED_MONTHLY",
+                  "LOGANALYZER_ARTIFACT_DELETED_WEEKLY"];
 
     if (configs.cacheTimeoutSeconds) {
         cacheTimeoutSeconds = parseInt(configs.cacheTimeoutSeconds);
@@ -111,7 +117,7 @@
         var token = session.get(USER_TOKEN);
         
         if (token != null) {
-             tenantId= token["tenantId"];
+             tenantDomain= token["TENANT_DOMAIN"];
             loggedInUser = token[USERNAME] + CONST_AT + token[TENANT_DOMAIN];
         } else {
             log.error("user is not authenticated!");
@@ -128,7 +134,7 @@
           if(tenantId == "-1234"){
             payload.query = payload.query.concat(" AND tenantID:\"*\"");
           }else{
-            payload.query = payload.query.concat(" AND tenantID:\"" + tenantId + "\"");
+            payload.query = payload.query.concat(" AND tenantID:\"" + tenantDomain + "\"");
           }
      }
 

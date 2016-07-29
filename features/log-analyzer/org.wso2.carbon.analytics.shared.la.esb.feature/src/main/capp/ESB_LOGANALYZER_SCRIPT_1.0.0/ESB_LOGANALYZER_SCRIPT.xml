@@ -147,45 +147,76 @@
         temp.byMonth, temp.byWeek;
 
         CREATE TEMPORARY TABLE artifactDeploymentDaily USING CarbonAnalytics OPTIONS (tableName
-        "LOGANALYZER_ARTIFACT_DEPLOYMENT_DAILY", schema "TenantID string -i, Artifact string -i, ArtifactCount int -i, _timestamp
+        "LOGANALYZER_ARTIFACT_DEPLOYMENT_DAILY", schema "TenantID string -i, ArtifactType string -i, Artifact string -i, ArtifactCount int -i, _timestamp
         long -i");
 
-        INSERT OVERWRITE table artifactDeploymentDaily SELECT temp.tenantID AS TenantID, temp.artifact AS Artifact, SUM(temp.ArtifactCount) AS
+        INSERT OVERWRITE table artifactDeploymentDaily SELECT temp.tenantID AS TenantID, temp.ArtifactType, temp.artifact AS Artifact, SUM(temp.ArtifactCount) AS
         ArtifactCount, getDateStartingTime(temp.byYear, temp.byMonth , temp.byDay) AS _timestamp FROM (SELECT
-        getRegexMatch(_content,'(?&lt;=\ : )(.*?)(?=\ )') AS artifact, getYear(_eventTimeStamp) AS byYear, getMonth(_eventTimeStamp) AS byMonth,
+        getRegexMatch(_content,'(?&lt;=\ : )(.*?)(?=\ )') AS artifact, getRegexMatch(_content,'^.*?(?= :)') AS ArtifactType, getYear(_eventTimeStamp) AS byYear, getMonth(_eventTimeStamp) AS byMonth,
         getDay(_eventTimeStamp) AS byDay, count(*) as ArtifactCount,tenantID AS tenantID FROM
-        CopyOfLoganalyzer WHERE _content LIKE '%DependencyTracker%' AND _content LIKE '%successfully%' GROUP BY _content, _eventTimeStamp, tenantID ORDER BY
-        _eventTimeStamp)temp GROUP BY temp.tenantID, temp.artifact, temp.byYear, temp.byMonth, temp.byDay ORDER BY temp.byYear,
+        CopyOfLoganalyzer WHERE _class LIKE '%DependencyTracker%' AND _content LIKE '%successfully%' AND _content LIKE '%added%' GROUP BY _content, _eventTimeStamp, tenantID ORDER BY
+        _eventTimeStamp)temp GROUP BY temp.tenantID, temp.artifact, temp.ArtifactType, temp.byYear, temp.byMonth, temp.byDay ORDER BY temp.byYear,
         temp.byMonth, temp.byDay;
 
         CREATE TEMPORARY TABLE artifactDeploymentMonthly USING CarbonAnalytics OPTIONS (tableName
-        "LOGANALYZER_ARTIFACT_DEPLOYMENT_MONTHLY", schema "TenantID string -i, Artifact string -i, ArtifactCount int -i, _timestamp
+        "LOGANALYZER_ARTIFACT_DEPLOYMENT_MONTHLY", schema "TenantID string -i, ArtifactType string -i, Artifact string -i, ArtifactCount int -i, _timestamp
         long -i");
 
-        INSERT OVERWRITE table artifactDeploymentMonthly SELECT temp.TenantID AS TenantID, temp.Artifact AS Artifact, SUM(temp.ArtifactCount) AS
+        INSERT OVERWRITE table artifactDeploymentMonthly SELECT temp.TenantID AS TenantID, temp.ArtifactType as ArtifactType, temp.Artifact AS Artifact, SUM(temp.ArtifactCount) AS
         ArtifactCount, getMonthStartingTime(temp.byYear, temp.byMonth) AS _timestamp FROM (SELECT
-        Artifact AS Artifact, getYear(_timestamp) AS byYear, getMonth(_timestamp) AS byMonth, first(ArtifactCount) as
+        Artifact AS Artifact, ArtifactType as ArtifactType, getYear(_timestamp) AS byYear, getMonth(_timestamp) AS byMonth, first(ArtifactCount) as
         ArtifactCount, TenantID AS TenantID FROM
-        artifactDeploymentDaily GROUP BY TenantID, Artifact, _timestamp ORDER BY
-        _timestamp)temp GROUP BY temp.TenantID, temp.Artifact, temp.byYear, temp.byMonth ORDER BY temp.byYear,
+        artifactDeploymentDaily GROUP BY TenantID, Artifact,ArtifactType, _timestamp ORDER BY
+        _timestamp)temp GROUP BY temp.TenantID, temp.Artifact, temp.ArtifactType, temp.byYear, temp.byMonth ORDER BY temp.byYear,
         temp.byMonth;
 
         CREATE TEMPORARY TABLE artifactDeploymentWeekly USING CarbonAnalytics OPTIONS (tableName
-        "LOGANALYZER_ARTIFACT_DEPLOYMENT_WEEKLY", schema "TenantID string -i, Artifact string -i, ArtifactCount int -i, week long -i, _timestamp long
+        "LOGANALYZER_ARTIFACT_DEPLOYMENT_WEEKLY", schema "TenantID string -i,ArtifactType string -i, Artifact string -i, ArtifactCount int -i, week long -i, _timestamp long
         -i");
 
-
-        INSERT OVERWRITE table artifactDeploymentWeekly SELECT temp.TenantID AS TenantID, temp.Artifact AS Artifact, SUM(temp.ArtifactCount) AS
+        INSERT OVERWRITE table artifactDeploymentWeekly SELECT temp.TenantID AS TenantID, temp.ArtifactType as ArtifactType,  temp.Artifact AS Artifact, SUM(temp.ArtifactCount) AS
         ArtifactCount, temp.byWeek AS week, getWeekStartingTime(temp.byYear, temp.byMonth, temp.byWeek) AS _timestamp FROM (SELECT
-        Artifact AS Artifact, getYear(_timestamp) AS byYear,
+        ArtifactType as ArtifactType, Artifact AS Artifact, getYear(_timestamp) AS byYear,
         getMonth(_timestamp) AS byMonth,getWeek(_timestamp) AS byWeek, first(ArtifactCount) as ArtifactCount, TenantID AS TenantID FROM
-        artifactDeploymentDaily GROUP BY TenantID, Artifact, _timestamp ORDER BY
-        _timestamp)temp GROUP BY temp.TenantID, temp.Artifact, temp.byYear, temp.byMonth, temp.byWeek ORDER BY temp.byYear,
+        artifactDeploymentDaily GROUP BY TenantID, ArtifactType, Artifact, _timestamp ORDER BY
+        _timestamp)temp GROUP BY temp.TenantID, temp.ArtifactType, temp.Artifact, temp.byYear, temp.byMonth, temp.byWeek ORDER BY temp.byYear,
         temp.byMonth, temp.byWeek;
 
+        CREATE TEMPORARY TABLE artifactRemovedDaily USING CarbonAnalytics OPTIONS (tableName
+        "LOGANALYZER_ARTIFACT_DELETED_DAILY", schema "TenantID string -i, ArtifactType string -i, Artifact string -i, ArtifactCount int -i, _timestamp
+        long -i");
 
+        INSERT OVERWRITE table artifactRemovedDaily SELECT temp.tenantID AS TenantID, temp.ArtifactType, temp.artifact AS Artifact, SUM(temp.ArtifactCount) AS
+        ArtifactCount, getDateStartingTime(temp.byYear, temp.byMonth , temp.byDay) AS _timestamp FROM (SELECT
+        getRegexMatch(_content,'(?&lt;=\ : )(.*?)(?=\ )') AS artifact, getRegexMatch(_content,'^.*?(?= :)') AS ArtifactType, getYear(_eventTimeStamp) AS byYear, getMonth(_eventTimeStamp) AS byMonth,
+        getDay(_eventTimeStamp) AS byDay, count(*) as ArtifactCount,tenantID AS tenantID FROM
+        CopyOfLoganalyzer WHERE _class LIKE '%DependencyTracker%' AND _content LIKE '%successfully%' AND _content LIKE '%removed%' GROUP BY _content, _eventTimeStamp, tenantID ORDER BY
+        _eventTimeStamp)temp GROUP BY temp.tenantID, temp.artifact, temp.ArtifactType, temp.byYear, temp.byMonth, temp.byDay ORDER BY temp.byYear,
+        temp.byMonth, temp.byDay;
 
+        CREATE TEMPORARY TABLE artifactRemovedMonthly USING CarbonAnalytics OPTIONS (tableName
+        "LOGANALYZER_ARTIFACT_DELETED_MONTHLY", schema "TenantID string -i, ArtifactType string -i, Artifact string -i, ArtifactCount int -i, _timestamp
+        long -i");
 
+        INSERT OVERWRITE table artifactRemovedMonthly SELECT temp.TenantID AS TenantID, temp.ArtifactType as ArtifactType, temp.Artifact AS Artifact, SUM(temp.ArtifactCount) AS
+        ArtifactCount, getMonthStartingTime(temp.byYear, temp.byMonth) AS _timestamp FROM (SELECT
+        Artifact AS Artifact, ArtifactType as ArtifactType, getYear(_timestamp) AS byYear, getMonth(_timestamp) AS byMonth, first(ArtifactCount) as
+        ArtifactCount, TenantID AS TenantID FROM
+        artifactRemovedDaily GROUP BY TenantID, Artifact,ArtifactType, _timestamp ORDER BY
+        _timestamp)temp GROUP BY temp.TenantID, temp.Artifact, temp.ArtifactType, temp.byYear, temp.byMonth ORDER BY temp.byYear,
+        temp.byMonth;
+
+        CREATE TEMPORARY TABLE artifactRemovedWeekly USING CarbonAnalytics OPTIONS (tableName
+        "LOGANALYZER_ARTIFACT_DELETED_WEEKLY", schema "TenantID string -i,ArtifactType string -i, Artifact string -i, ArtifactCount int -i, week long -i, _timestamp long
+        -i");
+
+        INSERT OVERWRITE table artifactRemovedWeekly SELECT temp.TenantID AS TenantID, temp.ArtifactType as ArtifactType,  temp.Artifact AS Artifact, SUM(temp.ArtifactCount) AS
+        ArtifactCount, temp.byWeek AS week, getWeekStartingTime(temp.byYear, temp.byMonth, temp.byWeek) AS _timestamp FROM (SELECT
+        ArtifactType as ArtifactType, Artifact AS Artifact, getYear(_timestamp) AS byYear,
+        getMonth(_timestamp) AS byMonth,getWeek(_timestamp) AS byWeek, first(ArtifactCount) as ArtifactCount, TenantID AS TenantID FROM
+        artifactRemovedDaily GROUP BY TenantID, ArtifactType, Artifact, _timestamp ORDER BY
+        _timestamp)temp GROUP BY temp.TenantID, temp.ArtifactType, temp.Artifact, temp.byYear, temp.byMonth, temp.byWeek ORDER BY temp.byYear,
+        temp.byMonth, temp.byWeek;
 
     </Script>
     <CronExpression>0 10 0 1/1 * ? *</CronExpression>

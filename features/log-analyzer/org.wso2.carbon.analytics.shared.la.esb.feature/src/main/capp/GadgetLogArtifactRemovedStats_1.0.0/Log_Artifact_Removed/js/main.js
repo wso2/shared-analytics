@@ -16,12 +16,13 @@
  * under the License.
  */
 var prefs = new gadgets.Prefs();
-var svrUrl = gadgetUtil.getGadgetSvrUrl("ESB");
+var svrUrl = gadgetUtil.getGadgetSvrUrl(prefs.getString(PARAM_TYPE));
 var client = new AnalyticsClient().init(null,null,svrUrl);
 var timeFrom = gadgetUtil.timeFrom();
 var timeTo = gadgetUtil.timeTo();
 var timeUnit = null;
-var gadgetPropertyName = "ERROR_CODE_DISTRIBUTION";// "CLASS_LEVEL_ERROR"
+var gadgetPropertyName = "ARTIFACT_DELETED";// "CLASS_LEVEL_ERROR"
+var artifactType = "API"
 var receivedData = [];
 var receivedOtherData = [];
 var mockData = [];
@@ -86,7 +87,8 @@ function initialize() {
     }
     tableName = "LOGANALYZER_" + gadgetData.name + "_" + timeFrame;
 
-    var query = "_timestamp: [" + timeFrom + " TO " + timeTo + "]";
+    var query = "_timestamp: [" + timeFrom + " TO " + timeTo + "] AND ArtifactType:\"" + artifactType+"\"";
+
     var sorting = [
         {
             field: gadgetData.orderedField,
@@ -94,9 +96,8 @@ function initialize() {
             reversed: "false" //optional
         }
     ];
-
     var queryInfo = queryBuilder(tableName, query, 0, 1000, sorting);
-
+    console.log(queryInfo);
     client.searchCount(queryInfo, function (d) {
         if (d["status"] === "success") {
             totalRecordCount = d["message"];
@@ -123,12 +124,18 @@ function initialize() {
 
 $(document).ready(function () {
     initialize();
+    $("#selector").on('change', onClickSelector);
 });
+
+function onClickSelector() {
+    artifactType = this.value;
+    initialize();
+}
 
 function fetch(start, count) {
     receivedData.length = 0;
     receivedOtherData.length = 0;
-    var query = "_timestamp: [" + timeFrom + " TO " + timeTo + "]";
+    var query = "_timestamp: [" + timeFrom + " TO " + timeTo + "] AND ArtifactType:\"" + artifactType+"\"";
     var sorting = [
         {
             field: gadgetData.orderedField,
