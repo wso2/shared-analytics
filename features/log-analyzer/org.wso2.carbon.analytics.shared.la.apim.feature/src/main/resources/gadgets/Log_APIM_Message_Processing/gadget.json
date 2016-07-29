@@ -1,10 +1,10 @@
 {
-  "id": "logAPIMMessageProcessing",
+  "id": "Log_APIM_Message_Processing",
   "title": "Errors in API Message Processing",
   "type": "gadget",
-  "thumbnail": "store://gadget/LogAPIMMessageProcessing/img/thumbnail.png",
+  "thumbnail": "store://gadget/Log_APIM_Message_Processing/img/thumbnail.png",
   "data": {
-    "url": "store://gadget/LogAPIMMessageProcessing/index.xml"
+    "url": "store://gadget/Log_APIM_Message_Processing/index.xml"
   },
   "listen": {
     "subscriber": {

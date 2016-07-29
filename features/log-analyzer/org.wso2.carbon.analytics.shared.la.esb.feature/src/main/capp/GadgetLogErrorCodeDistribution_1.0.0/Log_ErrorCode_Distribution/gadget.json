@@ -1,10 +1,10 @@
 {
-  "id": "errorCodeDistribution",
+  "id": "Log_ErrorCode_Distribution",
   "title": "Error code distribution",
   "type": "gadget",
-  "thumbnail": "store://gadget/LogInvalidLoggingCount/img/thumbnail.png",
+  "thumbnail": "store://gadget/Log_ErrorCode_Distribution/img/thumbnail.png",
   "data": {
-    "url": "store://gadget/LogErrorCodeDistribution/index.xml"
+    "url": "store://gadget/Log_ErrorCode_Distribution/index.xml"
   }, "notify": {
   "publisher": {
     "type": "filter",

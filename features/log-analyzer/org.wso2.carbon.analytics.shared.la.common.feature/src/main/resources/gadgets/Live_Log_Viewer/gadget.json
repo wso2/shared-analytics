@@ -1,10 +1,10 @@
 {
-  "id": "logEvents",
-  "title": "Log Event Chart",
+  "id": "Live_Log_Viewer",
+  "title": "Live Log viewer",
   "type": "gadget",
-  "thumbnail": "store://gadget/LogEvents/img/thumbnail.png",
+  "thumbnail": "store://gadget/Live_Log_Viewer/img/thumbnail.png",
   "data": {
-    "url": "store://gadget/LogEvents/index.xml"
+    "url": "store://gadget/Live_Log_Viewer/index.xml"
   },
   "listen": {
     "subscriber": {

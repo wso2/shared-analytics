@@ -1,10 +1,10 @@
 {
-  "id": "invalidLoggingCount",
+  "id": "Log_Invalid_Logging_Count",
   "title": "Invalid login count",
   "type": "gadget",
-  "thumbnail": "store://gadget/LogInvalidLoggingCount/img/thumbnail.png",
+  "thumbnail": "store://gadget/Log_Invalid_Logging_Count/img/thumbnail.png",
   "data": {
-    "url": "store://gadget/LogInvalidLoggingCount/index.xml"
+    "url": "store://gadget/Log_Invalid_Logging_Count/index.xml"
   },
   "notify": {
     "publisher": {

@@ -1,10 +1,10 @@
 {
-  "id": "logViewer",
+  "id": "Log_Viewer",
   "title": "Log Viewer",
   "type": "gadget",
-  "thumbnail": "store://gadget/LogViewer/index.png",
+  "thumbnail": "store://gadget/Log_Viewer/index.png",
   "data": {
-    "url": "store://gadget/LogViewer/index.xml"
+    "url": "store://gadget/Log_Viewer/index.xml"
   },
   "listen": {
     "subscriber": {

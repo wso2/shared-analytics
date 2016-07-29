@@ -76,11 +76,11 @@
             {
               "id": "logEvents-overview",
               "content": {
-                "id": "logEvents",
+                "id": "Log_Events",
                 "title": "Log Event Chart",
                 "type": "gadget",
-                "thumbnail": "store://gadget/LogEvents/img/thumbnail.png",
-                "data": {"url": "store://gadget/LogEvents/index.xml"},
+                "thumbnail": "store://gadget/Log_Events/img/thumbnail.png",
+                "data": {"url": "store://gadget/Log_Events/index.xml"},
                 "listen": {
                   "subscriber": {
                     "type": "date-range",
@@ -202,11 +202,11 @@
             {
               "id": "LogErrorBarChart-application-errors",
               "content": {
-                "id": "LogErrorBarChart",
+                "id": "Log_Error_Bar_Chart",
                 "title": "Log Error Bar Chart",
                 "type": "gadget",
-                "thumbnail": "store://gadget/LogErrorBarChart/img/thumbnail.png",
-                "data": {"url": "store://gadget/LogErrorBarChart/index.xml"},
+                "thumbnail": "store://gadget/Log_Error_Bar_Chart/img/thumbnail.png",
+                "data": {"url": "store://gadget/Log_Error_Bar_Chart/index.xml"},
                 "notify": {
                   "publisher": {
                     "type": "filter",
@@ -249,11 +249,11 @@
             {
               "id": "filteredLogMessages-application-errors",
               "content": {
-                "id": "filteredLogMessages",
+                "id": "Log_Error_Filtered_Message",
                 "title": "APIM Filtered Messages",
                 "type": "gadget",
-                "thumbnail": "store://gadget/LogErrorFilteredMessage/img/thumbnail.png",
-                "data": {"url": "store://gadget/LogErrorFilteredMessage/index.xml"},
+                "thumbnail": "store://gadget/Log_Error_Filtered_Message/img/thumbnail.png",
+                "data": {"url": "store://gadget/Log_Error_Filtered_Message/index.xml"},
                 "notify": {
                   "publisher": {
                     "type": "filter-range",
@@ -296,11 +296,11 @@
             {
               "id": "logViewer-application-errors",
               "content": {
-                "id": "logViewer",
+                "id": "Log_Viewer",
                 "title": "Log Viewer",
                 "type": "gadget",
-                "thumbnail": "store://gadget/LogViewer/index.png",
-                "data": {"url": "store://gadget/LogViewer/index.xml"},
+                "thumbnail": "store://gadget/Log_Viewer/index.png",
+                "data": {"url": "store://gadget/Log_Viewer/index.xml"},
                 "listen": {
                   "subscriber": {
                     "type": "filter-range",
@@ -415,11 +415,11 @@
             {
               "id": "logArtifactDeployed-artifact-deployment-stats",
               "content": {
-                "id": "logArtifactDeployed",
+                "id": "Log_Artifact_Deployed",
                 "title": "Deployed Artifacts",
                 "type": "gadget",
-                "thumbnail": "store://gadget/LogArtifactDeployed/img/thumbnail.png",
-                "data": {"url": "store://gadget/LogArtifactDeployed/index.xml"},
+                "thumbnail": "store://gadget/Log_Artifact_Deployed/img/thumbnail.png",
+                "data": {"url": "store://gadget/Log_Artifact_Deployed/index.xml"},
                 "listen": {
                   "subscriber": {
                     "type": "date-range",
@@ -456,11 +456,11 @@
             {
               "id": "logArtifactDeleted-artifact-deployment-stats",
               "content": {
-                "id": "logArtifactDeleted",
+                "id": "Log_Artifact_Deleted",
                 "title": "APIM Artifact Deleted",
                 "type": "gadget",
-                "thumbnail": "store://gadget/LogArtifactDeleted/img/thumbnail.png",
-                "data": {"url": "store://gadget/LogArtifactDeleted/index.xml"},
+                "thumbnail": "store://gadget/Log_Artifact_Deleted/img/thumbnail.png",
+                "data": {"url": "store://gadget/Log_Artifact_Deleted/index.xml"},
                 "listen": {
                   "subscriber": {
                     "type": "date-range",
@@ -566,11 +566,11 @@
             {
               "id": "invalidLoggingCount-logging-stats",
               "content": {
-                "id": "invalidLoggingCount",
+                "id": "Log_Invalid_Logging_Count",
                 "title": "Invalid Login Count",
                 "type": "gadget",
-                "thumbnail": "store://gadget/LogInvalidLoggingCount/img/thumbnail.png",
-                "data": {"url": "store://gadget/LogInvalidLoggingCount/index.xml"},
+                "thumbnail": "store://gadget/Log_Invalid_Logging_Count/img/thumbnail.png",
+                "data": {"url": "store://gadget/Log_Invalid_Logging_Count/index.xml"},
                 "notify": {
                   "publisher": {
                     "type": "filter",
@@ -683,11 +683,11 @@
             {
               "id": "logAPIMMessageProcessing-number-of-failures",
               "content": {
-                "id": "logAPIMMessageProcessing",
+                "id": "Log_APIM_Message_Processing",
                 "title": "Errors in API Message Processing",
                 "type": "gadget",
-                "thumbnail": "store://gadget/LogAPIMMessageProcessing/img/thumbnail.png",
-                "data": {"url": "store://gadget/LogAPIMMessageProcessing/index.xml"},
+                "thumbnail": "store://gadget/Log_APIM_Message_Processing/img/thumbnail.png",
+                "data": {"url": "store://gadget/Log_APIM_Message_Processing/index.xml"},
                 "listen": {
                   "subscriber": {
                     "type": "date-range",
@@ -803,11 +803,11 @@
             {
               "id": "logApiTokenByStatus-access-token-errors",
               "content": {
-                "id": "logApiTokenByStatus",
+                "id": "Log_Api_Token_By_Status",
                 "title": "Errors Distribution",
                 "type": "gadget",
-                "thumbnail": "store://gadget/LogApiTokenByStatus/img/thumbnail.png",
-                "data": {"url": "store://gadget/LogApiTokenByStatus/index.xml"},
+                "thumbnail": "store://gadget/Log_Api_Token_By_Status/img/thumbnail.png",
+                "data": {"url": "store://gadget/Log_Api_Token_By_Status/index.xml"},
                 "notify": {
                   "publisher": {
                     "type": "api-key-filter",
@@ -843,11 +843,11 @@
             {
               "id": "logApiTokenStatusTable-access-token-errors",
               "content": {
-                "id": "logApiTokenStatusTable-access-token-errors",
+                "id": "Log_Api_Token_By_Status_Table",
                 "title": "API Key Status Table",
                 "type": "gadget",
-                "thumbnail": "store://gadget/LogApiTokenByStatusTable/img/thumbnail.png",
-                "data": {"url": "store://gadget/LogApiTokenByStatusTable/index.xml"},
+                "thumbnail": "store://gadget/Log_Api_Token_By_Status_Table/img/thumbnail.png",
+                "data": {"url": "store://gadget/Log_Api_Token_By_Status_Table/index.xml"},
                 "notify": {
                   "publisher": {
                     "type": "filter-range",
@@ -882,11 +882,11 @@
             {
               "id": "logViewer-access-token-errors",
               "content": {
-                "id": "logViewer",
+                "id": "Log_Viewer",
                 "title": "Log Viewer",
                 "type": "gadget",
-                "thumbnail": "store://gadget/LogViewer/index.png",
-                "data": {"url": "store://gadget/LogViewer/index.xml"},
+                "thumbnail": "store://gadget/Log_Viewer/index.png",
+                "data": {"url": "store://gadget/Log_Viewer/index.xml"},
                 "listen": {
                   "subscriber": {
                     "type": "filter-range",
@@ -950,11 +950,11 @@
             {
               "id": "liveLogViewer-0",
               "content": {
-                "id": "liveLogViewer",
+                "id": "Live_Log_Viewer",
                 "title": "Filtered Logs for Tenant",
                 "type": "gadget",
-                "thumbnail": "store://gadget/LiveLogViewer/img/thumbnail.png",
-                "data": {"url": "store://gadget/LiveLogViewer/index.xml"},
+                "thumbnail": "store://gadget/Live_Log_Viewer/img/thumbnail.png",
+                "data": {"url": "store://gadget/Live_Log_Viewer/index.xml"},
                 "listen": {
                   "subscriber": {
                     "type": "date-range",

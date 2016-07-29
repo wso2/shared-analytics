@@ -1,10 +1,10 @@
 {
-  "id": "LogErrorBarChart",
+  "id": "Log_Error_Bar_Chart",
   "title": "Log Error Bar Chart",
   "type": "gadget",
-  "thumbnail": "store://gadget/LogErrorBarChart/img/thumbnail.png",
+  "thumbnail": "store://gadget/Log_Error_Bar_Chart/img/thumbnail.png",
   "data": {
-    "url": "store://gadget/LogErrorBarChart/index.xml"
+    "url": "store://gadget/Log_Error_Bar_Chart/index.xml"
   },
   "notify": {
     "publisher": {

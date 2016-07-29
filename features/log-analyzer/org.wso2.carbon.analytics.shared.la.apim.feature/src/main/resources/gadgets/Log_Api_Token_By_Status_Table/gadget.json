@@ -1,10 +1,10 @@
 {
-  "id": "logApiTokenStatusTable",
+  "id": "Log_Api_Token_By_Status_Table",
   "title": "APIM API Key Status table",
   "type": "gadget",
-  "thumbnail": "store://gadget/LogApiTokenByStatusTable/img/thumbnail.png",
+  "thumbnail": "store://gadget/Log_Api_Token_By_Status_Table/img/thumbnail.png",
   "data": {
-    "url": "store://gadget/LogApiTokenByStatusTable/index.xml"
+    "url": "store://gadget/Log_Api_Token_By_Status_Table/index.xml"
   },
   "notify": {
     "publisher": {

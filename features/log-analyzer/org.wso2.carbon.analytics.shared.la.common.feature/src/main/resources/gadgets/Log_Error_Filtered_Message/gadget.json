@@ -1,10 +1,10 @@
 {
-  "id": "filteredLogMessages",
+  "id": "Log_Error_Filtered_Message",
   "title": "Filtered Messages",
   "type": "gadget",
-  "thumbnail": "store://gadget/LogErrorFilteredMessage/img/thumbnail.png",
+  "thumbnail": "store://gadget/Log_Error_Filtered_Message/img/thumbnail.png",
   "data": {
-    "url": "store://gadget/LogErrorFilteredMessage/index.xml"
+    "url": "store://gadget/Log_Error_Filtered_Message/index.xml"
   },
   "notify": {
     "publisher": {

@@ -2,9 +2,9 @@
   "id": "logApiTokenByStatus",
   "title": "Errors Distribution",
   "type": "gadget",
-  "thumbnail": "store://gadget/LogApiTokenByStatus/img/thumbnail.png",
+  "thumbnail": "store://gadget/Log_Api_Token_By_Status/img/thumbnail.png",
   "data": {
-    "url": "store://gadget/LogApiTokenByStatus/index.xml"
+    "url": "store://gadget/Log_Api_Token_By_Status/index.xml"
   },
   "notify": {
     "publisher": {

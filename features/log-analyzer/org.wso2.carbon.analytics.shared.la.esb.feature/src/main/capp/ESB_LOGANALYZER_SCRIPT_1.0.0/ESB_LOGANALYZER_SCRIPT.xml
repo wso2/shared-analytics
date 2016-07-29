@@ -3,185 +3,189 @@
     <Name>ESB_LOGANALYZER_SCRIPT</Name>
     <Script>
         CREATE TEMPORARY TABLE CopyOfLoganalyzer USING CarbonAnalytics OPTIONS (tableName "LOGANALYZER", schema "_class
-        string -i, _content string -i, logstream string -i, _level string -i, _trace string -i, _eventTimeStamp long
+        string -i, _content string -i, tenantID string -i, _level string -i, _trace string -i, _eventTimeStamp long
         -i",primaryKeys "_class, _content, _level, _eventTimeStamp");
 
         CREATE TEMPORARY TABLE loganalyzer_message_level_error_daily USING CarbonAnalytics OPTIONS (tableName
         "LOGANALYZER_MESSAGE_LEVEL_ERROR_DAILY",
-        schema "message string -i, messageCount int -i, _timestamp long -i");
-        INSERT OVERWRITE table loganalyzer_message_level_error_daily SELECT temp.message AS myMessage,
+        schema "tenantID string -i, message string -i, messageCount int -i, _timestamp long -i");
+        INSERT OVERWRITE table loganalyzer_message_level_error_daily SELECT temp.tenantID AS tenantID, temp.message AS logMessage,
         SUM(temp.messageCount) AS totalMessageCount,
         getDateStartingTime(temp.byYear, temp.byMonth , temp.byDay) AS _timestamp FROM (SELECT _content AS message,
         getYear(_eventTimeStamp) AS byYear, getMonth(_eventTimeStamp) AS byMonth,
-        getDay(_eventTimeStamp) AS byDay, count(*) as messageCount FROM CopyOfLoganalyzer
+        getDay(_eventTimeStamp) AS byDay, count(*) as messageCount, tenantID AS tenantID FROM CopyOfLoganalyzer
         WHERE _level LIKE 'ERROR'
-        GROUP BY _content, _eventTimeStamp ORDER BY _eventTimeStamp)temp GROUP BY temp.message, temp.byYear,
+        GROUP BY _content, _eventTimeStamp, tenantID ORDER BY _eventTimeStamp)temp GROUP BY temp.tenantID, temp.message, temp.byYear,
         temp.byMonth, temp.byDay ORDER BY temp.byYear, temp.byMonth, temp.byDay;
 
         CREATE TEMPORARY TABLE loganalyzer_class_level_error_daily USING CarbonAnalytics OPTIONS (tableName
         "LOGANALYZER_CLASS_LEVEL_ERROR_DAILY",
-        schema "class string -i, classCount int -i, _timestamp long -i");
-        INSERT OVERWRITE table loganalyzer_class_level_error_daily SELECT temp.class AS myClass, SUM(temp.classCount) AS
+        schema "tenantID string -i, class string -i, classCount int -i, _timestamp long -i");
+        INSERT OVERWRITE table loganalyzer_class_level_error_daily SELECT temp.tenantID AS tenantID, temp.class AS logClass, SUM(temp.classCount) AS
         totalClassCount,
         getDateStartingTime(temp.byYear, temp.byMonth , temp.byDay) AS _timestamp FROM (SELECT _class AS class,
         getYear(_eventTimeStamp) AS byYear, getMonth(_eventTimeStamp) AS byMonth,
-        getDay(_eventTimeStamp) AS byDay, count(*) as classCount FROM CopyOfLoganalyzer WHERE
+        getDay(_eventTimeStamp) AS byDay, count(*) as classCount, tenantID AS tenantID FROM CopyOfLoganalyzer WHERE
         _level LIKE 'ERROR'
-        GROUP BY _class, _eventTimeStamp ORDER BY _eventTimeStamp)temp GROUP BY temp.class, temp.byYear, temp.byMonth,
+        GROUP BY _class, _eventTimeStamp, tenantID ORDER BY _eventTimeStamp)temp GROUP BY temp.tenantID, temp.class, temp.byYear, temp.byMonth,
         temp.byDay ORDER BY temp.byYear, temp.byMonth, temp.byDay;
 
         CREATE TEMPORARY TABLE loganalyzer_class_level_error_monthly USING CarbonAnalytics OPTIONS (tableName
         "LOGANALYZER_CLASS_LEVEL_ERROR_MONTHLY",
-        schema "class string -i, classCount int -i, _timestamp long -i");
-        INSERT OVERWRITE table loganalyzer_class_level_error_monthly SELECT temp.class AS myClass, SUM(temp.classCount)
+        schema "tenantID string -i, class string -i, classCount int -i, _timestamp long -i");
+        INSERT OVERWRITE table loganalyzer_class_level_error_monthly SELECT temp.tenantID AS tenantID, temp.class AS logClass, SUM(temp.classCount)
         AS totalClassCount,
         getMonthStartingTime(temp.byYear, temp.byMonth) AS _timestamp FROM (SELECT class AS class, getYear(_timestamp)
-        AS byYear, getMonth(_timestamp) AS byMonth, first(classCount) as classCount FROM
-        loganalyzer_class_level_error_daily GROUP BY class,
-        _timestamp ORDER BY _timestamp)temp GROUP BY temp.class, temp.byYear, temp.byMonth ORDER BY temp.byYear,
+        AS byYear, getMonth(_timestamp) AS byMonth, first(classCount) as classCount, tenantID AS tenantID FROM
+        loganalyzer_class_level_error_daily GROUP BY tenantID, class,
+        _timestamp ORDER BY _timestamp)temp GROUP BY temp.tenantID, temp.class, temp.byYear, temp.byMonth ORDER BY temp.byYear,
         temp.byMonth;
 
         CREATE TEMPORARY TABLE loganalyzer_message_level_error_monthly USING CarbonAnalytics OPTIONS (tableName
         "LOGANALYZER_MESSAGE_LEVEL_ERROR_MONTHLY",
-        schema "message string -i, messageCount int -i, _timestamp long -i");
-        INSERT OVERWRITE table loganalyzer_message_level_error_monthly SELECT temp.message AS myMessage,
+        schema "tenantID string -i, message string -i, messageCount int -i, _timestamp long -i");
+        INSERT OVERWRITE table loganalyzer_message_level_error_monthly SELECT temp.tenantID AS tenantID, temp.message AS logMessage,
         SUM(temp.messageCount) AS totalMessageCount,
         getMonthStartingTime(temp.byYear, temp.byMonth) AS _timestamp FROM (SELECT message AS message,
-        getYear(_timestamp) AS byYear, getMonth(_timestamp) AS byMonth, first(messageCount) as messageCount FROM
+        getYear(_timestamp) AS byYear, getMonth(_timestamp) AS byMonth, first(messageCount) as messageCount, tenantID AS tenantID FROM
         loganalyzer_message_level_error_daily
-        GROUP BY message, _timestamp ORDER BY _timestamp)temp GROUP BY temp.message, temp.byYear, temp.byMonth ORDER BY
+        GROUP BY tenantID, message, _timestamp ORDER BY _timestamp)temp GROUP BY temp.tenantID, temp.message, temp.byYear, temp.byMonth ORDER BY
         temp.byYear, temp.byMonth;
 
         CREATE TEMPORARY TABLE loganalyzer_class_level_error_weekly USING CarbonAnalytics OPTIONS (tableName
         "LOGANALYZER_CLASS_LEVEL_ERROR_WEEKLY",
-        schema "class string -i, classCount int -i, _timestamp long -i, week long -i");
-        INSERT OVERWRITE table loganalyzer_class_level_error_weekly SELECT temp.class AS myClass, SUM(temp.classCount)
+        schema "tenantID string -i, class string -i, classCount int -i, week long -i, _timestamp long -i");
+        INSERT OVERWRITE table loganalyzer_class_level_error_weekly SELECT temp.tenantID AS tenantID, temp.class AS logClass, SUM(temp.classCount)
         AS totalClassCount, temp.byWeek
-        AS week,getMonthStartingTime(temp.byYear, temp.byMonth) AS _timestamp FROM (SELECT class AS class,
+        AS week, getWeekStartingTime(temp.byYear, temp.byMonth, temp.byWeek) AS _timestamp FROM (SELECT class AS class,
         getYear(_timestamp) AS byYear, getMonth(_timestamp) AS byMonth, getWeek(_timestamp) AS byWeek, first(classCount)
-        as classCount FROM loganalyzer_class_level_error_daily GROUP BY class, _timestamp ORDER BY _timestamp)temp GROUP
-        BY temp.class, temp.byYear,
+        as classCount, tenantID AS tenantID FROM loganalyzer_class_level_error_daily GROUP BY tenantID, class, _timestamp ORDER BY _timestamp)temp GROUP
+        BY temp.tenantID, temp.class, temp.byYear,
         temp.byMonth, temp.byWeek ORDER BY temp.byYear, temp.byMonth, temp.byWeek;
 
         CREATE TEMPORARY TABLE loganalyzer_message_level_error_weekly USING CarbonAnalytics OPTIONS (tableName
         "LOGANALYZER_MESSAGE_LEVEL_ERROR_WEEKLY",
-        schema "message string -i, messageCount int -i, _timestamp long -i , week long -i");
-        INSERT OVERWRITE table loganalyzer_message_level_error_weekly SELECT temp.message AS myMessage,
+        schema "tenantID string -i, message string -i, messageCount int -i, week long -i, _timestamp long -i");
+        INSERT OVERWRITE table loganalyzer_message_level_error_weekly SELECT temp.tenantID AS tenantID, temp.message AS logMessage,
         SUM(temp.messageCount) AS totalMessageCount,
-        temp.byWeek AS week, getMonthStartingTime(temp.byYear, temp.byMonth) AS _timestamp FROM (SELECT message AS
+        temp.byWeek AS week, getWeekStartingTime(temp.byYear, temp.byMonth, temp.byWeek) AS _timestamp FROM (SELECT message AS
         message, getYear(_timestamp) AS byYear, getMonth(_timestamp) AS byMonth, getWeek(_timestamp) AS byWeek,
-        first(messageCount) as messageCount FROM loganalyzer_message_level_error_daily GROUP BY message, _timestamp
+        first(messageCount) AS messageCount, tenantID AS tenantID FROM loganalyzer_message_level_error_daily GROUP BY tenantID, message, _timestamp
         ORDER BY _timestamp)temp GROUP BY
-        temp.message, temp.byYear, temp.byMonth, temp.byWeek ORDER BY temp.byYear, temp.byMonth, temp.byWeek;
-
-        CREATE TEMPORARY TABLE loganalyzer_apim_artifact_deployed_daily USING CarbonAnalytics OPTIONS (tableName
-        "LOGANALYZER_APIM_ARTIFACT_DEPLOYED_DAILY", schema "artifact string -i, artifactCount int -i, _timestamp long
-        -i");
-        INSERT OVERWRITE table loganalyzer_apim_artifact_deployed_daily SELECT temp.artifact AS myArtifact,
-        SUM(temp.artifactCount) AS totalArtifactCount,
-        getDateStartingTime(temp.byYear, temp.byMonth , temp.byDay) AS _timestamp FROM (select
-        SUBSTRING(_content,18,100) as artifact, getYear(_eventTimeStamp) AS byYear,
-        getMonth(_eventTimeStamp) AS byMonth, getDay(_eventTimeStamp) AS byDay, count(*)
-        as artifactCount from CopyOfLoganalyzer where _content LIKE "%Initializing API:%" group by
-        _content, _eventTimeStamp
-        Order by _eventTimeStamp)temp GROUP BY temp.artifact, temp.byYear, temp.byMonth, temp.byDay ORDER BY
-        temp.byYear, temp.byMonth, temp.byDay;
-
-        CREATE TEMPORARY TABLE loganalyzer_apim_artifact_deleted_daily USING CarbonAnalytics OPTIONS (tableName
-        "LOGANALYZER_APIM_ARTIFACT_DELETED_DAILY",
-        schema "artifact string -i, artifactCount int -i, _timestamp long -i");
-        INSERT OVERWRITE table loganalyzer_apim_artifact_deleted_daily SELECT temp.artifact AS myArtifact,
-        SUM(temp.artifactCount) AS totalArtifactCount,
-        getDateStartingTime(temp.byYear, temp.byMonth , temp.byDay) AS _timestamp FROM (select
-        SUBSTRING(_content,17,100) as artifact, getYear(_eventTimeStamp) AS byYear,
-        getMonth(_eventTimeStamp) AS byMonth, getDay(_eventTimeStamp) AS byDay, count(*)
-        as artifactCount from CopyOfLoganalyzer where _content LIKE "%Destroying API:%" group by _content,
-        _eventTimeStamp Order
-        by _eventTimeStamp)temp GROUP BY temp.artifact, temp.byYear, temp.byMonth, temp.byDay ORDER BY temp.byYear,
-        temp.byMonth, temp.byDay;
-
+        temp.tenantID, temp.message, temp.byYear, temp.byMonth, temp.byWeek ORDER BY temp.byYear, temp.byMonth, temp.byWeek;
 
         CREATE TEMPORARY TABLE invalidLoginAttemptDaily USING CarbonAnalytics OPTIONS (tableName
-        "LOGANALYZER_INVALID_LOGIN_ATTEMPT_DAILY", schema "AgentId string -i, InvalidLoginCount int -i, _timestamp long
+        "LOGANALYZER_INVALID_LOGIN_ATTEMPT_DAILY", schema "tenantID string -i, InvalidLoginCount int -i, _timestamp long
         -i");
 
         CREATE TEMPORARY TABLE invalidLoginAttemptWeekly USING CarbonAnalytics OPTIONS (tableName
-        "LOGANALYZER_INVALID_LOGIN_ATTEMPT_WEEKLY", schema "AgentId string -i, InvalidLoginCount int -i, _timestamp long
+        "LOGANALYZER_INVALID_LOGIN_ATTEMPT_WEEKLY", schema "tenantID string -i, InvalidLoginCount int -i, _timestamp long
         -i, week long -i");
 
         CREATE TEMPORARY TABLE invalidLoginAttemptMonthly USING CarbonAnalytics OPTIONS (tableName
-        "LOGANALYZER_INVALID_LOGIN_ATTEMPT_MONTHLY", schema "AgentId string -i, InvalidLoginCount int -i, _timestamp
+        "LOGANALYZER_INVALID_LOGIN_ATTEMPT_MONTHLY", schema "tenantID string -i, InvalidLoginCount int -i, _timestamp
         long -i");
 
         INSERT OVERWRITE table invalidLoginAttemptDaily SELECT temp.agent AS agent, SUM(temp.agentCount) AS
         totalAgentCount, getDateStartingTime(temp.byYear, temp.byMonth , temp.byDay) AS _timestamp FROM (SELECT
-        logstream AS agent, getYear(_eventTimeStamp) AS byYear, getMonth(_eventTimeStamp) AS byMonth,
+        tenantID AS agent, getYear(_eventTimeStamp) AS byYear, getMonth(_eventTimeStamp) AS byMonth,
         getDay(_eventTimeStamp) AS byDay, count(*) as agentCount FROM
-        CopyOfLoganalyzer WHERE _content LIKE '%login attempt%' GROUP BY logstream, _eventTimeStamp ORDER BY
+        CopyOfLoganalyzer WHERE _content LIKE '%login attempt%' GROUP BY tenantID, _eventTimeStamp ORDER BY
         _eventTimeStamp)temp GROUP BY temp.agent, temp.byYear, temp.byMonth, temp.byDay ORDER BY temp.byYear,
         temp.byMonth, temp.byDay;
 
         INSERT OVERWRITE table invalidLoginAttemptMonthly SELECT temp.agent AS agent, SUM(temp.agentCount) AS
         totalAgentCount, getMonthStartingTime(temp.byYear, temp.byMonth) AS _timestamp FROM (SELECT
-        AgentId AS agent, getYear(_timestamp) AS byYear, getMonth(_timestamp) AS byMonth, first(InvalidLoginCount) as
+        tenantID AS agent, getYear(_timestamp) AS byYear, getMonth(_timestamp) AS byMonth, first(InvalidLoginCount) as
         agentCount FROM
-        invalidLoginAttemptDaily GROUP BY AgentId, _timestamp ORDER BY
+        invalidLoginAttemptDaily GROUP BY tenantID, _timestamp ORDER BY
         _timestamp)temp GROUP BY temp.agent, temp.byYear, temp.byMonth ORDER BY temp.byYear,
         temp.byMonth;
 
         INSERT OVERWRITE table invalidLoginAttemptWeekly SELECT temp.agent AS agent, SUM(temp.agentCount) AS
-        totalAgentCount, temp.byWeek AS week, getMonthStartingTime(temp.byYear, temp.byMonth) AS _timestamp FROM (SELECT
-        AgentId AS agent, getWeek(_timestamp) AS byWeek, getYear(_timestamp) AS byYear,
+        totalAgentCount, temp.byWeek AS week, getWeekStartingTime(temp.byYear, temp.byMonth, temp.byWeek) AS _timestamp FROM (SELECT
+        tenantID AS agent, getWeek(_timestamp) AS byWeek, getYear(_timestamp) AS byYear,
         getMonth(_timestamp) AS byMonth, first(InvalidLoginCount) as agentCount FROM
-        invalidLoginAttemptDaily GROUP BY AgentId, _timestamp ORDER BY
+        invalidLoginAttemptDaily GROUP BY tenantID, _timestamp ORDER BY
         _timestamp)temp GROUP BY temp.agent, temp.byYear, temp.byMonth, temp.byWeek ORDER BY temp.byYear,
         temp.byMonth, temp.byWeek;
 
-        CREATE TEMPORARY TABLE serverUpTimeDistribution USING CarbonAnalytics OPTIONS (tableName
-        "LOGANALYZER_SERVER_UP_TIME_DISTRIBUTION", schema "AgentId string -i, AverageServerUpTime int -i");
-
-        INSERT OVERWRITE table serverUpTimeDistribution SELECT temp.agent AS agent, (AVG(temp2.averageStartTime) -
-        AVG(temp.averageStartTime))AS totalAgentCount FROM (SELECT AVG(_eventTimeStamp) as averageStartTime, logstream
-        as agent FROM CopyOfLoganalyzer WHERE _content LIKE '%Starting WSO2%' GROUP BY logstream, _eventTimeStamp)temp,
-        (SELECT AVG(_eventTimeStamp) as averageStartTime, logstream as agent FROM CopyOfLoganalyzer WHERE _content LIKE
-        '%Stopping the carbon%' GROUP BY logstream, _eventTimeStamp)temp2 WHERE temp.agent = temp2.agent
-        GROUP BY temp.agent;
-
         CREATE TEMPORARY TABLE errorCodeDistributionDaily USING CarbonAnalytics OPTIONS (tableName
-        "LOGANALYZER_ERROR_CODE_DISTRIBUTION_DAILY", schema "ErrorCode string -i, ErrorCount int -i, _timestamp
+        "LOGANALYZER_ERROR_CODE_DISTRIBUTION_DAILY", schema "tenantID string -i, ErrorCode string -i, ErrorCount int -i, _timestamp
         long -i");
 
-        INSERT OVERWRITE table errorCodeDistributionDaily SELECT temp.errorCode AS agent, SUM(temp.errorCount) AS
-        totalAgentCount, getDateStartingTime(temp.byYear, temp.byMonth , temp.byDay) AS _timestamp FROM (SELECT
+        INSERT OVERWRITE table errorCodeDistributionDaily SELECT temp.tenantID AS tenantID, temp.errorCode AS ErrorCode, SUM(temp.errorCount) AS
+        ErrorCount, getDateStartingTime(temp.byYear, temp.byMonth , temp.byDay) AS _timestamp FROM (SELECT
         getRegexMatch(_content,'(?&lt;=\ ERROR_CODE = )(.*?)(?=\,)') AS errorCode, getYear(_eventTimeStamp) AS byYear, getMonth(_eventTimeStamp) AS byMonth,
-        getDay(_eventTimeStamp) AS byDay, count(*) as errorCount FROM
-        CopyOfLoganalyzer WHERE _content LIKE '%ERROR_CODE%' GROUP BY _content, _eventTimeStamp ORDER BY
-        _eventTimeStamp)temp GROUP BY temp.errorCode, temp.byYear, temp.byMonth, temp.byDay ORDER BY temp.byYear,
+        getDay(_eventTimeStamp) AS byDay, count(*) as errorCount,tenantID AS tenantID FROM
+        CopyOfLoganalyzer WHERE _content LIKE '%ERROR_CODE%' GROUP BY _content, _eventTimeStamp, tenantID ORDER BY
+        _eventTimeStamp)temp GROUP BY temp.tenantID, temp.errorCode, temp.byYear, temp.byMonth, temp.byDay ORDER BY temp.byYear,
         temp.byMonth, temp.byDay;
 
         CREATE TEMPORARY TABLE errorCodeDistributionMonthly USING CarbonAnalytics OPTIONS (tableName
-        "LOGANALYZER_ERROR_CODE_DISTRIBUTION_MONTHLY", schema "ErrorCode string -i, ErrorCount int -i, _timestamp
+        "LOGANALYZER_ERROR_CODE_DISTRIBUTION_MONTHLY", schema "tenantID string -i, ErrorCode string -i, ErrorCount int -i, _timestamp
         long -i");
 
-        INSERT OVERWRITE table errorCodeDistributionMonthly SELECT temp.errorCode AS agent, SUM(temp.errorCount) AS
-        totalAgentCount, getMonthStartingTime(temp.byYear, temp.byMonth) AS _timestamp FROM (SELECT
+        INSERT OVERWRITE table errorCodeDistributionMonthly SELECT temp.tenantID AS tenantID, temp.errorCode AS ErrorCode, SUM(temp.errorCount) AS
+        ErrorCount, getMonthStartingTime(temp.byYear, temp.byMonth) AS _timestamp FROM (SELECT
         ErrorCode AS errorCode, getYear(_timestamp) AS byYear, getMonth(_timestamp) AS byMonth, first(ErrorCount) as
-        errorCount FROM
-        errorCodeDistributionDaily GROUP BY ErrorCode, _timestamp ORDER BY
-        _timestamp)temp GROUP BY temp.errorCode, temp.byYear, temp.byMonth ORDER BY temp.byYear,
+        errorCount, tenantID AS tenantID FROM
+        errorCodeDistributionDaily GROUP BY tenantID, ErrorCode, _timestamp ORDER BY
+        _timestamp)temp GROUP BY temp.tenantID, temp.errorCode, temp.byYear, temp.byMonth ORDER BY temp.byYear,
         temp.byMonth;
 
         CREATE TEMPORARY TABLE errorCodeDistributionWeekly USING CarbonAnalytics OPTIONS (tableName
-        "LOGANALYZER_ERROR_CODE_DISTRIBUTION_WEEKLY", schema "ErrorCode string -i, ErrorCount int -i, _timestamp long
-        -i, week long -i");
+        "LOGANALYZER_ERROR_CODE_DISTRIBUTION_WEEKLY", schema "tenantID string -i, ErrorCode string -i, ErrorCount int -i, week long -i, _timestamp long
+        -i");
 
-        INSERT OVERWRITE table errorCodeDistributionWeekly SELECT temp.errorCode AS agent, SUM(temp.errorCount) AS
-        totalAgentCount, temp.byWeek AS week, getMonthStartingTime(temp.byYear, temp.byMonth) AS _timestamp FROM (SELECT
-        ErrorCode AS errorCode, getWeek(_timestamp) AS byWeek, getYear(_timestamp) AS byYear,
-        getMonth(_timestamp) AS byMonth, first(ErrorCount) as errorCount FROM
-        errorCodeDistributionDaily GROUP BY ErrorCode, _timestamp ORDER BY
-        _timestamp)temp GROUP BY temp.errorCode, temp.byYear, temp.byMonth, temp.byWeek ORDER BY temp.byYear,
+        INSERT OVERWRITE table errorCodeDistributionWeekly SELECT temp.tenantID AS tenantID, temp.errorCode AS ErrorCode, SUM(temp.errorCount) AS
+        ErrorCount, temp.byWeek AS week, getWeekStartingTime(temp.byYear, temp.byMonth, temp.byWeek) AS _timestamp FROM (SELECT
+        ErrorCode AS errorCode, getYear(_timestamp) AS byYear,
+        getMonth(_timestamp) AS byMonth,getWeek(_timestamp) AS byWeek, first(ErrorCount) as errorCount, tenantID AS tenantID FROM
+        errorCodeDistributionDaily GROUP BY tenantID, ErrorCode, _timestamp ORDER BY
+        _timestamp)temp GROUP BY temp.tenantID, temp.errorCode, temp.byYear, temp.byMonth, temp.byWeek ORDER BY temp.byYear,
         temp.byMonth, temp.byWeek;
+
+        CREATE TEMPORARY TABLE artifactDeploymentDaily USING CarbonAnalytics OPTIONS (tableName
+        "LOGANALYZER_ARTIFACT_DEPLOYMENT_DAILY", schema "TenantID string -i, Artifact string -i, ArtifactCount int -i, _timestamp
+        long -i");
+
+        INSERT OVERWRITE table artifactDeploymentDaily SELECT temp.tenantID AS TenantID, temp.artifact AS Artifact, SUM(temp.ArtifactCount) AS
+        ArtifactCount, getDateStartingTime(temp.byYear, temp.byMonth , temp.byDay) AS _timestamp FROM (SELECT
+        getRegexMatch(_content,'(?&lt;=\ : )(.*?)(?=\ )') AS artifact, getYear(_eventTimeStamp) AS byYear, getMonth(_eventTimeStamp) AS byMonth,
+        getDay(_eventTimeStamp) AS byDay, count(*) as ArtifactCount,tenantID AS tenantID FROM
+        CopyOfLoganalyzer WHERE _content LIKE '%DependencyTracker%' AND _content LIKE '%successfully%' GROUP BY _content, _eventTimeStamp, tenantID ORDER BY
+        _eventTimeStamp)temp GROUP BY temp.tenantID, temp.artifact, temp.byYear, temp.byMonth, temp.byDay ORDER BY temp.byYear,
+        temp.byMonth, temp.byDay;
+
+        CREATE TEMPORARY TABLE artifactDeploymentMonthly USING CarbonAnalytics OPTIONS (tableName
+        "LOGANALYZER_ARTIFACT_DEPLOYMENT_MONTHLY", schema "TenantID string -i, Artifact string -i, ArtifactCount int -i, _timestamp
+        long -i");
+
+        INSERT OVERWRITE table artifactDeploymentMonthly SELECT temp.TenantID AS TenantID, temp.Artifact AS Artifact, SUM(temp.ArtifactCount) AS
+        ArtifactCount, getMonthStartingTime(temp.byYear, temp.byMonth) AS _timestamp FROM (SELECT
+        Artifact AS Artifact, getYear(_timestamp) AS byYear, getMonth(_timestamp) AS byMonth, first(ArtifactCount) as
+        ArtifactCount, TenantID AS TenantID FROM
+        artifactDeploymentDaily GROUP BY TenantID, Artifact, _timestamp ORDER BY
+        _timestamp)temp GROUP BY temp.TenantID, temp.Artifact, temp.byYear, temp.byMonth ORDER BY temp.byYear,
+        temp.byMonth;
+
+        CREATE TEMPORARY TABLE artifactDeploymentWeekly USING CarbonAnalytics OPTIONS (tableName
+        "LOGANALYZER_ARTIFACT_DEPLOYMENT_WEEKLY", schema "TenantID string -i, Artifact string -i, ArtifactCount int -i, week long -i, _timestamp long
+        -i");
+
+
+        INSERT OVERWRITE table artifactDeploymentWeekly SELECT temp.TenantID AS TenantID, temp.Artifact AS Artifact, SUM(temp.ArtifactCount) AS
+        ArtifactCount, temp.byWeek AS week, getWeekStartingTime(temp.byYear, temp.byMonth, temp.byWeek) AS _timestamp FROM (SELECT
+        Artifact AS Artifact, getYear(_timestamp) AS byYear,
+        getMonth(_timestamp) AS byMonth,getWeek(_timestamp) AS byWeek, first(ArtifactCount) as ArtifactCount, TenantID AS TenantID FROM
+        artifactDeploymentDaily GROUP BY TenantID, Artifact, _timestamp ORDER BY
+        _timestamp)temp GROUP BY temp.TenantID, temp.Artifact, temp.byYear, temp.byMonth, temp.byWeek ORDER BY temp.byYear,
+        temp.byMonth, temp.byWeek;
+
+
+
+
 
     </Script>
     <CronExpression>0 10 0 1/1 * ? *</CronExpression>

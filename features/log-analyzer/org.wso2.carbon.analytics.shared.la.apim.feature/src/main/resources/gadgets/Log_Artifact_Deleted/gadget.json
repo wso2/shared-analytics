@@ -1,10 +1,10 @@
 {
-  "id": "logArtifactDeleted",
+  "id": "Log_Artifact_Deleted",
   "title": "Artifact Deleted",
   "type": "gadget",
-  "thumbnail": "store://gadget/LogArtifactDeleted/img/thumbnail.png",
+  "thumbnail": "store://gadget/Log_Artifact_Deleted/img/thumbnail.png",
   "data": {
-    "url": "store://gadget/LogArtifactDeleted/index.xml"
+    "url": "store://gadget/Log_Artifact_Deleted/index.xml"
   },
   "listen": {
     "subscriber": {

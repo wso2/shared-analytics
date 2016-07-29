@@ -1,10 +1,10 @@
 {
-  "id": "logArtifactDeployed",
+  "id": "Log_Artifact_Deployed",
   "title": "Log Artifact Deployed",
   "type": "gadget",
-  "thumbnail": "store://gadget/LogArtifactDeployed/img/thumbnail.png",
+  "thumbnail": "store://gadget/Log_Artifact_Deployed/img/thumbnail.png",
   "data": {
-    "url": "store://gadget/LogArtifactDeployed/index.xml"
+    "url": "store://gadget/Log_Artifact_Deployed/index.xml"
   },
   "listen": {
     "subscriber": {
