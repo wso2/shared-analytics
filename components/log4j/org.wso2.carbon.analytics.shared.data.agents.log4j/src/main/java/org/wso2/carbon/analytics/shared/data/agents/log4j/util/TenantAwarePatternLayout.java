@@ -26,8 +26,9 @@ import org.apache.log4j.helpers.PatternParser;
 import org.apache.log4j.spi.LoggingEvent;
 import org.wso2.carbon.base.ServerConfiguration;
 import org.wso2.carbon.context.CarbonContext;
-import org.wso2.carbon.utils.logging.TenantAwareLoggingEvent;
+import org.wso2.carbon.analytics.shared.data.agents.log4j.util.TenantDomainAwareLoggingEvent;
 
+import java.lang.System;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.AccessController;
@@ -163,8 +164,8 @@ public class TenantAwarePatternLayout extends PatternLayout {
             }
 
             public String getFullyQualifiedName(LoggingEvent event) {
-                if (event instanceof TenantAwareLoggingEvent) {
-                    return ((TenantAwareLoggingEvent) event).getServiceName() != null ? ((TenantAwareLoggingEvent) event).getServiceName() : "";
+                if (event instanceof TenantDomainAwareLoggingEvent) {
+                    return ((TenantDomainAwareLoggingEvent) event).getServiceName() != null ? ((TenantDomainAwareLoggingEvent) event).getServiceName() : "";
                 } else {
                     String appName = CarbonContext.getThreadLocalCarbonContext().getApplicationName();
                     return appName != null ? appName : "";
@@ -215,7 +216,11 @@ public class TenantAwarePatternLayout extends PatternLayout {
             }
 
             public String getFullyQualifiedName(LoggingEvent event) {
-                return CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
+                    if (event instanceof TenantDomainAwareLoggingEvent) {
+                        return ((TenantDomainAwareLoggingEvent)event).getTenantDomain();
+                    }else{
+                        return null;
+                    }
             }
         }
 
@@ -235,8 +240,8 @@ public class TenantAwarePatternLayout extends PatternLayout {
             }
 
             public String getFullyQualifiedName(LoggingEvent event) {
-                if (event instanceof TenantAwareLoggingEvent) {
-                    return ((TenantAwareLoggingEvent) event).getTenantId();
+                if (event instanceof TenantDomainAwareLoggingEvent) {
+                    return ((TenantDomainAwareLoggingEvent) event).getTenantId();
                 } else {
                     int tenantId = ((Integer) AccessController.doPrivileged(new PrivilegedAction() {
                         public Integer run() {

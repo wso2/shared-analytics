@@ -1,0 +1,21 @@
+{
+  "id": "Log_Error_Bar_Chart",
+  "title": "Log Error Bar Chart",
+  "type": "gadget",
+  "thumbnail": "store://gadget/Log_Error_Bar_Chart/img/thumbnail.png",
+  "data": {
+    "url": "store://gadget/Log_Error_Bar_Chart/index.xml"
+  },
+  "notify": {
+    "publisher": {
+      "type": "filter",
+      "description": "This notifies selected filter"
+    }
+  },
+  "listen": {
+    "subscriber": {
+      "type": "date-range",
+      "description": "Used to listen to any date range-selected"
+    }
+  }
+}

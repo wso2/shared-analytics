@@ -1,0 +1,24 @@
+{
+  "id": "Log_ErrorCode_Distribution",
+  "title": "Error code distribution",
+  "type": "gadget",
+  "thumbnail": "store://gadget/Log_ErrorCode_Distribution/img/thumbnail.png",
+  "data": {
+    "url": "store://gadget/Log_ErrorCode_Distribution/index.xml"
+  }, "notify": {
+  "publisher": {
+    "type": "filter",
+    "description": "This notifies selected filter"
+  },
+  "publisher2": {
+    "type": "other-data",
+    "description": "This notifies selected filter"
+  }
+},
+  "listen": {
+    "subscriber": {
+      "type": "date-range",
+      "description": "Used to listen to any date range-selected"
+    }
+  }
+}
