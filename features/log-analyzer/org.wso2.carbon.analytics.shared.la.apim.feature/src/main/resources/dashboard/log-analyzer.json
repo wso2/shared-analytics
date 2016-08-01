@@ -635,6 +635,22 @@
                 "width": 12,
                 "height": 5,
                 "banner": false
+              },
+              {
+                "id": "message-processing-filtered-message",
+                "x": 0,
+                "y": 8,
+                "width": 12,
+                "height": 7,
+                "banner": false
+              },
+              {
+                "id": "message-processing-log-viewer",
+                "x": 0,
+                "y": 15,
+                "width": 12,
+                "height": 6,
+                "banner": false
               }
             ]
           }
@@ -688,6 +704,12 @@
                 "type": "gadget",
                 "thumbnail": "store://gadget/LogAPIMMessageProcessing/img/thumbnail.png",
                 "data": {"url": "store://gadget/LogAPIMMessageProcessing/index.xml"},
+                "notify": {
+                  "publisher": {
+                    "type": "filter-range",
+                    "description": "This notifies selected filter"
+                  }
+                },
                 "listen": {
                   "subscriber": {
                     "type": "date-range",
@@ -709,6 +731,94 @@
                 },
                 "options": {},
                 "locale_titles": {"en-US": "Errors in API Message Processing"},
+                "settings": {}
+              }
+            }
+          ],
+          "message-processing-filtered-message": [
+            {
+              "id": "filteredLogMessages-message-processing",
+              "content": {
+                "id": "filteredLogMessages",
+                "title": "APIM Filtered Messages",
+                "type": "gadget",
+                "thumbnail": "store://gadget/LogErrorFilteredMessage/img/thumbnail.png",
+                "data": {"url": "store://gadget/LogErrorFilteredMessage/index.xml"},
+                "notify": {
+                  "publisher": {
+                    "type": "filter-range",
+                    "description": "This notifies selected filter"
+                  }
+                },
+                "listen": {
+                  "subscriber": {
+                    "type": "filter",
+                    "description": "Used to listen to any filters",
+                    "on": [
+                      {
+                        "from": "logAPIMMessageProcessing-number-of-failures",
+                        "event": "publisher"
+                      }
+                    ]
+                  }
+                },
+                "styles": {
+                  "no_heading": false,
+                  "hide_gadget": false,
+                  "titlePosition": "left",
+                  "title": "Filtered Messages"
+                },
+                "options": {
+                  "type": {
+                    "type": "STRING",
+                    "title": "Gadget Type",
+                    "value": "APIM",
+                    "options": [],
+                    "required": true
+                  }
+                },
+                "locale_titles": {"en-US": "Filtered Messages"},
+                "settings": {}
+              }
+            }
+          ],
+          "message-processing-log-viewer": [
+            {
+              "id": "message-processing-errors-log-viewer",
+              "content": {
+                "id": "logViewer",
+                "title": "Log Viewer",
+                "type": "gadget",
+                "thumbnail": "store://gadget/LogViewer/index.png",
+                "data": {"url": "store://gadget/LogViewer/index.xml"},
+                "listen": {
+                  "subscriber": {
+                    "type": "filter-range",
+                    "description": "Used to listen to any filters",
+                    "on": [
+                      {
+                        "from": "filteredLogMessages-message-processing",
+                        "event": "publisher"
+                      }
+                    ]
+                  }
+                },
+                "styles": {
+                  "no_heading": false,
+                  "hide_gadget": false,
+                  "titlePosition": "left",
+                  "title": "Log Viewer"
+                },
+                "options": {
+                  "type": {
+                    "type": "STRING",
+                    "title": "Gadget Type",
+                    "value": "APIM",
+                    "options": [],
+                    "required": true
+                  }
+                },
+                "locale_titles": {"en-US": "Log Viewer"},
                 "settings": {}
               }
             }
