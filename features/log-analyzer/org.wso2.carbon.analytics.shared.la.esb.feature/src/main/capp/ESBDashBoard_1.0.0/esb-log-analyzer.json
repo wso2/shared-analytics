@@ -17,17 +17,17 @@
             "blocks": [
               {
                 "id": "6b0a5dc03e03966c15d66274076ae16c",
-                "x": 1,
+                "x": 0,
                 "y": 0,
-                "width": 10,
-                "height": 4,
+                "width": 12,
+                "height": 3,
                 "banner": false
               },
               {
                 "id": "93f3718dbf3574038ed2600cc35d0fc1",
-                "x": 1,
-                "y": 4,
-                "width": 10,
+                "x": 0,
+                "y": 3,
+                "width": 12,
                 "height": 6,
                 "banner": false
               }
@@ -138,13 +138,13 @@
                 "x": 0,
                 "y": 3,
                 "width": 12,
-                "height": 5,
+                "height": 7,
                 "banner": false
               },
               {
                 "id": "a55f98ce25c776f151832df85af1f6d7",
                 "x": 0,
-                "y": 8,
+                "y": 10,
                 "width": 12,
                 "height": 5,
                 "banner": false
@@ -152,7 +152,7 @@
               {
                 "id": "775fe580f690f68bad542a5dbbefedd4",
                 "x": 0,
-                "y": 13,
+                "y": 15,
                 "width": 12,
                 "height": 5,
                 "banner": false
@@ -364,7 +364,7 @@
                 "x": 0,
                 "y": 3,
                 "width": 12,
-                "height": 4,
+                "height": 7,
                 "banner": false
               }
             ]
@@ -480,7 +480,7 @@
                 "x": 0,
                 "y": 3,
                 "width": 12,
-                "height": 5,
+                "height": 6,
                 "banner": false
               }
             ]
@@ -572,7 +572,7 @@
                 "x": 0,
                 "y": 0,
                 "width": 12,
-                "height": 9,
+                "height": 10,
                 "banner": false
               }
             ]
@@ -624,6 +624,168 @@
         },
         "anon": {}
       }
+    },
+    {
+      "id": "page4",
+      "title": "Artifacts Stats",
+      "layout": {
+        "content": {
+          "loggedIn": {
+            "blocks": [
+              {
+                "id": "083cfdca2fe019008add579a9a17d488",
+                "x": 0,
+                "y": 9,
+                "width": 12,
+                "height": 6,
+                "banner": false
+              },
+              {
+                "id": "95ca49d1e5c97e64823fdc2c9c505a31",
+                "x": 0,
+                "y": 3,
+                "width": 12,
+                "height": 6,
+                "banner": false
+              },
+              {
+                "id": "0851972b0ba17ba80c9131b9ab321d5b",
+                "x": 0,
+                "y": 0,
+                "width": 12,
+                "height": 3,
+                "banner": false
+              }
+            ]
+          }
+        },
+        "fluidLayout": false
+      },
+      "isanon": false,
+      "content": {
+        "default": {
+          "083cfdca2fe019008add579a9a17d488": [
+            {
+              "id": "Log_Artifact_Removed-0",
+              "content": {
+                "id": "Log_Artifact_Removed",
+                "title": "Log Artifact Removed",
+                "type": "gadget",
+                "thumbnail": "fs://gadget/Log_Artifact_Removed/img/thumbnail.png",
+                "data": {"url": "fs://gadget/Log_Artifact_Removed/index.xml"},
+                "listen": {
+                  "subscriber": {
+                    "type": "date-range",
+                    "description": "Used to listen to any date range-selected",
+                    "on": [
+                      {
+                        "from": "Date_Range_Picker-0",
+                        "event": "range-selected"
+                      }
+                    ]
+                  }
+                },
+                "styles": {
+                  "no_heading": false,
+                  "hide_gadget": false,
+                  "titlePosition": "left",
+                  "title": "Log Artifact Removed"
+                },
+                "options": {
+                  "type": {
+                    "type": "STRING",
+                    "title": "Gadget Type",
+                    "value": "ESB",
+                    "options": [],
+                    "required": true
+                  }
+                },
+                "locale_titles": {"en-US": "Log Artifact Removed"},
+                "settings": {
+                  "priority": "5",
+                  "timeoutInterval": "60000"
+                }
+              }
+            }
+          ],
+          "95ca49d1e5c97e64823fdc2c9c505a31": [
+            {
+              "id": "Log_Artifact_Deployed-0",
+              "content": {
+                "id": "Log_Artifact_Deployed",
+                "title": "Log Artifact Deployed",
+                "type": "gadget",
+                "thumbnail": "fs://gadget/Log_Artifact_Deployed/img/thumbnail.png",
+                "data": {"url": "fs://gadget/Log_Artifact_Deployed/index.xml"},
+                "listen": {
+                  "subscriber": {
+                    "type": "date-range",
+                    "description": "Used to listen to any date range-selected",
+                    "on": [
+                      {
+                        "from": "Date_Range_Picker-0",
+                        "event": "range-selected"
+                      }
+                    ]
+                  }
+                },
+                "styles": {
+                  "no_heading": false,
+                  "hide_gadget": false,
+                  "titlePosition": "left",
+                  "title": "Log Artifact Deployed"
+                },
+                "options": {
+                  "type": {
+                    "type": "STRING",
+                    "title": "Gadget Type",
+                    "value": "ESB",
+                    "options": [],
+                    "required": true
+                  }
+                },
+                "locale_titles": {"en-US": "Log Artifact Deployed"},
+                "settings": {
+                  "priority": "5",
+                  "timeoutInterval": "60000"
+                }
+              }
+            }
+          ],
+          "0851972b0ba17ba80c9131b9ab321d5b": [
+            {
+              "id": "Date_Range_Picker-0",
+              "content": {
+                "id": "Date_Range_Picker",
+                "title": "Date Range Picker",
+                "type": "widget",
+                "category": "Widgets",
+                "thumbnail": "fs://gadget/Date_Range_Picker/index.png",
+                "data": {"url": "fs://gadget/Date_Range_Picker/index.xml"},
+                "styles": {
+                  "borders": false,
+                  "title": "Date Range Picker"
+                },
+                "notify": {
+                  "range-selected": {
+                    "type": "date-range",
+                    "description": "This notifies selected state"
+                  }
+                },
+                "listen": {
+                  "chart-zoomed": {
+                    "type": "date-range",
+                    "description": "This notifies message generated in publisher"
+                  }
+                },
+                "options": {},
+                "locale_titles": {}
+              }
+            }
+          ]
+        },
+        "anon": {}
+      }
     }
   ],
   "menu": [
@@ -661,6 +823,13 @@
       "ishidden": false,
       "title": "Live Log Viewer",
       "subordinates": []
+    },
+    {
+      "id": "page4",
+      "isanon": false,
+      "ishidden": false,
+      "title": "Artifacts Stats",
+      "subordinates": []
     }
   ],
   "hideAllMenuItems": false,
@@ -677,5 +846,6 @@
     "customBannerExists": false
   },
   "landing": "landing",
-  "isanon": false
+  "isanon": false,
+  "defaultPriority": "5"
 }

@@ -1,0 +1,15 @@
+{
+  "id": "Log_Artifact_Deployed",
+  "title": "Log Artifact Deployed",
+  "type": "gadget",
+  "thumbnail": "store://gadget/Log_Artifact_Deployed/img/thumbnail.png",
+  "data": {
+    "url": "store://gadget/Log_Artifact_Deployed/index.xml"
+  },
+  "listen": {
+    "subscriber": {
+      "type": "date-range",
+      "description": "Used to listen to any date range-selected"
+    }
+  }
+}
