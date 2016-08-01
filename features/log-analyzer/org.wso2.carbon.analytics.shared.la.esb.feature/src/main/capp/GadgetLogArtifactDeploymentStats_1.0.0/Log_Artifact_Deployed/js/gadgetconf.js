@@ -16,38 +16,24 @@
  * under the License.
  */
 
-var charts = [
-    {
-        name: "ARTIFACT_DEPLOYMENT",
-        columns: ["timestamp", "ArtifactCount", "Artifact"],
-        additionalColumns: ["week"],
-        orderedField: "ArtifactCount",
-        schema: [{
-            "metadata": {
-                "names": ["day", "ArtifactCount", "Artifact", "ID"],
-                "types": ["ordinal", "linear", "ordinal", "linear"]
-            },
-            "data": []
-        }],
-        "chartConfig": {
-            type: "bar",
-            x: "day",
-            colorScale: [],
-            colorDomain: [],
-            xAxisAngle: true,
-            color: "Artifact",
-            charts: [{type: "bar", y: "ArtifactCount", mode: "stack"}],
-            width: $(document).width()/1.27,
-            height: $(document).height()/1.2,
-            padding: {"top": 10, "left": 80, "bottom": 70, "right": 50},
-            legend: false,
-            tooltip: {
-                "enabled": true,
-                "color": "#e5f2ff",
-                "type": "symbol",
-                "content": ["ID", "ArtifactCount", "day"],
-                "label": true
-            }
-        }
-    }
-];
+var gadgetConfig = {
+    "id": "Log_Artifact_Deployed",
+    "title": "Log Event",
+    "datasource": "LOGANALYZER_ARTIFACT_DEPLOYMENT_DAILY",
+    "ArtifactType": ["API", "Proxy service", "Template", "Local entry", "Endpoint", "Sequence","Startup","Event source","Priority executor", "Inbound Endpoint"],
+    "meta": {
+        "names": ["ArtifactType", "Frequency"],
+        "types": ["ordinal", "linear"]
+    },
+    "chartConfig": {
+        colorScale: ["#5CB85C", "#438CAD", "#EECA5A", "#D9483D", "#95A5A6","#95A5A6","#95A5A6","#95A5A6","#95A5A6","#95A5A6"],
+        type: "bar",
+        x: "ArtifactType",
+        color: "ArtifactType",
+        charts: [{y: "Frequency"}],
+        width: $('body').width(),
+        height: $('body').height(),
+        padding: {"top": 10, "left": 80, "bottom": 70, "right": 200}
+    },
+    "domain": "carbon.super"
+};

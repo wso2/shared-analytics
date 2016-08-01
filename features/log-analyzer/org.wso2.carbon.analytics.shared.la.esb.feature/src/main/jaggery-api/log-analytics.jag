@@ -96,7 +96,7 @@
                   "LOGANALYZER_ARTIFACT_DEPLOYMENT_DAILY",
                   "LOGANALYZER_ARTIFACT_DEPLOYMENT_MONTHLY",
                   "LOGANALYZER_ARTIFACT_DEPLOYMENT_WEEKLY",
-                  "LOGANALYZER_ARTIFACT_DELETED_DAILY,
+                  "LOGANALYZER_ARTIFACT_DELETED_DAILY",
                   "LOGANALYZER_ARTIFACT_DELETED_MONTHLY",
                   "LOGANALYZER_ARTIFACT_DELETED_WEEKLY"];
 
@@ -117,7 +117,7 @@
         var token = session.get(USER_TOKEN);
         
         if (token != null) {
-             tenantDomain= token["TENANT_DOMAIN"];
+             tenantDomain= token[TENANT_DOMAIN];
             loggedInUser = token[USERNAME] + CONST_AT + token[TENANT_DOMAIN];
         } else {
             log.error("user is not authenticated!");
@@ -131,7 +131,7 @@
     var payload = request.getContent();
 
     if(tables.indexOf(tableName) > -1){
-          if(tenantId == "-1234"){
+          if(tenantDomain == "carbon.super"){
             payload.query = payload.query.concat(" AND tenantID:\"*\"");
           }else{
             payload.query = payload.query.concat(" AND tenantID:\"" + tenantDomain + "\"");
