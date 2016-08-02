@@ -399,6 +399,7 @@ function publish(data) {
 };
 
 var onclick = function (event, item) {
+
     var selectedDataArray = [];
     var tempFromTime;
     if (item != null) {

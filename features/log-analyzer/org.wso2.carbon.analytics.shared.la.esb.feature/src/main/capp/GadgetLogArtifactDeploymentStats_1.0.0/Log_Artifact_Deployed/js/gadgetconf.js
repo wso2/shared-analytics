@@ -19,21 +19,24 @@
 var gadgetConfig = {
     "id": "Log_Artifact_Deployed",
     "title": "Log Event",
-    "datasource": "LOGANALYZER_ARTIFACT_DEPLOYMENT_DAILY",
+    "datasourceOne": "LOGANALYZER_ARTIFACT_DEPLOYMENT_DAILY",
+    "datasourceTwo": "LOGANALYZER_ARTIFACT_DELETED_DAILY",
     "ArtifactType": ["API", "Proxy service", "Template", "Local entry", "Endpoint", "Sequence","Startup","Event source","Priority executor", "Inbound Endpoint"],
     "meta": {
-        "names": ["ArtifactType", "Frequency"],
-        "types": ["ordinal", "linear"]
+        "names": ["ArtifactType", "Status", "Frequency"],
+        "types": ["ordinal","ordinal", "linear"]
     },
+
     "chartConfig": {
+        mode:"group",
         colorScale: ["#5CB85C", "#438CAD", "#EECA5A", "#D9483D", "#95A5A6","#95A5A6","#95A5A6","#95A5A6","#95A5A6","#95A5A6"],
         type: "bar",
         x: "ArtifactType",
-        color: "ArtifactType",
-        charts: [{y: "Frequency"}],
+       charts : [{type: "bar",  y : "Frequency", color: "Status", mode:"group"}],
         width: $('body').width(),
         height: $('body').height(),
-        padding: {"top": 10, "left": 80, "bottom": 70, "right": 200}
+        padding: {"top": 10, "left": 80, "bottom": 70, "right": 200},
+        tooltip: {"enabled":true, "color":"#e5f2ff", "type":"symbol", "content":["ArtifactType","Frequency","Status"], "label":true}
     },
     "domain": "carbon.super"
 };
