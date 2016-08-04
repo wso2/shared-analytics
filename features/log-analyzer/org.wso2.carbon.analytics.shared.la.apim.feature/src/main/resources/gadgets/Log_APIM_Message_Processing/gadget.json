@@ -6,6 +6,12 @@
   "data": {
     "url": "store://gadget/Log_APIM_Message_Processing/index.xml"
   },
+  "notify": {
+    "publisher": {
+      "type": "filter",
+      "description": "This notifies selected API Key filter"
+    }
+  },
   "listen": {
     "subscriber": {
       "type": "date-range",
