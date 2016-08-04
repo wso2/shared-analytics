@@ -702,8 +702,8 @@
                 "id": "Log_APIM_Message_Processing",
                 "title": "Errors in API Message Processing",
                 "type": "gadget",
-                "thumbnail": "store://gadget/LogAPIMMessageProcessing/img/thumbnail.png",
-                "data": {"url": "store://gadget/LogAPIMMessageProcessing/index.xml"},
+                "thumbnail": "store://gadget/Log_APIM_Message_Processing/img/thumbnail.png",
+                "data": {"url": "store://gadget/Log_APIM_Message_Processing/index.xml"},
                 "notify": {
                   "publisher": {
                     "type": "filter-range",
@@ -742,8 +742,8 @@
                 "id": "filteredLogMessages",
                 "title": "APIM Filtered Messages",
                 "type": "gadget",
-                "thumbnail": "store://gadget/LogErrorFilteredMessage/img/thumbnail.png",
-                "data": {"url": "store://gadget/LogErrorFilteredMessage/index.xml"},
+                "thumbnail": "store://gadget/Log_Error_Filtered_Message/img/thumbnail.png",
+                "data": {"url": "store://gadget/Log_Error_Filtered_Message/index.xml"},
                 "notify": {
                   "publisher": {
                     "type": "filter-range",
@@ -789,8 +789,8 @@
                 "id": "logViewer",
                 "title": "Log Viewer",
                 "type": "gadget",
-                "thumbnail": "store://gadget/LogViewer/index.png",
-                "data": {"url": "store://gadget/LogViewer/index.xml"},
+                "thumbnail": "store://gadget/Log_Viewer/index.png",
+                "data": {"url": "store://gadget/Log_Viewer/index.xml"},
                 "listen": {
                   "subscriber": {
                     "type": "filter-range",
