@@ -1,0 +1,21 @@
+{
+  "id": "Log_Artifact_Filter",
+  "title": "Filtered Messages for Artifact Stats",
+  "type": "gadget",
+  "thumbnail": "store://gadget/Log_Artifact_Filter/img/thumbnail.png",
+  "data": {
+    "url": "store://gadget/Log_Artifact_Filter/index.xml"
+  },
+  "notify": {
+    "publisher": {
+      "type": "filter-range",
+      "description": "This notifies selected filter"
+    }
+  },
+  "listen": {
+    "subscriber": {
+      "type": "filter",
+      "description": "Used to listen to any filters"
+    }
+  }
+}

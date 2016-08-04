@@ -25,6 +25,7 @@ var canvasDiv = "#canvas";
 var prefs = new gadgets.Prefs();
 var svrUrl = gadgetUtil.getGadgetSvrUrl(prefs.getString(PARAM_TYPE));
 var client = new AnalyticsClient().init(null,null,svrUrl);
+var isArtifact = false;
 
 function initialize() {
     $(canvasDiv).html(gadgetUtil.getCustemText("No content to display","Please click on a View button from the above table" +
@@ -109,7 +110,15 @@ function drawLogViewer() {
             $(canvasDiv).append(createLogList("logDebug",receivedData[i][0]));
         }else if (receivedData[i][0].level === "FATAL") {
             $(canvasDiv).append(createLogList("logFatal",receivedData[i][0]));
-        } else {
+        }else if(isArtifact){
+              if (receivedContent === filteredMessage && receivedData[i][0].timestamp === filteredTime) {
+                    $(canvasDiv).append(createLogList("selectedWarn",receivedData[i][0]));
+                    selectedDiv = "selectedWarn";
+              } else {
+                    $(canvasDiv).append(createLogList("logWarn",receivedData[i][0]));
+              }
+        }
+        else{
             $(canvasDiv).append(createLogList("logInfo",receivedData[i][0]));
         }
     }
@@ -129,6 +138,7 @@ subscribe(function (topic, data, subscriber) {
     $(canvasDiv).html(gadgetUtil.getLoadingText());
     filteredTime = parseInt(data["timestamp"]);
     filteredMessage = data["message"];
+    isArtifact = data["type"];
     var fromDate = filteredTime - (gadgetConfig.timeDomain);
     var toDate = filteredTime + (gadgetConfig.timeDomain);
     from = fromDate;
