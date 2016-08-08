@@ -18,6 +18,8 @@
         GROUP BY _content, _eventTimeStamp, tenantID ORDER BY _eventTimeStamp)temp GROUP BY temp.tenantID, temp.message, temp.byYear,
         temp.byMonth, temp.byDay ORDER BY temp.byYear, temp.byMonth, temp.byDay;
 
+        INCREMENTAL_TABLE_COMMIT loganalyzer_message_level_error_daily;
+
         CREATE TEMPORARY TABLE loganalyzer_class_level_error_daily USING CarbonAnalytics OPTIONS (tableName
         "LOGANALYZER_CLASS_LEVEL_ERROR_DAILY",
         schema "tenantID string -i, class string -i, classCount int -i, _timestamp long -i");
@@ -29,6 +31,8 @@
         _level LIKE 'ERROR'
         GROUP BY _class, _eventTimeStamp, tenantID ORDER BY _eventTimeStamp)temp GROUP BY temp.tenantID, temp.class, temp.byYear, temp.byMonth,
         temp.byDay ORDER BY temp.byYear, temp.byMonth, temp.byDay;
+
+        INCREMENTAL_TABLE_COMMIT loganalyzer_class_level_error_daily;
 
         CREATE TEMPORARY TABLE loganalyzer_class_level_error_monthly USING CarbonAnalytics OPTIONS (tableName
         "LOGANALYZER_CLASS_LEVEL_ERROR_MONTHLY",
@@ -78,6 +82,8 @@
         "LOGANALYZER_INVALID_LOGIN_ATTEMPT_DAILY", schema "tenantID string -i, InvalidLoginCount int -i, _timestamp long
         -i");
 
+        INCREMENTAL_TABLE_COMMIT invalidLoginAttemptDaily;
+
         CREATE TEMPORARY TABLE invalidLoginAttemptWeekly USING CarbonAnalytics OPTIONS (tableName
         "LOGANALYZER_INVALID_LOGIN_ATTEMPT_WEEKLY", schema "tenantID string -i, InvalidLoginCount int -i, _timestamp long
         -i, week long -i");
@@ -93,6 +99,7 @@
         CopyOfLoganalyzer WHERE _content LIKE '%login attempt%' GROUP BY tenantID, _eventTimeStamp ORDER BY
         _eventTimeStamp)temp GROUP BY temp.agent, temp.byYear, temp.byMonth, temp.byDay ORDER BY temp.byYear,
         temp.byMonth, temp.byDay;
+
 
         INSERT OVERWRITE table invalidLoginAttemptMonthly SELECT temp.agent AS agent, SUM(temp.agentCount) AS
         totalAgentCount, getMonthStartingTime(temp.byYear, temp.byMonth) AS _timestamp FROM (SELECT
@@ -113,6 +120,8 @@
         CREATE TEMPORARY TABLE errorCodeDistributionDaily USING CarbonAnalytics OPTIONS (tableName
         "LOGANALYZER_ERROR_CODE_DISTRIBUTION_DAILY", schema "tenantID string -i, ErrorCode string -i, ErrorCount int -i, _timestamp
         long -i");
+
+        INCREMENTAL_TABLE_COMMIT errorCodeDistributionDaily;
 
         INSERT OVERWRITE table errorCodeDistributionDaily SELECT temp.tenantID AS tenantID, temp.errorCode AS ErrorCode, SUM(temp.errorCount) AS
         ErrorCount, getDateStartingTime(temp.byYear, temp.byMonth , temp.byDay) AS _timestamp FROM (SELECT
@@ -150,6 +159,8 @@
         "LOGANALYZER_ARTIFACT_DEPLOYMENT_DAILY", schema "TenantID string -i, ArtifactType string -i, Artifact string -i, ArtifactCount int -i, _timestamp
         long -i");
 
+        INCREMENTAL_TABLE_COMMIT artifactDeploymentDaily;
+
         INSERT OVERWRITE table artifactDeploymentDaily SELECT temp.tenantID AS TenantID, temp.ArtifactType, temp.artifact AS Artifact, SUM(temp.ArtifactCount) AS
         ArtifactCount, getDateStartingTime(temp.byYear, temp.byMonth , temp.byDay) AS _timestamp FROM (SELECT
         getRegexMatch(_content,'(?&lt;=\ : )(.*?)(?=\ )') AS artifact, getRegexMatch(_content,'^.*?(?= :)') AS ArtifactType, getYear(_eventTimeStamp) AS byYear, getMonth(_eventTimeStamp) AS byMonth,
@@ -185,6 +196,8 @@
         CREATE TEMPORARY TABLE artifactRemovedDaily USING CarbonAnalytics OPTIONS (tableName
         "LOGANALYZER_ARTIFACT_DELETED_DAILY", schema "TenantID string -i, ArtifactType string -i, Artifact string -i, ArtifactCount int -i, _timestamp
         long -i");
+
+        INCREMENTAL_TABLE_COMMIT artifactRemovedDaily;
 
         INSERT OVERWRITE table artifactRemovedDaily SELECT temp.tenantID AS TenantID, temp.ArtifactType, temp.artifact AS Artifact, SUM(temp.ArtifactCount) AS
         ArtifactCount, getDateStartingTime(temp.byYear, temp.byMonth , temp.byDay) AS _timestamp FROM (SELECT

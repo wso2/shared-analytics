@@ -67,7 +67,43 @@
                 <script src="js/main.js"></script>
             </head>
             <body style="margin-bottom: 0px;">
-                <div id="canvas"/>
+             <div id="errorDiv"></div>
+
+                <div id= "drawCanvasDefault" class="drawCanvas" style="display:block;">
+                    <table>
+                        <tr>
+                            <td>
+                               <div id="canvasDefault"></div>
+                            </td>
+                            <td>
+                                <div>
+                                    <div id="legendTitleDefault" class="legendTitle"></div>
+                                    <div id="legendDefault" class="legend"></div>
+
+                                <div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                 <div id="errorDiv"></div>
+
+                <div id= "drawCanvasSecondary" class="drawCanvas" style="display:block;">
+                    <table>
+                        <tr>
+                            <td>
+                               <div id="canvasSecondary"></div>
+                            </td>
+                            <td>
+                                <div>
+                                    <div id="legendTitleSecondary" class="legendTitle"></div>
+                                    <div id="legendSecondary" class="legend"></div>
+
+                                <div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                 <div id="checkBox" class="checkBox"></div>
             </body>
         </html>
         ]]>
