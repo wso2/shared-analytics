@@ -22,6 +22,7 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
 import org.wso2.carbon.analytics.shared.common.udf.DateTimeUDF;
+import org.wso2.carbon.analytics.shared.common.udf.JsonParseUdf;
 import org.wso2.carbon.analytics.shared.common.udf.RegExrUDF;
 import org.wso2.carbon.analytics.spark.core.udf.CarbonUDF;
 
@@ -42,6 +43,7 @@ public class APIMLoganalyzerSparkComponent {
         try {
             bundleContext.registerService(CarbonUDF.class, new DateTimeUDF(), null);
             bundleContext.registerService(CarbonUDF.class, new RegExrUDF(), null);
+            bundleContext.registerService(CarbonUDF.class, new JsonParseUdf(), null);
         } catch (Throwable e) {
             log.error("Error in activating APIMLoganalyzerSparkComponent: " + e.getMessage(), e);
         }
