@@ -237,6 +237,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
             tenantDomain = AccessController.doPrivileged(new PrivilegedAction<String>() {
                 public String run() {
                     return CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
+
                 }
             });
 
