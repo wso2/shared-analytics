@@ -97,7 +97,6 @@ function fetch(logLevelIndex) {
 
     client.searchCount(queryInfo, function (d) {
     if (d["status"] === "success") {
-            console.log(gadgetConfig.level[logLevelIndex]);
             receivedData.push([gadgetConfig.level[logLevelIndex], parseInt(d["message"])]);
             async_tasks--;
             if (async_tasks == 0) {
@@ -143,7 +142,6 @@ function fetchWithDebugAndInfo(logLevelIndex) {
     client.searchCount(queryInfo, function (d) {
 
     if (d["status"] === "success") {
-        console.log(gadgetConfig.level[logLevelIndex]);
         receivedData.push([gadgetConfig.level[logLevelIndex], parseInt(d["message"])]);
         async_tasks--;
         if (async_tasks == 0) {
