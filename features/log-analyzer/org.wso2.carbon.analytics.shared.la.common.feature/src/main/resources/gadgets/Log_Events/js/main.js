@@ -33,7 +33,6 @@ var prefs = new gadgets.Prefs();
 var svrUrl = gadgetUtil.getGadgetSvrUrl(prefs.getString(PARAM_TYPE));
 var client = new AnalyticsClient().init(null,null,svrUrl);
 var chartColorScale = ["#1abc9c", "#3498db", "#9b59b6", "#f1c40f", "#e67e22"];
-var showWithoutDebugs = false;
 
 function initialize() {
     gadgetConfig.chartConfig.colorScale = chartColorScale;
@@ -42,34 +41,37 @@ function initialize() {
 
 $(document).ready(function () {
     initialize();
-   $("#legend").empty();
-           $("#legendTitleDefault").append("<div style='position:absolute;top: 50px;left: "+(gadgetConfig.chartConfig.width-50)+";'>Legend</div>");
-           for (var i = 0; i < gadgetConfig.level.length; i++) {
-               $("#legendDefault").append(createLegendList(chartColorScale[i], "legendText2",gadgetConfig.level[i]));
-           }
+    drawLegends();
+ });
 
-            $("#legendSecondary").empty();
-                      $("#legendTitleSecondary").append("<div style='position:absolute;top: 50px;left: "+(gadgetConfig.chartConfig.width-50)+";'>Legend</div>");
-                      for (var i = 0; i < gadgetConfig.level.length-2; i++) {
-                          $("#legendSecondary").append(createLegendList(chartColorScale[i], "legendText2",gadgetConfig.level[i+2]));
-             }
+function drawLegends(){
 
- document.getElementById('drawCanvasDefault').style.display='block';
-        document.getElementById('drawCanvasSecondary').style.display='none';
+    $("#legend").empty();
+    $("#legendTitleDefault").append("<div style='position:absolute;top: 50px;left: "+(gadgetConfig.chartConfig.width-50)+";'>Legend</div>");
+    for (var i = 0; i < gadgetConfig.level.length; i++) {
+        $("#legendDefault").append(createLegendList(chartColorScale[i], "legendText2",gadgetConfig.level[i]));
+    }
 
-        $("#checkBox").append("<ul class='checkBoxText' style='list-style-type:none;position:absolute;bottom: 140px;left: "+(gadgetConfig.chartConfig.width-57)+";'><li class='context'><a class='legendTooltip' " +
+    $("#legendSecondary").empty();
+    $("#legendTitleSecondary").append("<div style='position:absolute;top: 50px;left: "+(gadgetConfig.chartConfig.width-50)+";'>Legend</div>");
+    for (var i = 0; i < gadgetConfig.level.length-2; i++) {
+        $("#legendSecondary").append(createLegendList(chartColorScale[i], "legendText2",gadgetConfig.level[i+2]));
+    }
+
+    document.getElementById('drawCanvasDefault').style.display='block';
+    document.getElementById('drawCanvasSecondary').style.display='none';
+
+    $("#checkBox").append("<ul class='checkBoxText' style='list-style-type:none;position:absolute;bottom: 140px;left: "+(gadgetConfig.chartConfig.width-57)+";'><li class='context'><a class='legendTooltip' " +
                                                              "data-toggle='tooltip' data-placement='bottom' title=\""+"\" style='cursor:default'>"+"<input type=\"checkbox\" checked=\"checked\" onclick='onClickSelector(this);'> Enable Debug and Info Logs<br>"+"</a></span></li></ul>");
-});
+}
 
 function onClickSelector(checkbox) {
     if(checkbox.checked){
-
        document.getElementById('drawCanvasDefault').style.display='block';
-        document.getElementById('drawCanvasSecondary').style.display='none';
+       document.getElementById('drawCanvasSecondary').style.display='none';
     }else{
-
        document.getElementById('drawCanvasDefault').style.display='none';
-        document.getElementById('drawCanvasSecondary').style.display='block';
+       document.getElementById('drawCanvasSecondary').style.display='block';
     }
 
 }
@@ -94,22 +96,21 @@ function fetch(logLevelIndex) {
     };
 
     client.searchCount(queryInfo, function (d) {
-
-        if (d["status"] === "success") {
+    if (d["status"] === "success") {
             console.log(gadgetConfig.level[logLevelIndex]);
             receivedData.push([gadgetConfig.level[logLevelIndex], parseInt(d["message"])]);
             async_tasks--;
             if (async_tasks == 0) {
                 if (!initState) {
                     redrawDefaultLogLevelChart();
+
                 } else {
                     drawDefaultLogLevelChart();
                     initState = true;
-
-                        receivedData.length = 0;
-                                                   async_tasks = 3;
-                                                   fetchWithDebug(2);
                 }
+                receivedData.length = 0;
+                async_tasks = 3;
+                fetchWithDebugAndInfo(2);
             } else {
                 fetch(++logLevelIndex);
             }
@@ -126,7 +127,7 @@ function fetch(logLevelIndex) {
     });
 }
 
-function fetchWithDebug(logLevelIndex) {
+function fetchWithDebugAndInfo(logLevelIndex) {
     if (!logLevelIndex) {
         receivedData.length = 0;
         logLevelIndex = 0;
@@ -141,19 +142,19 @@ function fetchWithDebug(logLevelIndex) {
 
     client.searchCount(queryInfo, function (d) {
 
-        if (d["status"] === "success") {
-            console.log(gadgetConfig.level[logLevelIndex]);
-            receivedData.push([gadgetConfig.level[logLevelIndex], parseInt(d["message"])]);
-            async_tasks--;
-            if (async_tasks == 0) {
-                if (!initState) {
-                    redrawWithDebugLogLevelChart();
-                } else {
-                    drawWithDebugLogLevelChart();
-                    initState = false;
+    if (d["status"] === "success") {
+        console.log(gadgetConfig.level[logLevelIndex]);
+        receivedData.push([gadgetConfig.level[logLevelIndex], parseInt(d["message"])]);
+        async_tasks--;
+        if (async_tasks == 0) {
+            if (!initState) {
+                 redrawDefaultLogLevelChart(true);
+            } else {
+                 drawWithDebugLogLevelChart();
+                 initState = false;
                 }
             } else {
-                fetchWithDebug(++logLevelIndex);
+                fetchWithDebugAndInfo(++logLevelIndex);
             }
         }
     }, function (error) {
@@ -170,8 +171,6 @@ function fetchWithDebug(logLevelIndex) {
 
 function drawDefaultLogLevelChart() {
     try {
-
-
         $(canvasDiv).empty();
 
                 chartDefault = new vizg(
@@ -195,23 +194,20 @@ function drawDefaultLogLevelChart() {
 
 function drawWithDebugLogLevelChart() {
     try {
-
-  $(canvasDivSecondary).empty();
-                chartSecondary = new vizg(
-                    [
-                        {
-                            "metadata": {
-                                        "names": ["LogLevel", "Frequency"],
-                                        "types": ["ordinal", "linear"]
-                                        },
-                            "data": receivedData
-                        }
-                    ],
-                    configChartSecondary
-                );
-                chartSecondary.draw(canvasDivSecondary);
-
-
+       $(canvasDivSecondary).empty();
+       chartSecondary = new vizg(
+           [
+               {
+                   "metadata": {
+                   "names": ["LogLevel", "Frequency"],
+                   "types": ["ordinal", "linear"]
+                    },
+                   "data": receivedData
+               }
+           ],
+       configChartSecondary
+       );
+       chartSecondary.draw(canvasDivSecondary);
     } catch (error) {
         console.log(error);
         error.message = "Error while drawing log event chart.";
@@ -220,17 +216,14 @@ function drawWithDebugLogLevelChart() {
     }
 }
 
-function redrawDefaultLogLevelChart() {
-    for (var i in receivedData) {
-        chartDefault.insert([receivedData[i]]);
-    }
-}
-
-function redrawWithDebugLogLevelChart(){
-for (var i in receivedData) {
-        chartSecondary.insert([receivedData[i]]);
-    }
-
+function redrawDefaultLogLevelChart(withDebugAndInfo) {
+     for (var i in receivedData) {
+          if(!withDebugAndInfo){
+                chartDefault.insert([receivedData[i]]);
+          }else{
+                chartSecondary.insert([receivedData[i]]);
+          }
+     }
 }
 
 function subscribe(callback) {
