@@ -61,12 +61,18 @@ function fetch(artifactType, status) {
         var obj = JSON.parse(d["message"]);
         if (d["status"] === "success") {
             var artifactName;
+            var containerName;
             for (var i = 0; i < obj.length; i++) {
                 artifactName = (obj[i].values._content).match(/(\ : )(.*?)(?=\ )/);
                 artifactName = artifactName[0].substring(2, artifactName[0].length);
+                containerName = (obj[i].values._content).match(/(\Deployed From Artifact Container: )(.*?)(?=\ )/);
+                if(containerName!=null){
+                containerName = containerName[0].substring(33, containerName[0].length);
+                }
+
                 var msg = obj[i].values._content.replace('\n',"");
                 msg = msg.replace(/[\r\n]/g, "");
-                receivedData.push([moment(obj[i].timestamp).format("YYYY-MM-DD HH:mm:ss.SSS"), artifactType, artifactName , obj[i].values._content, '<a href="#" class="btn padding-reduce-on-grid-view" onclick= "viewFunction(\''+obj[i].values._eventTimeStamp+'\',\''+msg+'\')"> <span class="fw-stack"> ' +
+                receivedData.push([moment(obj[i].timestamp).format("YYYY-MM-DD HH:mm:ss.SSS"), artifactType, artifactName , containerName, obj[i].values._content, '<a href="#" class="btn padding-reduce-on-grid-view" onclick= "viewFunction(\''+obj[i].values._eventTimeStamp+'\',\''+msg+'\')"> <span class="fw-stack"> ' +
                                                                                                                                                                         '<i class="fw fw-ring fw-stack-2x"></i> <i class="fw fw-view fw-stack-1x"></i> </span> <span class="hidden-xs">View</span> </a>']);
             }
                 drawLogErrorFilteredTable();
@@ -98,6 +104,7 @@ function drawLogErrorFilteredTable() {
                 { title: "Timestamp" },
                 { title: "ArtifactType" },
                 { title: "ArtifactName" },
+                { title: "ContainerID" },
                 { title: "LogLine" },
                 { title: "View" }
             ],

@@ -78,7 +78,6 @@ function fetchDeployed(logLevelIndex) {
 
 
 function fetchRemoved(logLevelIndex) {
-    console.log("ASdasda");
     if (!logLevelIndex) {
         logLevelIndex = 0;
     }
@@ -182,7 +181,6 @@ function onErrorCustom(title, message) {
 
 var onclick = function (event, item) {
     if (item != null) {
-    console.log("Asda");
            publish(
                 {
                     "ArtifactType": item.datum["ArtifactType"],
