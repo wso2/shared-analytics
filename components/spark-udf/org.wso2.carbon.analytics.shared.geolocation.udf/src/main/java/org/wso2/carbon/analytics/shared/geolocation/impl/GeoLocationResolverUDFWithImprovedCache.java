@@ -29,7 +29,7 @@ public class GeoLocationResolverUDFWithImprovedCache implements CarbonUDF {
 
     private static final Log log = LogFactory.getLog(GeoLocationResolverUDFWithImprovedCache.class);
 
-    public GeoLocationResolverUDFWithImprovedCache() throws GeoLocationResolverException {
+    public GeoLocationResolverUDFWithImprovedCache(){
         LocationResolver locationResolver = GeoResolverInitializer.getInstance().getLocationResolver();
         locationResolver.setPersistInDataBase(true);
     }
