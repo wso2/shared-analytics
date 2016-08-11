@@ -26,14 +26,16 @@ var gadgetConfig = {
         "types": ["ordinal", "linear"]
     },
     "chartConfig": {
-        colorScale: ["#5CB85C", "#438CAD", "#EECA5A", "#D9483D", "#95A5A6"],
+        colorScale: ["#1abc9c", "#3498db", "#9b59b6", "#f1c40f", "#e67e22", "#e74c3c", "#2c3e50", "#2ecc71", "#F16272","#bcbd22"],
         type: "bar",
         x: "LogLevel",
         color: "LogLevel",
         charts: [{y: "Frequency"}],
-        width: $('body').width(),
-        height: $('body').height(),
+        width: $(document).width()/1.27,
+        height: $(document).height()/1.2,
+        legend: false,
         padding: {"top": 10, "left": 80, "bottom": 70, "right": 200}
     },
     "domain": "carbon.super"
 };
+

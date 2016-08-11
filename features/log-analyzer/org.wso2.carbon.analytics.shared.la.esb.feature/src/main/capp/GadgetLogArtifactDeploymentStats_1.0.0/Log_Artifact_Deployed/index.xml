@@ -67,23 +67,6 @@
             <body>
                 <div class="col-sm-12">
                 <table>
-                    <tr>
-                        <td><label class="control-label">Filtering Type </label></td>
-                        <td>
-                            <select id="selector" class="form-control">
-                                <option>API</option>
-                                <option>Proxy service</option>
-                                <option>Template</option>
-                                <option>Local entry</option>
-                                <option>Endpoint</option>
-                                <option>Sequence</option>
-                                <option>Startup</option>
-                                <option>Event source</option>
-                                <option>Priority executor</option>
-                                <option>Inbound Endpoint</option>
-                            </select>
-                        </td>
-                    </tr>
                 </table>
                 </div>
                 <div id="errorDiv"></div>

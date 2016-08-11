@@ -40,13 +40,13 @@
         "default": {
           "overview-date-range-picker": [
             {
-              "id": "Date_Range_Picker-overview",
+              "id": "Log_Date_Range_Picker-overview",
               "content": {
-                "id": "Date_Range_Picker",
+                "id": "Log_Date_Range_Picker",
                 "title": "Date Range Picker",
                 "type": "gadget",
-                "thumbnail": "store://gadget/Date_Range_Picker/index.png",
-                "data": {"url": "store://gadget/Date_Range_Picker/index.xml"},
+                "thumbnail": "store://gadget/Log_Date_Range_Picker/index.png",
+                "data": {"url": "store://gadget/Log_Date_Range_Picker/index.xml"},
                 "notify": {
                   "range-selected": {
                     "type": "date-range",
@@ -87,7 +87,7 @@
                     "description": "Used to listen to any date range-selected",
                     "on": [
                       {
-                        "from": "Date_Range_Picker-overview",
+                        "from": "Log_Date_Range_Picker-overview",
                         "event": "range-selected"
                       }
                     ]
@@ -166,13 +166,13 @@
         "default": {
           "application-errors-date-range-picker": [
             {
-              "id": "Date_Range_Picker-application-errors",
+              "id": "Log_Date_Range_Picker-application-errors",
               "content": {
-                "id": "Date_Range_Picker",
+                "id": "Log_Date_Range_Picker",
                 "title": "Date Range Picker",
                 "type": "gadget",
-                "thumbnail": "store://gadget/Date_Range_Picker/index.png",
-                "data": {"url": "store://gadget/Date_Range_Picker/index.xml"},
+                "thumbnail": "store://gadget/Log_Date_Range_Picker/index.png",
+                "data": {"url": "store://gadget/Log_Date_Range_Picker/index.xml"},
                 "notify": {
                   "range-selected": {
                     "type": "date-range",
@@ -219,7 +219,7 @@
                     "description": "Used to listen to any date range-selected",
                     "on": [
                       {
-                        "from": "Date_Range_Picker-application-errors",
+                        "from": "Log_Date_Range_Picker-application-errors",
                         "event": "range-selected"
                       }
                     ]
@@ -378,14 +378,14 @@
         "default": {
           "artifact-deployment-stats-date-range-picker": [
             {
-              "id": "Date_Range_Picker-artifact-deployment-stats",
+              "id": "Log_Date_Range_Picker-artifact-deployment-stats",
               "content": {
-                "id": "Date_Range_Picker",
+                "id": "Log_Date_Range_Picker",
                 "title": "Date Range Picker",
                 "type": "gadget",
                 "category": "Widgets",
-                "thumbnail": "store://gadget/Date_Range_Picker/index.png",
-                "data": {"url": "store://gadget/Date_Range_Picker/index.xml"},
+                "thumbnail": "store://gadget/Log_Date_Range_Picker/index.png",
+                "data": {"url": "store://gadget/Log_Date_Range_Picker/index.xml"},
                 "notify": {
                   "range-selected": {
                     "type": "date-range",
@@ -426,7 +426,7 @@
                     "description": "Used to listen to any date range-selected",
                     "on": [
                       {
-                        "from": "Date_Range_Picker-artifact-deployment-stats",
+                        "from": "Log_Date_Range_Picker-artifact-deployment-stats",
                         "event": "range-selected"
                       }
                     ]
@@ -467,7 +467,7 @@
                     "description": "Used to listen to any date range-selected",
                     "on": [
                       {
-                        "from": "Date_Range_Picker-artifact-deployment-stats",
+                        "from": "Log_Date_Range_Picker-artifact-deployment-stats",
                         "event": "range-selected"
                       }
                     ]
@@ -530,14 +530,14 @@
         "default": {
           "logging-stats-date-range-picker": [
             {
-              "id": "Date_Range_Picker-logging-stats",
+              "id": "Log_Date_Range_Picker-logging-stats",
               "content": {
-                "id": "Date_Range_Picker",
+                "id": "Log_Date_Range_Picker",
                 "title": "Date Range Picker",
                 "type": "gadget",
                 "category": "Widgets",
-                "thumbnail": "store://gadget/Date_Range_Picker/index.png",
-                "data": {"url": "store://gadget/Date_Range_Picker/index.xml"},
+                "thumbnail": "store://gadget/Log_Date_Range_Picker/index.png",
+                "data": {"url": "store://gadget/Log_Date_Range_Picker/index.xml"},
                 "notify": {
                   "range-selected": {
                     "type": "date-range",
@@ -583,7 +583,7 @@
                     "description": "Used to listen to any date range-selected",
                     "on": [
                       {
-                        "from": "Date_Range_Picker-logging-stats",
+                        "from": "Log_Date_Range_Picker-logging-stats",
                         "event": "range-selected"
                       }
                     ]
@@ -662,14 +662,14 @@
         "default": {
           "number-of-failures-date-range-picker": [
             {
-              "id": "Date_Range_Picker-number-of-failures",
+              "id": "Log_Date_Range_Picker-number-of-failures",
               "content": {
-                "id": "Date_Range_Picker",
+                "id": "Log_Date_Range_Picker",
                 "title": "Date Range Picker",
                 "type": "gadget",
                 "category": "Widgets",
-                "thumbnail": "store://gadget/Date_Range_Picker/index.png",
-                "data": {"url": "store://gadget/Date_Range_Picker/index.xml"},
+                "thumbnail": "store://gadget/Log_Date_Range_Picker/index.png",
+                "data": {"url": "store://gadget/Log_Date_Range_Picker/index.xml"},
                 "notify": {
                   "range-selected": {
                     "type": "date-range",
@@ -716,7 +716,7 @@
                     "description": "Used to listen to any date range-selected",
                     "on": [
                       {
-                        "from": "Date_Range_Picker-number-of-failures",
+                        "from": "Log_Date_Range_Picker-number-of-failures",
                         "event": "range-selected"
                       }
                     ]
@@ -876,14 +876,14 @@
         "default": {
           "access-token-errors-date-range-picker": [
             {
-              "id": "Date_Range_Picker-access-token-errors",
+              "id": "Log_Date_Range_Picker-access-token-errors",
               "content": {
-                "id": "Date_Range_Picker",
+                "id": "Log_Date_Range_Picker",
                 "title": "Date Range Picker",
                 "type": "gadget",
                 "category": "Widgets",
-                "thumbnail": "store://gadget/Date_Range_Picker/index.png",
-                "data": {"url": "store://gadget/Date_Range_Picker/index.xml"},
+                "thumbnail": "store://gadget/Log_Date_Range_Picker/index.png",
+                "data": {"url": "store://gadget/Log_Date_Range_Picker/index.xml"},
                 "notify": {
                   "range-selected": {
                     "type": "date-range",
@@ -930,7 +930,7 @@
                     "description": "Used to listen to any date range-selected",
                     "on": [
                       {
-                        "from": "Date_Range_Picker-access-token-errors",
+                        "from": "Log_Date_Range_Picker-access-token-errors",
                         "event": "range-selected"
                       }
                     ]
