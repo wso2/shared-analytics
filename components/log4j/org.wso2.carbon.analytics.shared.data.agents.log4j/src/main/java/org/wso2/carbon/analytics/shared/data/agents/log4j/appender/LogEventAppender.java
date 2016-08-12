@@ -165,25 +165,15 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         try {
             dataPublisher = new DataPublisher("Thrift", url, authURLs, userName, password);
         } catch (DataEndpointAgentConfigurationException e) {
-            log.error(
-                    "Invalid urls passed for receiver and auth, and hence expected to fail " + e
-                            .getMessage(), e);
+            logError("Invalid urls passed for receiver and auth, and hence expected to fail "  + e.getMessage(), e);
         } catch (DataEndpointException e) {
-            log.error(
-                    "Error while trying to publish events to data receiver " + e
-                            .getMessage(), e);
+            logError("Error while trying to publish events to data receiver " + e.getMessage(), e);
         } catch (DataEndpointConfigurationException e) {
-            log.error(
-                    "Invalid urls passed for receiver and auth, and hence expected to fail " + e
-                            .getMessage(), e);
+            logError("Invalid urls passed for receiver and auth, and hence expected to fail " + e.getMessage(), e);
         } catch (DataEndpointAuthenticationException e) {
-            log.error(
-                    "Error while trying to login to data receiver : " + e
-                            .getMessage(), e);
+            logError("Error while trying to login to data receiver : " + e.getMessage(), e);
         } catch (TransportException e) {
-            log.error(
-                    "Thrift transport exception occurred " + e
-                            .getMessage(), e);
+            logError( "Thrift transport exception occurred " + e.getMessage(), e);
         }
     }
 
@@ -196,7 +186,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
             try {
                 scheduler.awaitTermination(10, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
-                log.warn("Interrupted while awaiting for Schedule Executor termination");
+                logError("Interrupted while awaiting for Schedule Executor termination", null);
             }
         }
         try {
@@ -204,7 +194,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
                 dataPublisher.shutdown();
             }
         } catch (DataEndpointException e) {
-            log.error("Error in shutting down the data publisher " + e.getMessage(), e);
+            logError("Error in shutting down the data publisher " + e.getMessage(), e);
         }
     }
 
@@ -247,8 +237,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
                     try {
                         tenantId = getTenantIdForDomain(tenantDomain);
                     } catch (UserStoreException e) {
-                        System.err.println("Cannot find tenant id for the given tenant domain.");
-                        e.printStackTrace();
+                        logError("Cannot find tenant id for the given tenant domain.", e);
                     }
                 }
             }
@@ -262,8 +251,16 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
                 tenantEvent.setServiceName("");
             }
             if (!loggingEvents.offer(tenantEvent)) {
-                log.warn("Logging events queue exceed the process limits");
+                logError("Logging events queue exceed the process limits", null);
             }
+        }
+    }
+
+
+    public static void logError(String message, Throwable exception){
+        System.err.println(message);
+        if (exception != null) {
+            exception.printStackTrace();
         }
     }
 
@@ -370,12 +367,11 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
                     publishLogEvent(tenantDomainAwareLoggingEvent);
                 }
             } catch (Throwable t) {
-                System.err.println("FATAL: LogEventAppender Cannot publish log events");
-                t.printStackTrace();
+                logError("FATAL: LogEventAppender Cannot publish log events", t);
                 numOfConsecutiveFailures++;
                 if (numOfConsecutiveFailures >= getMaxTolerableConsecutiveFailure()) {
-                    System.err.println("WARN: Number of consecutive log publishing failures reached the threshold of " +
-                            getMaxTolerableConsecutiveFailure() + ". Purging log event array. Some logs will be lost.");
+                    logError("WARN: Number of consecutive log publishing failures reached the threshold of " +
+                            getMaxTolerableConsecutiveFailure() + ". Purging log event array. Some logs will be lost.", null);
                     loggingEvents.clear();
                     numOfConsecutiveFailures = 0;
                 }
