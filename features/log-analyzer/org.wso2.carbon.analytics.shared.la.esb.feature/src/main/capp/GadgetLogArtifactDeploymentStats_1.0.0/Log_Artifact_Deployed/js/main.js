@@ -20,48 +20,71 @@
 var chart;
 var from = gadgetUtil.timeFrom();
 var to = gadgetUtil.timeTo();
-var async_tasks = gadgetConfig.ArtifactType.length;
 var receivedData = [];
 var initState = true;
-var meta = gadgetConfig.meta;
-var configChart = gadgetConfig.chartConfig;
 var canvasDiv = "#canvas";
 var prefs = new gadgets.Prefs();
+var gadgetConfig = gadgetUtil.getGadgetConf("Log_Artifact_Deployed");
+var async_tasks = gadgetConfig.classes.length;
+var meta = gadgetConfig.meta;
+var configChart = gadgetConfig.chartConfig;
 var svrUrl = gadgetUtil.getGadgetSvrUrl("ESB");
 var client = new AnalyticsClient().init(null,null,svrUrl);
+var initialBarCount = gadgetConfig.barCount;
+var dataSourceCount = 0;
 
 function initialize() {
-    fetchDeployed();
+    fetchDeployed(null,gadgetConfig.barData.names[initialBarCount - gadgetConfig.barCount]);
 }
 
 $(document).ready(function () {
     initialize();
 });
 
-function fetchDeployed(logLevelIndex) {
-    if (!logLevelIndex) {
-        receivedData.length = 0;
+function fetchDeployed(logLevelIndex, param) {
+    if (!logLevelIndex ) {
         logLevelIndex = 0;
+        if(dataSourceCount == 0){
+            receivedData.length = 0;
+        }
     }
+
+    var initialQuery = queryBuilder(logLevelIndex);
+
     var queryInfo = {
-        tableName: gadgetConfig.datasourceOne,
+        tableName: gadgetConfig.barData.datasources[dataSourceCount],
         searchParams: {
-            query: "ArtifactType:\"" + gadgetConfig.ArtifactType[logLevelIndex] + "\" AND  _timestamp: [" + from + " TO " + to + "]"
+            query: initialQuery + " AND  _timestamp: [" + from + " TO " + to + "]"
         }
     };
 
     client.searchCount(queryInfo, function (d) {
         if (d["status"] === "success") {
-
-            receivedData.push([gadgetConfig.ArtifactType[logLevelIndex],"Deployed Artifacts", parseInt(d["message"])]);
-
-
+            receivedData.push([gadgetConfig.classes[logLevelIndex],param, parseInt(d["message"])]);
             async_tasks--;
             if (async_tasks == 0) {
-            async_tasks = gadgetConfig.ArtifactType.length;
-                fetchRemoved(0);
+            async_tasks = gadgetConfig.classes.length;
+
+                if(--gadgetConfig.barCount > 0){
+                    dataSourceCount++;
+                    fetchDeployed(0, gadgetConfig.barData.names[gadgetConfig.barCount]);
+
+                }else{
+                    if(initState){
+                       drawLogLevelChart();
+                    }else{
+                       initState=  false;
+                       redrawLogLevelChart();
+                    }
+
+                }
             } else {
-                fetchDeployed(++logLevelIndex);
+                if(gadgetConfig.barCount > 1){
+                    fetchDeployed(++logLevelIndex,gadgetConfig.barData.names[initialBarCount - gadgetConfig.barCount]);
+                    }
+                else{
+                    fetchDeployed(++logLevelIndex,gadgetConfig.barData.names[initialBarCount - gadgetConfig.barCount]);
+                }
             }
         }
     }, function (error) {
@@ -76,46 +99,10 @@ function fetchDeployed(logLevelIndex) {
     });
 }
 
-
-function fetchRemoved(logLevelIndex) {
-    if (!logLevelIndex) {
-        logLevelIndex = 0;
+function queryBuilder(logLevelIndex){
+     for(i=0; i < gadgetConfig.queryParams.fieldNames[dataSourceCount][logLevelIndex].length; i++){
+              return gadgetConfig.queryParams.fieldNames[dataSourceCount][logLevelIndex][i] +": \"" + gadgetConfig.queryParams.searchParams[dataSourceCount][logLevelIndex][i] + "\"";
     }
-
-    var queryInfo = {
-        tableName: gadgetConfig.datasourceTwo,
-        searchParams: {
-            query: "ArtifactType:\"" + gadgetConfig.ArtifactType[logLevelIndex] + "\" AND  _timestamp: [" + from + " TO " + to + "]"
-        }
-    };
-
-    client.searchCount(queryInfo, function (d) {
-        if (d["status"] === "success") {
-
-            receivedData.push([gadgetConfig.ArtifactType[logLevelIndex],"Removed Artifacts", parseInt(d["message"])]);
-
-            async_tasks--;
-            if (async_tasks == 0) {
-                if (!initState) {
-                    redrawLogLevelChart();
-                } else {
-                    drawLogLevelChart();
-                    initState = false;
-                }
-            } else {
-                fetchRemoved(++logLevelIndex);
-            }
-        }
-    }, function (error) {
-        if(error === undefined){
-            onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
-            console.log("Analytics server not found : Please troubleshoot connection problems.");
-        }else{
-            error.message = "Internal server error while data indexing.";
-            onError(error);
-            console.log(error);
-        }
-    });
 }
 
 function drawLogLevelChart() {
@@ -137,7 +124,6 @@ function drawLogLevelChart() {
                         callback: onclick
                     }
                 ]);
-
     } catch (error) {
         console.log(error);
         error.message = "Error while drawing log event chart.";
@@ -165,10 +151,13 @@ function subscribe(callback) {
 }
 
 subscribe(function (topic, data, subscriber) {
+    $(canvasDiv).empty();
     from = parseInt(data["timeFrom"]);
     to = parseInt(data["timeTo"]);
-    async_tasks = gadgetConfig.ArtifactType.length;
-    fetchDeployed();
+    async_tasks = gadgetConfig.classes.length;
+    gadgetConfig.barCount = 2;
+    dataSourceCount = 0;
+    fetchDeployed(null,gadgetConfig.barData.names[initialBarCount - gadgetConfig.barCount]);
 });
 
 function onError(msg) {
@@ -183,7 +172,7 @@ var onclick = function (event, item) {
     if (item != null) {
            publish(
                 {
-                    "ArtifactType": item.datum["ArtifactType"],
+                    "ArtifactType": item.datum["class"],
                     "Status": item.datum["Status"],
                     "fromTime": from,
                     "toTime": to,

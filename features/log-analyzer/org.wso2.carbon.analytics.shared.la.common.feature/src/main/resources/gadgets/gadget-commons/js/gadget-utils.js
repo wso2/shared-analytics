@@ -50,6 +50,16 @@ function GadgetUtil() {
         return gadgetConf;
     };
 
+    this.getGadgetConf = function(gadgetConfig) {
+            var gadgetConf = null;
+            gadgetConfigs.forEach(function(item, i) {
+                if (item.id === gadgetConfig) {
+                    gadgetConf = item;
+                }
+            });
+            return gadgetConf;
+        };
+
       this.getGadgetSvrUrl = function(chartType) {
             var svrUrl = null;
             serverUrls.forEach(function(item, i) {

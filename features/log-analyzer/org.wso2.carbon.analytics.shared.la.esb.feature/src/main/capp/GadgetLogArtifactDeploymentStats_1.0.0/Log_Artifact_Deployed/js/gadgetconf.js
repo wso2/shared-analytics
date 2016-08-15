@@ -16,27 +16,34 @@
  * under the License.
  */
 
-var gadgetConfig = {
+var gadgetConfigs = [{
     "id": "Log_Artifact_Deployed",
     "title": "Log Event",
-    "datasourceOne": "LOGANALYZER_ARTIFACT_DEPLOYMENT_DAILY",
-    "datasourceTwo": "LOGANALYZER_ARTIFACT_DELETED_DAILY",
-    "ArtifactType": ["API", "Proxy service", "Template", "Local entry", "Endpoint", "Sequence","Startup","Event source","Priority executor", "Inbound Endpoint"],
+    "barData": {
+            "datasources": ["LOGANALYZER_ARTIFACT_DEPLOYMENT_DAILY", "LOGANALYZER_ARTIFACT_DELETED_DAILY"],
+            "names": ["Deployed Artifacts","Removed Artifacts"]
+        },
+    "classes": ["API", "Proxy service", "Template", "Local entry", "Endpoint", "Sequence","Startup","Event source","Priority executor", "Inbound Endpoint"],
+    "barCount" : 2,
     "meta": {
-        "names": ["ArtifactType", "Status", "Frequency"],
+        "names": ["class", "Status", "Frequency"],
         "types": ["ordinal","ordinal", "linear"]
     },
 
+    "queryParams" : { "fieldNames" : [[["ArtifactType"],["ArtifactType"],["ArtifactType"],["ArtifactType"],["ArtifactType"],["ArtifactType"],["ArtifactType"],["ArtifactType"],["ArtifactType"],["ArtifactType"]],[["ArtifactType"],["ArtifactType"],["ArtifactType"],["ArtifactType"],["ArtifactType"],["ArtifactType"],["ArtifactType"],["ArtifactType"],["ArtifactType"],["ArtifactType"]]],
+                      "searchParams" : [[["API"],["Proxy service"], ["Template"], ["Local entry"], ["Endpoint"], ["Sequence"],["Startup"],["Event source"],["Priority executor"], ["Inbound Endpoint"]],[["API"], ["Proxy service"], ["Template"], ["Local entry"], ["Endpoint"], ["Sequence"],["Startup"],["Event source"],["Priority executor"], ["Inbound Endpoint"] ]]
+},
+
     "chartConfig": {
         mode:"group",
-        colorScale: ["#5CB85C", "#438CAD", "#EECA5A", "#D9483D", "#95A5A6","#95A5A6","#95A5A6","#95A5A6","#95A5A6","#95A5A6"],
+        colorScale: ["#5CB85C", "#FF0000"],
         type: "bar",
-        x: "ArtifactType",
+        x: "class",
        charts : [{type: "bar",  y : "Frequency", color: "Status", mode:"group"}],
         width: $('body').width(),
         height: $('body').height(),
         padding: {"top": 10, "left": 80, "bottom": 70, "right": 200},
-        tooltip: {"enabled":true, "color":"#e5f2ff", "type":"symbol", "content":["ArtifactType","Frequency","Status"], "label":true}
+        tooltip: {"enabled":true, "color":"#e5f2ff", "type":"symbol", "content":["classes","Frequency","Status"], "label":true}
     },
     "domain": "carbon.super"
-};
+}];
