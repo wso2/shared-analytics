@@ -31,80 +31,90 @@
     <Content type="html">
         <![CDATA[
         <html>
-            <head>
-                <meta charset="utf-8"/>
-                <title>Log Events</title>
+        <head>
+            <meta charset="utf-8"/>
+            <title>Log Events</title>
 
-                <!-- WSO2 Theme -->
-                <link rel="stylesheet" type="text/css" href="/portal/libs/font-wso2_1.0.0/css/font-wso2.min.css" />
-                <link rel="stylesheet" type="text/css" href="/portal/libs/theme-wso2_1.0/css/theme-wso2.css" />
+            <link rel="stylesheet" type="text/css" href="/portal/libs/bootstrap_3.3.5/css/bootstrap.min.css" />
+            <link rel="stylesheet" type="text/css" href="/portal/libs/font-wso2_1.0.0/css/font-wso2.min.css" />
+            <link rel="stylesheet" type="text/css" href="/portal/libs/theme-wso2_1.0/css/theme-wso2.css" />
+            <link rel="stylesheet" type="text/css" href="../commons/css/gadget.css" />
+
+            <!-- Custom -->
+            <link rel="stylesheet" type="text/css" href="css/style.css">
+            <link rel="stylesheet" type="text/css" href="css/custom.css">
+
+            <!-- JS -->
+            <script src="../gadget-commons/js/jquery-1.10.2.js"></script>
+            <script src="../gadget-commons/js/moment.min.js"></script>
+            <script src="../gadget-commons/js/gadget-utils.js"></script>
+            <script src="../gadget-commons/js/bootstrap-paginator.min.js"></script>
+            <script src="../gadget-commons/js/carbon-analytics.js"></script>
+            <script src="../gadget-commons/js/bootstrap.min.js"></script>
+            <script src="../gadget-commons/js/Mustache.js"></script>
+
+            <!-- Include VizGrammar -->
+            <script src="../gadget-commons/js/d3.min.js"></script>
+            <script src="../gadget-commons/js/vega.js"></script>
+            <script src="../gadget-commons/js/VizGrammar.js"></script>
+
+            <!--Twitter typeahead-->
+            <script src="../gadget-commons/js/typeahead.bundle.js"></script>
+
+            <!-- Custom -->
+            <script src="js/gadgetconf.js"></script>
+            <script src="js/main.js"></script>
+        </head>
+        <body style="margin-bottom: 0px;">
+        <div id="errorDiv"></div>
+
+        <div id= "drawCanvasDefault" class="drawCanvas" style="display:block;">
+            <table>
+                <tr>
+                    <td>
+                        <div id="canvasDefault" class="canvasDefault"></div>
+                    </td>
+                    <td>
+                        <div >
+                            <div id="listContainer" class="legend">
+
+                                <div class="checkboxDebug">
+                                    <input type="checkbox" value="None" id="checkboxDebug" name="check" checked onclick='debugClick(this);'/>
+                                    <label for="checkboxDebug" style="float:left" > Debug</label>
+                                </div>
+
+                                <div class="checkboxInfo">
+                                    <input type="checkbox" value="None" id="checkboxInfo" name="check" checked onclick='infoClick(this);'/>
+                                    <label for="checkboxInfo" style="float:left" > Info</label>
+                                </div>
+
+                                <div class="checkboxWarning">
+                                    <input type="checkbox" value="None" id="checkboxWarning" name="check" checked onclick='warnClick(this);'/>
+                                    <label for="checkboxWarning" style="float:left" > Warn</label>
+                                </div>
+
+                                <div class="checkboxError">
+                                    <input type="checkbox" value="None" id="checkboxError" name="check" checked onclick='errorClick(this);'/>
+                                    <label for="checkboxError" style="float:left" > Error</label>
+                                </div>
+
+                                <div class="checkboxFatal">
+                                    <input type="checkbox" value="None" id="checkboxFatal" name="check" checked onclick='fatalClick(this);'/>
+                                    <label for="checkboxFatal" style="float:left" > Fatal</label>
+                                </div>
+
+                            </div>
+
+                            <div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="errorDiv"></div>
 
 
-                <!-- CSS -->
-                <link rel="stylesheet" type="text/css" href="../gadget-commons/css/gadget.css" />
-                <link rel="stylesheet" type="text/css" href="../gadget-commons/css/bootstrap.min.css" />
-                <link rel="stylesheet" type="text/css" href="css/style.css" />
 
-                <!-- JS -->
-                <script src="../gadget-commons/js/jquery-1.10.2.js"></script>
-                <script src="../gadget-commons/js/moment.min.js"></script>
-                <script src="../gadget-commons/js/gadget-utils.js"></script>
-                <script src="../gadget-commons/js/bootstrap-paginator.min.js"></script>
-                <script src="../gadget-commons/js/carbon-analytics.js"></script>
-                <script src="../gadget-commons/js/bootstrap.min.js"></script>
-                <script src="../gadget-commons/js/Mustache.js"></script>
-
-                <!-- Include VizGrammar -->
-                <script src="../gadget-commons/js/d3.min.js"></script>
-                <script src="../gadget-commons/js/vega.js"></script>
-                <script src="../gadget-commons/js/VizGrammar.js"></script>
-
-                <!--Twitter typeahead-->
-                <script src="../gadget-commons/js/typeahead.bundle.js"></script>
-
-                <!-- Custom -->
-                <script src="js/gadgetconf.js"></script>
-                <script src="js/main.js"></script>
-            </head>
-            <body style="margin-bottom: 0px;">
-             <div id="errorDiv"></div>
-
-                <div id= "drawCanvasDefault" class="drawCanvas" style="display:block;">
-                    <table>
-                        <tr>
-                            <td>
-                               <div id="canvasDefault"></div>
-                            </td>
-                            <td>
-                                <div>
-                                    <div id="legendTitleDefault" class="legendTitle"></div>
-                                    <div id="legendDefault" class="legend"></div>
-
-                                <div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                 <div id="errorDiv"></div>
-
-                <div id= "drawCanvasSecondary" class="drawCanvas" style="display:block;">
-                    <table>
-                        <tr>
-                            <td>
-                               <div id="canvasSecondary"></div>
-                            </td>
-                            <td>
-                                <div>
-                                    <div id="legendTitleSecondary" class="legendTitle"></div>
-                                    <div id="legendSecondary" class="legend"></div>
-
-                                <div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                 <div id="checkBox" class="checkBox"></div>
-            </body>
+        </body>
         </html>
         ]]>
     </Content>
