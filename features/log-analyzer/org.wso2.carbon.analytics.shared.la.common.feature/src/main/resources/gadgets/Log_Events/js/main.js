@@ -181,9 +181,8 @@ function xAxisBuilder(){
         for( var i = 0; i < checkedBars.length; i++ ){
            if(checkedBars[i]){
                xAxisValues.push( gadgetConfig.level[i]);
-               console.log(i);
         }}
-        console.log(xAxisValues.length);
+
 }
 
 
@@ -205,7 +204,7 @@ function fetch(logLevelIndex) {
             query: "_level:" + xAxisValues[logLevelIndex] + " AND  _eventTimeStamp: [" + from + " TO " + to + "]"
         }
     };
-    console.log(queryInfo);
+
     client.searchCount(queryInfo, function (d) {
         if (d["status"] === "success") {
             receivedData.push([xAxisValues[logLevelIndex], parseInt(d["message"])]);
