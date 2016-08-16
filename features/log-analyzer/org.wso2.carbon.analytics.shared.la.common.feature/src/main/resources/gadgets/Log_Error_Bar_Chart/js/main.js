@@ -257,7 +257,12 @@ function drawErrorChart() {
         gadgetData.schema[0].data = drawingChartData;
         gadgetData.chartConfig.colorScale.push("#95a5a6");
         gadgetData.chartConfig.colorDomain.push("NoEntries");
-        var vg = new vizg(gadgetData.schema, JSON.parse(JSON.stringify(gadgetData.chartConfig)));
+        var maxValue = getMaximumValue();
+        var configChart = JSON.parse(JSON.stringify(gadgetData.chartConfig));
+        if(maxValue < 10){
+              configChart.yTicks = maxValue;
+        }
+        var vg = new vizg(gadgetData.schema, configChart);
         vg.draw(canvasDiv, [
             {
                 type: "click",
@@ -273,6 +278,16 @@ function drawErrorChart() {
         error.status = "";
         onError(error);
     }
+}
+
+function getMaximumValue(){
+    var max = 0;
+    for(var i=0;i<this.gadgetData.schema[0].data.length;i++){
+        if(this.gadgetData.schema[0].data[i][1] > max){
+            max = this.gadgetData.schema[0].data[i][1];
+        }
+    }
+    return max;
 }
 
 function drawLegend(fullContext, id) {
