@@ -45,6 +45,7 @@
             <!-- Custom -->
             <link rel="stylesheet" type="text/css" href="../gadget-commons/css/dataTables.bootstrap.css">
             <link rel="stylesheet" type="text/css" href="css/style.css">
+            <link rel="stylesheet" type="text/css" href="css/custom.css">
 
             <!-- JS -->
             <script src="../gadget-commons/js/jquery-1.10.2.js"></script>

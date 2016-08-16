@@ -34,6 +34,7 @@
             <head>
                 <title>Live log viewer</title>
                 <link rel="stylesheet" href="css/style.css" type="text/css"/>
+                <link rel="stylesheet" type="text/css" href="css/custom.css">
                 <meta charset="utf-8">
                 <script src="../gadget-commons/js/jquery-1.10.2.js"></script>
                 <script src="../gadget-commons/js/carbon-analytics.js"></script>
