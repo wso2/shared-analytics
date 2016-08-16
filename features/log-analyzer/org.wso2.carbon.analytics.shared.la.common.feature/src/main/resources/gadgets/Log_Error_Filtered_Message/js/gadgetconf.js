@@ -29,10 +29,10 @@ var tables = [
     },
     {
         name: "APIM_AUDIT_LOG",
-        dataSource: "LOGANALYZER",
+        dataSource: "LOGANALYZER_APIM_AUDIT_LOG",
         schema: {
-            columns: ["performedBy", "action", "typ", "info"],
-            titles: ["Performed By", "API Action", "Type", "Info"]
+            columns: ["user", "action", "type", "info"],
+            titles: ["User", "API Action", "Type", "Info"]
         },
         advancedColumns: [
             {
@@ -40,27 +40,13 @@ var tables = [
                 formatters: [
                     {
                         type: "json",
-                        keys: ["application_name", "tier", "provider", "api_name", "application_id"],
-                        titles: ["Application Name :", "Tire :", "Provider :", "API name :", "Application ID :"],
-                        delimiter: "\n"
-                    }
-                ]
-            },
-            {
-                id: "action",
-                formatters: [
-                    {
-                        type: "regx",
-                        pattern: "/(\ : )(.*?)(?=\ )/",
-                    },
-                    {
-                        type: "substring",
-                        start:0,
-                        end:6
+                        keys: ["name", "context", "provider", "version", "tier", "callbackURL", "application_name", "api_name"],
+                        titles: ["Name", "Context", "Provider", "Version", "Tier", "Callback URL", "Application Name", "API Name"],
+                        delimiter: "<br>"
                     }
                 ]
             }
         ],
-        actionParameters: ["performedBy", "action"]
+        actionParameters: []
     }
 ];

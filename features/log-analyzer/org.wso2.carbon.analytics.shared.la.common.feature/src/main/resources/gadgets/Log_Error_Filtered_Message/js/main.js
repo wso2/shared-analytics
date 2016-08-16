@@ -24,9 +24,7 @@ var toTime;
 var receivedData = [];
 var canvasDiv = "#canvas";
 var gadgetData = gadgetUtil.getTable(prefs.getString(PARAM_TYPE));
-var viewFunctionMap = new Map();
-var filteredMessageArray = [];
-var filteringByField;
+var viewFunctionMap = [];
 var nanoScrollerSelector = $(".nano");
 var dataTable;
 var queryString = "";
@@ -43,8 +41,8 @@ $(document).ready(function () {
 });
 
 function fetch() {
-    viewFunctionMap.clear();
-    receivedData.length = 0
+    viewFunctionMap.length = 0;
+    receivedData.length = 0;
     var queryInfo = {
         tableName: gadgetData.dataSource,
         searchParams: {
@@ -78,8 +76,8 @@ function fetch() {
                             viewFunctionParamerters[gadgetData.actionParameters[actionParameter]] = obj[i].values[gadgetData.actionParameters[actionParameter]];
                         }
                     }
-                    viewFunctionMap.set((viewFunctionMap.size + 1), viewFunctionParamerters);
-                    formattedEntry.push('<a href="#" class="btn padding-reduce-on-grid-view" onclick= "viewFunction(\'' + viewFunctionMap.size + '\')"> <span class="fw-stack"> ' +
+                    viewFunctionMap.push(viewFunctionParamerters);
+                    formattedEntry.push('<a href="#" class="btn padding-reduce-on-grid-view" onclick= "viewFunction(\'' + viewFunctionMap.length + '\')"> <span class="fw-stack"> ' +
                         '<i class="fw fw-ring fw-stack-2x"></i> <i class="fw fw-view fw-stack-1x"></i> </span> <span class="hidden-xs">View</span> </a>')
                 }
                 receivedData.push(formattedEntry);
@@ -94,21 +92,23 @@ function fetch() {
 }
 
 function columnFormatter(columnData, formatters) {
-    var processedMessage = columnData;
+    var processedMessage = "";
     for (var formatter in formatters) {
-        if (formatter.type === "json") {
-            processedMessage = "";
-            for (var i = 0; i < formatter.keys.length; i++) {
-                processedMessage = processedMessage.concat(formatter.titles[i] + " : " + columnData[formatter.keys[i]] + formatter.delimiter);
+        if (formatters[formatter].type === "json") {
+            columnData = JSON.parse(columnData);
+            for (var i = 0; i < formatters[formatter].keys.length; i++) {
+                if (columnData[formatters[formatter].keys[i]] != undefined) {
+                    processedMessage = processedMessage.concat(formatters[formatter].titles[i] + " : " + columnData[formatters[formatter].keys[i]] + formatters[formatter].delimiter);
+                }
             }
         }
 
-        if (formatter.type === "regx") {
-            processedMessage = (processedMessage).match(formatter.pattern);
+        if (formatters[formatter].type === "regx") {
+            processedMessage = (processedMessage).match(formatters[formatter].pattern);
         }
 
-        if (formatter.type === "substring") {
-            processedMessage = processedMessage.substring(formatter.start, formatter.end);
+        if (formatters[formatter].type === "substring") {
+            processedMessage = processedMessage.substring(formatters[formatter].start, formatters[formatter].end);
         }
     }
     return processedMessage;
@@ -121,7 +121,7 @@ function drawLogErrorFilteredTable() {
             dataTable.destroy();
         }
         var colNames = [];
-        colNames.push({title: "Timestamp"})
+        colNames.push({title: "Timestamp"});
         for (var i = 0; i < gadgetData.schema.titles.length; i++) {
             colNames.push({title: gadgetData.schema.titles[i]})
         }
@@ -151,11 +151,6 @@ function drawLogErrorFilteredTable() {
         onError(error);
     }
 }
-
-
-function publish(data) {
-    gadgets.Hub.publish("publisher", data);
-};
 
 function subscribe(callback) {
     gadgets.HubSettings.onConnect = function () {
@@ -188,7 +183,7 @@ subscribe(function (topic, data, subscriber) {
 });
 
 function viewFunction(data) {
-    publish(viewFunctionMap.get(data));
+    gadgets.Hub.publish("publisher", viewFunctionMap[data-1]);
 }
 
 function onError(msg) {
