@@ -26,11 +26,9 @@ import org.apache.log4j.helpers.PatternParser;
 import org.apache.log4j.spi.LoggingEvent;
 import org.wso2.carbon.base.ServerConfiguration;
 import org.wso2.carbon.context.CarbonContext;
-import org.wso2.carbon.analytics.shared.data.agents.log4j.util.TenantDomainAwareLoggingEvent;
+import org.wso2.carbon.utils.NetworkUtils;
 
-import java.lang.System;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.net.SocketException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
@@ -59,7 +57,6 @@ public class TenantAwarePatternLayout extends PatternLayout {
     }
 
     private static class TenantAwarePatternParser extends PatternParser {
-        InetAddress inetAddress;
         String address;
         String serverName = (String) AccessController.doPrivileged(new PrivilegedAction() {
             public String run() {
@@ -71,10 +68,9 @@ public class TenantAwarePatternLayout extends PatternLayout {
             super(pattern);
 
             try {
-                this.inetAddress = InetAddress.getLocalHost();
-                this.address = this.inetAddress.getHostAddress();
-            } catch (UnknownHostException var3) {
-                this.address = "127.0.0.1";
+                this.address = NetworkUtils.getLocalHostname();
+            } catch (SocketException e) {
+                e.printStackTrace();
             }
 
         }
