@@ -19,7 +19,7 @@
 var charts = [
     {
         name: "APIM_MESSAGE_PROCESSING",
-        columns: ["timestamp", "apiCount", "apiName"],
+        columns: ["timestamp", "apiCount", "apiName", "fullApiName"],
         additionalColumns: ["week"],
         orderedField: "apiCount",
         schema: [{

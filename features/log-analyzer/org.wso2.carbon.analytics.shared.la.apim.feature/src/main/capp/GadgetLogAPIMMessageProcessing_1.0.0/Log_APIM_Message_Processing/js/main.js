@@ -93,6 +93,7 @@ function initialize() {
             reversed: "false" //optional
         }
     ];
+
     var queryInfo = queryBuilder(tableName, query, 0, 1000, sorting);
 
     client.searchCount(queryInfo, function (d) {
@@ -391,39 +392,52 @@ function publish(data) {
 var onclick = function (event, item) {
     var selectedDataArray = [];
     var tempFromTime;
+    var eventCount = 0;
     if (item != null) {
         if (item.datum[gadgetData.columns[2]] === "Other") {
             for (var i = 0; i < receivedOtherData.length; i++) {
                 if (receivedOtherData[i]["day"] === item.datum.day) {
-                    selectedDataArray.push([receivedOtherData[i].values[gadgetData.columns[2]], receivedOtherData[i].values[gadgetData.columns[1]]]);
-                    if(tempFromTime === undefined){
+                    selectedDataArray.push(receivedOtherData[i].values[gadgetData.columns[3]].replace(/\"/g, "\\\""));
+                    eventCount = eventCount + receivedOtherData[i].values[gadgetData.columns[1]];
+                    if (tempFromTime === undefined) {
                         tempFromTime = receivedOtherData[i][gadgetData.columns[0]];
                     }
                 }
             }
             publish(
                 {
-                    "selected": selectedDataArray,
+                    "selected": [
+                        {
+                            "filter": "__class",
+                            "values": selectedDataArray
+                        }
+                    ],
+                    "count" : eventCount,
                     "fromTime": getFromTime(tempFromTime),
-                    "toTime": getToTime(tempFromTime),
-                    "filter": gadgetPropertyName
+                    "toTime": getToTime(tempFromTime)
                 }
             );
         } else {
             for (var i = 0; i < receivedData.length; i++) {
                 if (receivedData[i].values[gadgetData.columns[2]] === item.datum[gadgetData.columns[2]] && receivedData[i]["day"] === item.datum.day) {
-                    selectedDataArray.push([receivedData[i].values[gadgetData.columns[2]], receivedData[i].values[gadgetData.columns[1]]]);
-                    if(tempFromTime === undefined){
+                    selectedDataArray.push(receivedData[i].values[gadgetData.columns[3]].replace(/\"/g, "\\\""));
+                    eventCount = eventCount + receivedData[i].values[gadgetData.columns[1]];
+                    if (tempFromTime === undefined) {
                         tempFromTime = receivedData[i][gadgetData.columns[0]];
                     }
                 }
             }
             publish(
                 {
-                    "selected": selectedDataArray,
+                    "selected": [
+                        {
+                            "filter": "__class",
+                            "values": selectedDataArray
+                        }
+                    ],
+                    "count" : eventCount,
                     "fromTime": getFromTime(tempFromTime),
-                    "toTime": getToTime(tempFromTime),
-                    "filter": gadgetPropertyName
+                    "toTime": getToTime(tempFromTime)
                 }
             );
         }

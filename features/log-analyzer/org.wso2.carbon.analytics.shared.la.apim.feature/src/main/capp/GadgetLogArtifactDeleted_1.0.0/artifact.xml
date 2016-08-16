@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artifact name="GadgetLogArtifactDeleted" version="1.0.0" type="dashboards/gadget" serverRole="APIManager">
+    <file>Log_Artifact_Deleted</file>
+</artifact>
+

@@ -1,3 +1,10 @@
 instructions.configure = \
-org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.analytics.shared.la.apim_${feature.version}/gadgets,target:${installFolder}/../../deployment/server/jaggeryapps/portal/store/carbon.super/fs/gadget,overwrite:true);\
-org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.analytics.shared.la.apim_${feature.version}/dashboard,target:${installFolder}/../../deployment/server/jaggeryapps/portal/extensions/dashboards,overwrite:true);\
+org.eclipse.equinox.p2.touchpoint.natives.mkdir(path:${installFolder}/../../deployment/);\
+org.eclipse.equinox.p2.touchpoint.natives.mkdir(path:${installFolder}/../../deployment/server/);\
+org.eclipse.equinox.p2.touchpoint.natives.mkdir(path:${installFolder}/../../deployment/server/carbonapps/);\
+org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.analytics.shared.la.apim_${feature.version}/org_wso2_carbon_analytics_shared_la_apim-1.0.0.car,target:${installFolder}/../../deployment/server/carbonapps/org_wso2_carbon_analytics_shared_la_apim-1.0.0.car,overwrite:true);\
+
+
+
+instructions.uninstall = \
+org.eclipse.equinox.p2.touchpoint.natives.remove(path:${installFolder}/../../deployment/server/carbonapps/org_wso2_carbon_analytics_shared_la_apim-1.0.0.car,overwrite:true);\
