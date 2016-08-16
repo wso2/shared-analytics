@@ -232,52 +232,17 @@ function fetch(logLevelIndex) {
     });
 }
 
-function fetchWithDebugAndInfo(logLevelIndex) {
-    if (!logLevelIndex) {
-        receivedData.length = 0;
-        logLevelIndex = 0;
-    }
-
-    var queryInfo = {
-        tableName: gadgetConfig.datasource,
-        searchParams: {
-            query: "_level:" + gadgetConfig.level[logLevelIndex] + " AND  _eventTimeStamp: [" + from + " TO " + to + "]"
-        }
-    };
-
-    client.searchCount(queryInfo, function (d) {
-
-    if (d["status"] === "success") {
-        receivedData.push([gadgetConfig.level[logLevelIndex], parseInt(d["message"])]);
-        async_tasks--;
-        if (async_tasks == 0) {
-            if (!initState) {
-                 redrawDefaultLogLevelChart(true);
-            } else {
-                 drawWithDebugLogLevelChart();
-                 initState = false;
-                }
-            } else {
-                fetchWithDebugAndInfo(++logLevelIndex);
-            }
-        }
-    }, function (error) {
-        if(error === undefined){
-            onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
-            console.log("Analytics server not found : Please troubleshoot connection problems.");
-        }else{
-            error.message = "Internal server error while data indexing.";
-            onError(error);
-            console.log(error);
-        }
-    });
-}
 
 function drawLogLevelChart() {
 
 chartDefault = null;
 configChart = null;
 configChart = JSON.parse(JSON.stringify(gadgetConfig.chartConfig));
+
+var maxValue = getMaximumValue(receivedData);
+if(maxValue < 10){
+      configChart.yTicks = maxValue;
+}
     try {
         $(canvasDiv).empty();
 
@@ -300,32 +265,6 @@ configChart = JSON.parse(JSON.stringify(gadgetConfig.chartConfig));
     }
 }
 
-function drawWithDebugLogLevelChart() {
-configChartSecondary.colorScale = chartColorScale2;
-
-    try {
-       $(canvasDivSecondary).empty();
-       chartSecondary = new vizg(
-           [
-               {
-                   "metadata": {
-                   "names": ["LogLevel", "Frequency"],
-                   "types": ["ordinal", "linear"]
-                    },
-                   "data": receivedData
-               }
-           ],
-       configChartSecondary
-       );
-       chartSecondary.draw(canvasDivSecondary);
-    } catch (error) {
-        console.log(error);
-        error.message = "Error while drawing log event chart.";
-        error.status = "";
-        onError(error);
-    }
-}
-
 function redrawDefaultLogLevelChart(withDebugAndInfo) {
      for (var i in receivedData) {
           if(!withDebugAndInfo){
@@ -336,6 +275,15 @@ function redrawDefaultLogLevelChart(withDebugAndInfo) {
      }
 }
 
+function getMaximumValue(receivedData){
+    var max = 0;
+    for(var i=0;i<receivedData.length;i++){
+        if(receivedData[i][1] > max){
+            max = receivedData[i][1];
+        }
+    }
+    return max;
+}
 function subscribe(callback) {
     gadgets.HubSettings.onConnect = function () {
         gadgets.Hub.subscribe("subscriber", function (topic, data, subscriber) {

@@ -27,14 +27,15 @@ var prefs = new gadgets.Prefs();
 var gadgetConfig = gadgetUtil.getGadgetConf("Log_Artifact_Deployed");
 var async_tasks = gadgetConfig.classes.length;
 var meta = gadgetConfig.meta;
-var configChart = gadgetConfig.chartConfig;
+var configChart;
 var svrUrl = gadgetUtil.getGadgetSvrUrl("ESB");
 var client = new AnalyticsClient().init(null,null,svrUrl);
 var initialBarCount = gadgetConfig.barCount;
+var currentBarCount =  gadgetConfig.barCount;
 var dataSourceCount = 0;
 
 function initialize() {
-    fetchDeployed(null,gadgetConfig.barData.names[initialBarCount - gadgetConfig.barCount]);
+    fetchDeployed(null,gadgetConfig.barData.names[initialBarCount - currentBarCount]);
 }
 
 $(document).ready(function () {
@@ -65,9 +66,9 @@ function fetchDeployed(logLevelIndex, param) {
             if (async_tasks == 0) {
             async_tasks = gadgetConfig.classes.length;
 
-                if(--gadgetConfig.barCount > 0){
+                if(--currentBarCount > 0){
                     dataSourceCount++;
-                    fetchDeployed(0, gadgetConfig.barData.names[gadgetConfig.barCount]);
+                    fetchDeployed(0, gadgetConfig.barData.names[currentBarCount]);
 
                 }else{
                     if(initState){
@@ -79,12 +80,7 @@ function fetchDeployed(logLevelIndex, param) {
 
                 }
             } else {
-                if(gadgetConfig.barCount > 1){
-                    fetchDeployed(++logLevelIndex,gadgetConfig.barData.names[initialBarCount - gadgetConfig.barCount]);
-                    }
-                else{
-                    fetchDeployed(++logLevelIndex,gadgetConfig.barData.names[initialBarCount - gadgetConfig.barCount]);
-                }
+                    fetchDeployed(++logLevelIndex,gadgetConfig.barData.names[initialBarCount - currentBarCount]);
             }
         }
     }, function (error) {
@@ -107,6 +103,15 @@ function queryBuilder(logLevelIndex){
 
 function drawLogLevelChart() {
     try {
+
+        chart = null;
+        configChart = null;
+        configChart = JSON.parse(JSON.stringify(gadgetConfig.chartConfig))
+        var maxValue = getMaximumValue(receivedData);
+        if(maxValue < 10){
+            configChart.yTicks = maxValue;
+        }
+
         $(canvasDiv).empty();
         chart = new vizg(
             [
@@ -132,6 +137,16 @@ function drawLogLevelChart() {
     }
 }
 
+function getMaximumValue(receivedData){
+    var max = 0;
+    for(var i=0;i<receivedData.length;i++){
+        if(receivedData[i][2] > max){
+            max = receivedData[i][2];
+        }
+    }
+    return max;
+}
+
 function redrawLogLevelChart() {
     for (var i in receivedData) {
         chart.insert([receivedData[i]]);
@@ -155,7 +170,7 @@ subscribe(function (topic, data, subscriber) {
     from = parseInt(data["timeFrom"]);
     to = parseInt(data["timeTo"]);
     async_tasks = gadgetConfig.classes.length;
-    gadgetConfig.barCount = 2;
+    currentBarCount = gadgetConfig.barCount;
     dataSourceCount = 0;
     fetchDeployed(null,gadgetConfig.barData.names[initialBarCount - gadgetConfig.barCount]);
 });
