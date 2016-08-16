@@ -36,7 +36,7 @@
                 <!-- WSO2 Theme -->
                 <link rel="stylesheet" type="text/css" href="/portal/libs/font-wso2_1.0.0/css/font-wso2.min.css" />
                 <link rel="stylesheet" type="text/css" href="/portal/libs/theme-wso2_1.0/css/theme-wso2.css" />
-
+                <link rel="stylesheet" type="text/css" href="css/custom.css">
 
                 <!-- CSS -->
                 <link rel="stylesheet" type="text/css" href="../gadget-commons/css/gadget.css" />

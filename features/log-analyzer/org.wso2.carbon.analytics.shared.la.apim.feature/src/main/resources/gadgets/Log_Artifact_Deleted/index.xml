@@ -41,6 +41,7 @@
             <link rel="stylesheet" type="text/css" href="/portal/libs/theme-wso2_1.0/css/theme-wso2.css" />
             <link rel="stylesheet" type="text/css" href="../gadget-commons/css/nanoscroller.css" />
             <link rel="stylesheet" type="text/css" href="../gadget-commons/css/gadget.css" />
+            <link rel="stylesheet" type="text/css" href="css/custom.css">
 
             <!-- Custom -->
             <link rel="stylesheet" type="text/css" href="../gadget-commons/css/dataTables.bootstrap.css">
