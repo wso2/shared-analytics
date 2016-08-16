@@ -96,7 +96,7 @@ function fetchDeployed(logLevelIndex, param) {
 }
 
 function queryBuilder(logLevelIndex){
-     for(i=0; i < gadgetConfig.queryParams.fieldNames[dataSourceCount][logLevelIndex].length; i++){
+     for(var i=0; i < gadgetConfig.queryParams.fieldNames[dataSourceCount][logLevelIndex].length; i++){
               return gadgetConfig.queryParams.fieldNames[dataSourceCount][logLevelIndex][i] +": \"" + gadgetConfig.queryParams.searchParams[dataSourceCount][logLevelIndex][i] + "\"";
     }
 }
@@ -190,7 +190,7 @@ var onclick = function (event, item) {
                     "ArtifactType": item.datum["class"],
                     "Status": item.datum["Status"],
                     "fromTime": from,
-                    "toTime": to,
+                    "toTime": to
                 }
             );
         }

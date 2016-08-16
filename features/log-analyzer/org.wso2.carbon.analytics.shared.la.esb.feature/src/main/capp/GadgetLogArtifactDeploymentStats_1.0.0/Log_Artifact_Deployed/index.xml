@@ -82,7 +82,7 @@
                         <div>
                             <div id="legendTitle"></div>
                             <div id="legend" class="legend"></div>
-                            <div>
+                        </div>
                     </td>
                 </tr>
             </table>
