@@ -64,6 +64,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     private String url;
     private String password;
     private String userName;
+    private String instanceId;
     private String columnList;
     private int maxTolerableConsecutiveFailure;
     private int processingLimit = 100;
@@ -292,6 +293,14 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         return false;
     }
 
+    public String getInstanceId() {
+        return instanceId;
+    }
+
+    public void setInstanceId(String instanceId) {
+        this.instanceId = instanceId;
+    }
+
     public String getUrl() {
         return url;
     }
@@ -394,7 +403,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
             String priority = priorityLayout.format(event);
             String message = messageLayout.format(event);
             String ip = ipLayout.format(event);
-            String instance = instanceLayout.format(event);
+            String instance = (getInstanceId() == null || getInstanceId().isEmpty()) ? instanceLayout.format(event) : getInstanceId() ;
             String stacktrace = "";
 
             if (isStackTrace) {
