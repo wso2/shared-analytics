@@ -457,7 +457,7 @@ var onclick = function (event, item) {
                     "selected": [
                         {
                             "filter": ((gadgetPropertyName === "MESSAGE_LEVEL_ERROR") ? "__content" : "__class"),
-                            "values": selectedDataArray,
+                            "values": selectedDataArray
                         }
                     ],
                     "count" : eventCount,
