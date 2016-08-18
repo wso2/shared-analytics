@@ -24,11 +24,10 @@ var nanoScrollerSelector = $(".nano");
 var canvasDiv = "#canvas";
 var prefs = new gadgets.Prefs();
 var svrUrl = gadgetUtil.getGadgetSvrUrl(prefs.getString(PARAM_TYPE));
-var client = new AnalyticsClient().init(null,null,svrUrl);
-var isArtifact = false;
+var client = new AnalyticsClient().init(null, null, svrUrl);
 
 function initialize() {
-    $(canvasDiv).html(gadgetUtil.getCustemText("No content to display","Please click on a View button from the above table" +
+    $(canvasDiv).html(gadgetUtil.getCustemText("No content to display", "Please click on a View button from the above table" +
         " to access all the log events in the time period surrounding an event."));
     nanoScrollerSelector.nanoScroller();
 }
@@ -43,7 +42,7 @@ function fetch() {
     var queryForSearchCount = {
         tableName: "LOGANALYZER",
         searchParams: {
-            query: "_eventTimeStamp: [" + from + " TO " + to + "]",
+            query: "_timestamp: [" + from + " TO " + to + "]",
         }
     };
 
@@ -53,7 +52,7 @@ function fetch() {
             queryInfo = {
                 tableName: "LOGANALYZER",
                 searchParams: {
-                    query: "_eventTimeStamp: [" + from + " TO " + to + "]",
+                    query: "_timestamp: [" + from + " TO " + to + "]",
                     start: 0, //starting index of the matching record set
                     count: totalRecordCount //page size for pagination
                 }
@@ -63,12 +62,12 @@ function fetch() {
                 if (d["status"] === "success") {
                     for (var i = 0; i < obj.length; i++) {
                         receivedData.push([{
-                            date: new Date(parseInt(obj[i].values._eventTimeStamp)).toUTCString(),
+                            date: new Date(parseInt(obj[i].timestamp)).toUTCString(),
                             level: obj[i].values._level,
                             class: obj[i].values._class,
                             content: obj[i].values._content,
                             trace: (obj[i].values._trace ? obj[i].values._trace : ""),
-                            timestamp: parseInt(obj[i].values._eventTimeStamp)
+                            timestamp: parseInt(obj[i].timestamp)
                         }]);
                     }
                     drawLogViewer();
@@ -94,32 +93,29 @@ function drawLogViewer() {
         receivedContent = receivedContent.replace(/[\r\n]/g, "");
         if (receivedData[i][0].level === "ERROR") {
             if (receivedContent === filteredMessage && receivedData[i][0].timestamp === filteredTime) {
-                $(canvasDiv).append(createLogList("selectedError",receivedData[i][0]));
+                $(canvasDiv).append(createLogList("selectedError", receivedData[i][0]));
                 selectedDiv = "selectedError";
             } else {
-                $(canvasDiv).append(createLogList("logError",receivedData[i][0]));
+                $(canvasDiv).append(createLogList("logError", receivedData[i][0]));
             }
         } else if (receivedData[i][0].level === "WARN") {
             if (receivedContent === filteredMessage && receivedData[i][0].timestamp === filteredTime) {
-                $(canvasDiv).append(createLogList("selectedWarn",receivedData[i][0]));
+                $(canvasDiv).append(createLogList("selectedWarn", receivedData[i][0]));
                 selectedDiv = "selectedWarn";
             } else {
-                $(canvasDiv).append(createLogList("logWarn",receivedData[i][0]));
+                $(canvasDiv).append(createLogList("logWarn", receivedData[i][0]));
             }
         } else if (receivedData[i][0].level === "DEBUG") {
-            $(canvasDiv).append(createLogList("logDebug",receivedData[i][0]));
-        }else if (receivedData[i][0].level === "FATAL") {
-            $(canvasDiv).append(createLogList("logFatal",receivedData[i][0]));
-        }else if(isArtifact){
-              if (receivedContent === filteredMessage && receivedData[i][0].timestamp === filteredTime) {
-                    $(canvasDiv).append(createLogList("selectedWarn",receivedData[i][0]));
-                    selectedDiv = "selectedWarn";
-              } else {
-                    $(canvasDiv).append(createLogList("logWarn",receivedData[i][0]));
-              }
-        }
-        else{
-            $(canvasDiv).append(createLogList("logInfo",receivedData[i][0]));
+            $(canvasDiv).append(createLogList("logDebug", receivedData[i][0]));
+        } else if (receivedData[i][0].level === "FATAL") {
+            $(canvasDiv).append(createLogList("logFatal", receivedData[i][0]));
+        } else if (receivedData[i][0].level === "INFO") {
+            if (receivedContent === filteredMessage && receivedData[i][0].timestamp === filteredTime) {
+                $(canvasDiv).append(createLogList("selectedInfo", receivedData[i][0]));
+                selectedDiv = "selectedInfo";
+            } else {
+                $(canvasDiv).append(createLogList("logInfo", receivedData[i][0]));
+            }
         }
     }
     nanoScrollerSelector[0].nanoscroller.reset();
@@ -137,8 +133,7 @@ function subscribe(callback) {
 subscribe(function (topic, data, subscriber) {
     $(canvasDiv).html(gadgetUtil.getLoadingText());
     filteredTime = parseInt(data["timestamp"]);
-    filteredMessage = data["message"];
-    isArtifact = data["type"];
+    filteredMessage = data["_content"];
     var fromDate = filteredTime - (gadgetConfig.timeDomain);
     var toDate = filteredTime + (gadgetConfig.timeDomain);
     from = fromDate;
@@ -150,7 +145,7 @@ function onError(msg) {
     $(canvasDiv).html(gadgetUtil.getErrorText(msg));
 }
 
-function createLogList(templateName, templateData){
-    return "<ul id="+templateName+" class="+templateName+"><li class='date'>"+templateData.date+"</li><li class='level'>"+templateData.level+"</li>" +
-    "<li class='class'>"+templateData.class+"</li><li class='content'>"+templateData.content+"</li><li class='trace'>"+templateData.trace+"</li></ul>";
+function createLogList(templateName, templateData) {
+    return "<ul id=" + templateName + " class=" + templateName + "><li class='date'>" + templateData.date + "</li><li class='level'>" + templateData.level + "</li>" +
+        "<li class='class'>" + templateData.class + "</li><li class='content'>" + templateData.content + "</li><li class='trace'>" + templateData.trace + "</li></ul>";
 }

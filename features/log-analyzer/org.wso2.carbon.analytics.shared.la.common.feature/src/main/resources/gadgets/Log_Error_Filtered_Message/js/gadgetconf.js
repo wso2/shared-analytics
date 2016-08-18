@@ -16,7 +16,37 @@
  * under the License.
  */
 
-var gadgetConfig = {
-    "id": "filteredLogMessages",
-    "title": "filteredLogMessages",
-};
+var tables = [
+    {
+        name: "APIM",
+        dataSource: "LOGANALYZER",
+        schema: {
+            columns: ["_content", "_class"],
+            titles: ["Message", "Class"]
+        },
+        advancedColumns: [],
+        actionParameters: ["_content", "timestamp"]
+    },
+    {
+        name: "APIM_AUDIT_LOG",
+        dataSource: "LOGANALYZER_APIM_AUDIT_LOG",
+        schema: {
+            columns: ["user", "action", "type", "info"],
+            titles: ["User", "API Action", "Type", "Info"]
+        },
+        advancedColumns: [
+            {
+                id: "info",
+                formatters: [
+                    {
+                        type: "json",
+                        keys: ["name", "context", "provider", "version", "tier", "callbackURL", "application_name", "api_name"],
+                        titles: ["Name", "Context", "Provider", "Version", "Tier", "Callback URL", "Application Name", "API Name"],
+                        delimiter: "<br>"
+                    }
+                ]
+            }
+        ],
+        actionParameters: []
+    }
+];

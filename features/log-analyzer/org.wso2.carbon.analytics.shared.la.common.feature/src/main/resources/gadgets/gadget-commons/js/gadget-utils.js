@@ -50,20 +50,20 @@ function GadgetUtil() {
         return gadgetConf;
     };
 
-    this.getGadgetConf = function(gadgetConfig) {
-            var gadgetConf = null;
-            gadgetConfigs.forEach(function(item, i) {
-                if (item.id === gadgetConfig) {
-                    gadgetConf = item;
-                }
-            });
-            return gadgetConf;
-        };
+    this.getTable = function(tableType) {
+        var gadgetConf = null;
+        tables.forEach(function(item, i) {
+            if (item.name === tableType) {
+                gadgetConf = item;
+            }
+        });
+        return gadgetConf;
+    };
 
-      this.getGadgetSvrUrl = function(chartType) {
+      this.getGadgetSvrUrl = function(gadgetType) {
             var svrUrl = null;
             serverUrls.forEach(function(item, i) {
-                if (item.name === chartType) {
+                if (item.name === gadgetType || item.name  === gadgetType.slice(0, gadgetType.indexOf("_"))) {
                     svrUrl = item;
                 }
             });

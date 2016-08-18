@@ -3,8 +3,15 @@
   "title": "Log Analyzer for APIM",
   "description": "",
   "permissions": {
-    "viewers": ["Internal/everyone"],
-    "editors": ["Internal/everyone"]
+    "viewers": [
+      "Internal/log-analyzer-viewer"
+    ],
+    "editors": [
+      "Internal/log-analyzer-editor"
+    ],
+    "owners": [
+      "Internal/log-analyzer-owner"
+    ]
   },
   "pages": [
     {
@@ -27,7 +34,7 @@
                 "x": 0,
                 "y": 2,
                 "width": 12,
-                "height": 4,
+                "height": 7,
                 "banner": false
               }
             ]
@@ -45,13 +52,23 @@
                 "id": "Log_Date_Range_Picker",
                 "title": "Date Range Picker",
                 "type": "gadget",
-                "thumbnail": "store://gadget/Log_Date_Range_Picker/index.png",
-                "data": {"url": "store://gadget/Log_Date_Range_Picker/index.xml"},
+                "thumbnail": "fs://gadget/Log_Date_Range_Picker/index.png",
+                "data": {
+                  "url": "fs://gadget/Log_Date_Range_Picker/index.xml"
+                },
                 "notify": {
                   "range-selected": {
                     "type": "date-range",
                     "description": "This notifies selected state"
                   }
+                },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
                 },
                 "listen": {
                   "chart-zoomed": {
@@ -67,7 +84,9 @@
                   "title": "Date Range Picker"
                 },
                 "options": {},
-                "locale_titles": {"en-US": "Date Range Picker"},
+                "locale_titles": {
+                  "en-US": "Date Range Picker"
+                },
                 "settings": {}
               }
             }
@@ -79,8 +98,10 @@
                 "id": "Log_Events",
                 "title": "Log Event Chart",
                 "type": "gadget",
-                "thumbnail": "store://gadget/Log_Events/img/thumbnail.png",
-                "data": {"url": "store://gadget/Log_Events/index.xml"},
+                "thumbnail": "fs://gadget/Log_Events/img/thumbnail.png",
+                "data": {
+                  "url": "fs://gadget/Log_Events/index.xml"
+                },
                 "listen": {
                   "subscriber": {
                     "type": "date-range",
@@ -92,6 +113,14 @@
                       }
                     ]
                   }
+                },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
                 },
                 "styles": {
                   "no_heading": false,
@@ -108,7 +137,9 @@
                     "required": true
                   }
                 },
-                "locale_titles": {"en-US": "Log Events"},
+                "locale_titles": {
+                  "en-US": "Log Events"
+                },
                 "settings": {}
               }
             }
@@ -171,13 +202,23 @@
                 "id": "Log_Date_Range_Picker",
                 "title": "Date Range Picker",
                 "type": "gadget",
-                "thumbnail": "store://gadget/Log_Date_Range_Picker/index.png",
-                "data": {"url": "store://gadget/Log_Date_Range_Picker/index.xml"},
+                "thumbnail": "fs://gadget/Log_Date_Range_Picker/index.png",
+                "data": {
+                  "url": "fs://gadget/Log_Date_Range_Picker/index.xml"
+                },
                 "notify": {
                   "range-selected": {
                     "type": "date-range",
                     "description": "This notifies selected state"
                   }
+                },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
                 },
                 "listen": {
                   "chart-zoomed": {
@@ -193,7 +234,9 @@
                   "title": "Date Range Picker"
                 },
                 "options": {},
-                "locale_titles": {"en-US": "Date Range Picker"},
+                "locale_titles": {
+                  "en-US": "Date Range Picker"
+                },
                 "settings": {}
               }
             }
@@ -205,8 +248,10 @@
                 "id": "Log_Error_Bar_Chart",
                 "title": "Log Error Bar Chart",
                 "type": "gadget",
-                "thumbnail": "store://gadget/Log_Error_Bar_Chart/img/thumbnail.png",
-                "data": {"url": "store://gadget/Log_Error_Bar_Chart/index.xml"},
+                "thumbnail": "fs://gadget/Log_Error_Bar_Chart/img/thumbnail.png",
+                "data": {
+                  "url": "fs://gadget/Log_Error_Bar_Chart/index.xml"
+                },
                 "notify": {
                   "publisher": {
                     "type": "filter",
@@ -225,6 +270,14 @@
                     ]
                   }
                 },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
@@ -240,7 +293,9 @@
                     "required": true
                   }
                 },
-                "locale_titles": {"en-US": "Errors Distribution"},
+                "locale_titles": {
+                  "en-US": "Errors Distribution"
+                },
                 "settings": {}
               }
             }
@@ -252,8 +307,10 @@
                 "id": "Log_Error_Filtered_Message",
                 "title": "APIM Filtered Messages",
                 "type": "gadget",
-                "thumbnail": "store://gadget/Log_Error_Filtered_Message/img/thumbnail.png",
-                "data": {"url": "store://gadget/Log_Error_Filtered_Message/index.xml"},
+                "thumbnail": "fs://gadget/Log_Error_Filtered_Message/img/thumbnail.png",
+                "data": {
+                  "url": "fs://gadget/Log_Error_Filtered_Message/index.xml"
+                },
                 "notify": {
                   "publisher": {
                     "type": "filter-range",
@@ -272,6 +329,14 @@
                     ]
                   }
                 },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
@@ -287,7 +352,9 @@
                     "required": true
                   }
                 },
-                "locale_titles": {"en-US": "Filtered Messages"},
+                "locale_titles": {
+                  "en-US": "Filtered Messages"
+                },
                 "settings": {}
               }
             }
@@ -299,8 +366,10 @@
                 "id": "Log_Viewer",
                 "title": "Log Viewer",
                 "type": "gadget",
-                "thumbnail": "store://gadget/Log_Viewer/index.png",
-                "data": {"url": "store://gadget/Log_Viewer/index.xml"},
+                "thumbnail": "fs://gadget/Log_Viewer/index.png",
+                "data": {
+                  "url": "fs://gadget/Log_Viewer/index.xml"
+                },
                 "listen": {
                   "subscriber": {
                     "type": "filter-range",
@@ -312,6 +381,14 @@
                       }
                     ]
                   }
+                },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
                 },
                 "styles": {
                   "no_heading": false,
@@ -328,7 +405,9 @@
                     "required": true
                   }
                 },
-                "locale_titles": {"en-US": "Log Viewer"},
+                "locale_titles": {
+                  "en-US": "Log Viewer"
+                },
                 "settings": {}
               }
             }
@@ -345,7 +424,7 @@
           "loggedIn": {
             "blocks": [
               {
-                "id": "artifact-deployment-stats-date-range-picker",
+                "id": "api-deployment-stats-date-range-picker",
                 "x": 0,
                 "y": 0,
                 "width": 12,
@@ -353,19 +432,19 @@
                 "banner": false
               },
               {
-                "id": "artifact-deployment-stats-artifact-deployment",
+                "id": "api-deployment-stats-artifact-status-chart",
                 "x": 0,
                 "y": 2,
-                "width": 6,
+                "width": 12,
                 "height": 6,
                 "banner": false
               },
               {
-                "id": "artifact-deployment-stats-artifact-deleted",
-                "x": 6,
-                "y": 2,
-                "width": 6,
-                "height": 6,
+                "id": "api-deployment-stats-filtered-message",
+                "x": 0,
+                "y": 8,
+                "width": 12,
+                "height": 7,
                 "banner": false
               }
             ]
@@ -376,21 +455,30 @@
       "isanon": false,
       "content": {
         "default": {
-          "artifact-deployment-stats-date-range-picker": [
+          "api-deployment-stats-date-range-picker": [
             {
-              "id": "Log_Date_Range_Picker-artifact-deployment-stats",
+              "id": "Log_Date_Range_Picker-api-deployment-stats",
               "content": {
                 "id": "Log_Date_Range_Picker",
                 "title": "Date Range Picker",
                 "type": "gadget",
-                "category": "Widgets",
-                "thumbnail": "store://gadget/Log_Date_Range_Picker/index.png",
-                "data": {"url": "store://gadget/Log_Date_Range_Picker/index.xml"},
+                "thumbnail": "fs://gadget/Log_Date_Range_Picker/index.png",
+                "data": {
+                  "url": "fs://gadget/Log_Date_Range_Picker/index.xml"
+                },
                 "notify": {
                   "range-selected": {
                     "type": "date-range",
                     "description": "This notifies selected state"
                   }
+                },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
                 },
                 "listen": {
                   "chart-zoomed": {
@@ -406,89 +494,127 @@
                   "title": "Date Range Picker"
                 },
                 "options": {},
-                "locale_titles": {"en-US": "Date Range Picker"},
+                "locale_titles": {
+                  "en-US": "Date Range Picker"
+                },
                 "settings": {}
               }
             }
           ],
-          "artifact-deployment-stats-artifact-deployment": [
+          "api-deployment-stats-artifact-status-chart": [
             {
-              "id": "logArtifactDeployed-artifact-deployment-stats",
+              "id": "Log_Artifact_Status-api-deployment-stats",
               "content": {
-                "id": "Log_Artifact_Deployed",
-                "title": "Deployed Artifacts",
+                "id": "Log_Artifact_Status",
+                "title": "Artifact Status",
                 "type": "gadget",
-                "thumbnail": "store://gadget/Log_Artifact_Deployed/img/thumbnail.png",
-                "data": {"url": "store://gadget/Log_Artifact_Deployed/index.xml"},
+                "thumbnail": "fs://gadget/Log_Artifact_Status/img/thumbnail.png",
+                "data": {
+                  "url": "fs://gadget/Log_Artifact_Status/index.xml"
+                },
+                "notify": {
+                  "publisher": {
+                    "type": "filter",
+                    "description": "This notifies selected filter"
+                  }
+                },
                 "listen": {
                   "subscriber": {
                     "type": "date-range",
                     "description": "Used to listen to any date range-selected",
                     "on": [
                       {
-                        "from": "Log_Date_Range_Picker-artifact-deployment-stats",
+                        "from": "Log_Date_Range_Picker-api-deployment-stats",
                         "event": "range-selected"
                       }
                     ]
                   }
                 },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
                   "titlePosition": "left",
-                  "title": "Deployed Artifacts"
+                  "title": "Artifact Deployed Distribution"
                 },
                 "options": {
                   "type": {
                     "type": "STRING",
                     "title": "Gadget Type",
-                    "value": "APIM",
+                    "value": "APIM_Artifact_Deployed",
                     "options": [],
                     "required": true
                   }
                 },
-                "locale_titles": {"en-US": "Deployed APIs"},
+                "locale_titles": {
+                  "en-US": "Artifact Deployed Distribution"
+                },
                 "settings": {}
               }
             }
           ],
-          "artifact-deployment-stats-artifact-deleted": [
+          "api-deployment-stats-filtered-message": [
             {
-              "id": "logArtifactDeleted-artifact-deployment-stats",
+              "id": "filteredLogMessages-api-deployment-stats",
               "content": {
-                "id": "Log_Artifact_Deleted",
-                "title": "APIM Artifact Deleted",
+                "id": "Log_Error_Filtered_Message",
+                "title": "APIM Filtered Messages",
                 "type": "gadget",
-                "thumbnail": "store://gadget/Log_Artifact_Deleted/img/thumbnail.png",
-                "data": {"url": "store://gadget/Log_Artifact_Deleted/index.xml"},
+                "thumbnail": "fs://gadget/Log_Error_Filtered_Message/img/thumbnail.png",
+                "data": {
+                  "url": "fs://gadget/Log_Error_Filtered_Message/index.xml"
+                },
+                "notify": {
+                  "publisher": {
+                    "type": "filter-range",
+                    "description": "This notifies selected filter"
+                  }
+                },
                 "listen": {
                   "subscriber": {
-                    "type": "date-range",
-                    "description": "Used to listen to any date range-selected",
+                    "type": "filter",
+                    "description": "Used to listen to any filters",
                     "on": [
                       {
-                        "from": "Log_Date_Range_Picker-artifact-deployment-stats",
-                        "event": "range-selected"
+                        "from": "Log_Artifact_Status-api-deployment-stats",
+                        "event": "publisher"
                       }
                     ]
                   }
+                },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
                 },
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
                   "titlePosition": "left",
-                  "title": "Deleted Artifacts"
+                  "title": "Filtered Messages"
                 },
                 "options": {
                   "type": {
                     "type": "STRING",
                     "title": "Gadget Type",
-                    "value": "APIM",
+                    "value": "APIM_AUDIT_LOG",
                     "options": [],
                     "required": true
                   }
                 },
-                "locale_titles": {"en-US": "Deleted APIs"},
+                "locale_titles": {
+                  "en-US": "Filtered Messages"
+                },
                 "settings": {}
               }
             }
@@ -517,7 +643,7 @@
                 "x": 0,
                 "y": 2,
                 "width": 12,
-                "height": 5,
+                "height": 6,
                 "banner": false
               }
             ]
@@ -536,8 +662,10 @@
                 "title": "Date Range Picker",
                 "type": "gadget",
                 "category": "Widgets",
-                "thumbnail": "store://gadget/Log_Date_Range_Picker/index.png",
-                "data": {"url": "store://gadget/Log_Date_Range_Picker/index.xml"},
+                "thumbnail": "fs://gadget/Log_Date_Range_Picker/index.png",
+                "data": {
+                  "url": "fs://gadget/Log_Date_Range_Picker/index.xml"
+                },
                 "notify": {
                   "range-selected": {
                     "type": "date-range",
@@ -549,6 +677,14 @@
                     "type": "date-range",
                     "description": "This notifies message generated in publisher"
                   }
+                },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
                 },
                 "styles": {
                   "no_heading": false,
@@ -569,8 +705,10 @@
                 "id": "Log_Invalid_Logging_Count",
                 "title": "Invalid Login Count",
                 "type": "gadget",
-                "thumbnail": "store://gadget/Log_Invalid_Logging_Count/img/thumbnail.png",
-                "data": {"url": "store://gadget/Log_Invalid_Logging_Count/index.xml"},
+                "thumbnail": "fs://gadget/Log_Invalid_Logging_Count/img/thumbnail.png",
+                "data": {
+                  "url": "fs://gadget/Log_Invalid_Logging_Count/index.xml"
+                },
                 "notify": {
                   "publisher": {
                     "type": "filter",
@@ -589,6 +727,14 @@
                     ]
                   }
                 },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
@@ -604,7 +750,9 @@
                     "required": true
                   }
                 },
-                "locale_titles": {"en-US": "Invalid Login Count"},
+                "locale_titles": {
+                  "en-US": "Invalid Login Count"
+                },
                 "settings": {}
               }
             }
@@ -633,7 +781,7 @@
                 "x": 0,
                 "y": 2,
                 "width": 12,
-                "height": 5,
+                "height": 6,
                 "banner": false
               },
               {
@@ -668,8 +816,10 @@
                 "title": "Date Range Picker",
                 "type": "gadget",
                 "category": "Widgets",
-                "thumbnail": "store://gadget/Log_Date_Range_Picker/index.png",
-                "data": {"url": "store://gadget/Log_Date_Range_Picker/index.xml"},
+                "thumbnail": "fs://gadget/Log_Date_Range_Picker/index.png",
+                "data": {
+                  "url": "fs://gadget/Log_Date_Range_Picker/index.xml"
+                },
                 "notify": {
                   "range-selected": {
                     "type": "date-range",
@@ -682,6 +832,14 @@
                     "description": "This notifies message generated in publisher"
                   }
                 },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
@@ -690,7 +848,9 @@
                   "title": "Date Range Picker"
                 },
                 "options": {},
-                "locale_titles": {"en-US": "Date Range Picker"},
+                "locale_titles": {
+                  "en-US": "Date Range Picker"
+                },
                 "settings": {}
               }
             }
@@ -702,8 +862,10 @@
                 "id": "Log_APIM_Message_Processing",
                 "title": "Errors in API Message Processing",
                 "type": "gadget",
-                "thumbnail": "store://gadget/Log_APIM_Message_Processing/img/thumbnail.png",
-                "data": {"url": "store://gadget/Log_APIM_Message_Processing/index.xml"},
+                "thumbnail": "fs://gadget/Log_APIM_Message_Processing/img/thumbnail.png",
+                "data": {
+                  "url": "fs://gadget/Log_APIM_Message_Processing/index.xml"
+                },
                 "notify": {
                   "publisher": {
                     "type": "filter-range",
@@ -722,6 +884,14 @@
                     ]
                   }
                 },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
@@ -730,7 +900,9 @@
                   "title": "Errors in API Message Processing"
                 },
                 "options": {},
-                "locale_titles": {"en-US": "Errors in API Message Processing"},
+                "locale_titles": {
+                  "en-US": "Errors in API Message Processing"
+                },
                 "settings": {}
               }
             }
@@ -739,11 +911,13 @@
             {
               "id": "filteredLogMessages-message-processing",
               "content": {
-                "id": "filteredLogMessages",
+                "id": "Log_Error_Filtered_Message",
                 "title": "APIM Filtered Messages",
                 "type": "gadget",
-                "thumbnail": "store://gadget/Log_Error_Filtered_Message/img/thumbnail.png",
-                "data": {"url": "store://gadget/Log_Error_Filtered_Message/index.xml"},
+                "thumbnail": "fs://gadget/Log_Error_Filtered_Message/img/thumbnail.png",
+                "data": {
+                  "url": "fs://gadget/Log_Error_Filtered_Message/index.xml"
+                },
                 "notify": {
                   "publisher": {
                     "type": "filter-range",
@@ -762,6 +936,14 @@
                     ]
                   }
                 },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
@@ -777,7 +959,9 @@
                     "required": true
                   }
                 },
-                "locale_titles": {"en-US": "Filtered Messages"},
+                "locale_titles": {
+                  "en-US": "Filtered Messages"
+                },
                 "settings": {}
               }
             }
@@ -786,11 +970,13 @@
             {
               "id": "message-processing-errors-log-viewer",
               "content": {
-                "id": "logViewer",
+                "id": "Log_Viewer",
                 "title": "Log Viewer",
                 "type": "gadget",
-                "thumbnail": "store://gadget/Log_Viewer/index.png",
-                "data": {"url": "store://gadget/Log_Viewer/index.xml"},
+                "thumbnail": "fs://gadget/Log_Viewer/index.png",
+                "data": {
+                  "url": "fs://gadget/Log_Viewer/index.xml"
+                },
                 "listen": {
                   "subscriber": {
                     "type": "filter-range",
@@ -802,6 +988,14 @@
                       }
                     ]
                   }
+                },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
                 },
                 "styles": {
                   "no_heading": false,
@@ -818,7 +1012,9 @@
                     "required": true
                   }
                 },
-                "locale_titles": {"en-US": "Log Viewer"},
+                "locale_titles": {
+                  "en-US": "Log Viewer"
+                },
                 "settings": {}
               }
             }
@@ -882,8 +1078,10 @@
                 "title": "Date Range Picker",
                 "type": "gadget",
                 "category": "Widgets",
-                "thumbnail": "store://gadget/Log_Date_Range_Picker/index.png",
-                "data": {"url": "store://gadget/Log_Date_Range_Picker/index.xml"},
+                "thumbnail": "fs://gadget/Log_Date_Range_Picker/index.png",
+                "data": {
+                  "url": "fs://gadget/Log_Date_Range_Picker/index.xml"
+                },
                 "notify": {
                   "range-selected": {
                     "type": "date-range",
@@ -896,6 +1094,14 @@
                     "description": "This notifies message generated in publisher"
                   }
                 },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
@@ -904,7 +1110,9 @@
                   "title": "Date Range Picker"
                 },
                 "options": {},
-                "locale_titles": {"en-US": "Date Range Picker"},
+                "locale_titles": {
+                  "en-US": "Date Range Picker"
+                },
                 "settings": {}
               }
             }
@@ -916,8 +1124,10 @@
                 "id": "Log_Api_Token_By_Status",
                 "title": "Errors Distribution",
                 "type": "gadget",
-                "thumbnail": "store://gadget/Log_Api_Token_By_Status/img/thumbnail.png",
-                "data": {"url": "store://gadget/Log_Api_Token_By_Status/index.xml"},
+                "thumbnail": "fs://gadget/Log_Api_Token_By_Status/img/thumbnail.png",
+                "data": {
+                  "url": "fs://gadget/Log_Api_Token_By_Status/index.xml"
+                },
                 "notify": {
                   "publisher": {
                     "type": "api-key-filter",
@@ -936,15 +1146,25 @@
                     ]
                   }
                 },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
                   "borders": false,
                   "titlePosition": "left",
-                  "title": "Errors Distribution"
+                  "title": "Api Token By Status"
                 },
                 "options": {},
-                "locale_titles": {"en-US": "Errors Distribution"},
+                "locale_titles": {
+                  "en-US": "Api Token By Status"
+                },
                 "settings": {}
               }
             }
@@ -956,8 +1176,10 @@
                 "id": "Log_Api_Token_By_Status_Table",
                 "title": "API Key Status Table",
                 "type": "gadget",
-                "thumbnail": "store://gadget/Log_Api_Token_By_Status_Table/img/thumbnail.png",
-                "data": {"url": "store://gadget/Log_Api_Token_By_Status_Table/index.xml"},
+                "thumbnail": "fs://gadget/Log_Api_Token_By_Status_Table/img/thumbnail.png",
+                "data": {
+                  "url": "fs://gadget/Log_Api_Token_By_Status_Table/index.xml"
+                },
                 "notify": {
                   "publisher": {
                     "type": "filter-range",
@@ -976,14 +1198,24 @@
                     ]
                   }
                 },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
                   "titlePosition": "left",
-                  "title": "Filtered Messages"
+                  "title": "Api Token By Status"
                 },
                 "options": {},
-                "locale_titles": {"en-US": "Filtered Messages"},
+                "locale_titles": {
+                  "en-US": "Api Token By Status Table"
+                },
                 "settings": {}
               }
             }
@@ -995,8 +1227,10 @@
                 "id": "Log_Viewer",
                 "title": "Log Viewer",
                 "type": "gadget",
-                "thumbnail": "store://gadget/Log_Viewer/index.png",
-                "data": {"url": "store://gadget/Log_Viewer/index.xml"},
+                "thumbnail": "fs://gadget/Log_Viewer/index.png",
+                "data": {
+                  "url": "fs://gadget/Log_Viewer/index.xml"
+                },
                 "listen": {
                   "subscriber": {
                     "type": "filter-range",
@@ -1009,13 +1243,23 @@
                     ]
                   }
                 },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
                   "titlePosition": "left",
                   "title": "Log Viewer"
                 },
-                "locale_titles": {"en-US": "Log Viewer"},
+                "locale_titles": {
+                  "en-US": "Log Viewer"
+                },
                 "settings": {},
                 "options": {
                   "type": {
@@ -1063,13 +1307,23 @@
                 "id": "Live_Log_Viewer",
                 "title": "Filtered Logs for Tenant",
                 "type": "gadget",
-                "thumbnail": "store://gadget/Live_Log_Viewer/img/thumbnail.png",
-                "data": {"url": "store://gadget/Live_Log_Viewer/index.xml"},
+                "thumbnail": "fs://gadget/Live_Log_Viewer/img/thumbnail.png",
+                "data": {
+                  "url": "fs://gadget/Live_Log_Viewer/index.xml"
+                },
                 "listen": {
                   "subscriber": {
                     "type": "date-range",
                     "description": "Used to listen to any date range-selected"
                   }
+                },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
                 },
                 "styles": {
                   "title": "Live Log viewer",
@@ -1082,7 +1336,8 @@
                     "value": "APIM",
                     "options": [],
                     "required": true
-                  }},
+                  }
+                },
                 "locale_titles": {}
               }
             }
@@ -1092,24 +1347,70 @@
       }
     }
   ],
-  "menu": [{
-             "id": "landing",
-             "isanon": false,
-             "ishidden": false,
-             "title": "Home",
-             "subordinates": []
-           }],
+  "menu": [
+    {
+      "id": "overview",
+      "isanon": false,
+      "ishidden": false,
+      "title": "Overview",
+      "subordinates": []
+    },
+    {
+      "id": "application-errors",
+      "isanon": false,
+      "ishidden": false,
+      "title": "Application Errors",
+      "subordinates": []
+    },
+    {
+      "id": "api-deployment-stats",
+      "isanon": false,
+      "ishidden": false,
+      "title": "Api Deployment Stats",
+      "subordinates": []
+    },
+    {
+      "id": "login-errors",
+      "isanon": false,
+      "ishidden": false,
+      "title": "Login Errors",
+      "subordinates": []
+    },
+    {
+      "id": "number-of-api-failures",
+      "isanon": false,
+      "ishidden": false,
+      "title": "Number Of Api Failures",
+      "subordinates": []
+    },
+    {
+      "id": "access-token-errors",
+      "isanon": false,
+      "ishidden": false,
+      "title": "Access Token Errors",
+      "subordinates": []
+    },
+    {
+      "id": "live-log-viewer",
+      "isanon": false,
+      "ishidden": false,
+      "title": "Live Log Viewer",
+      "subordinates": []
+    }
+  ],
+  "hideAllMenuItems": false,
   "identityServerUrl": "",
   "accessTokenUrl": "",
   "apiKey": "",
   "apiSecret": "",
-  "theme": "",
+  "theme": "Default Theme",
+  "shareDashboard": false,
   "isUserCustom": false,
-  "isEditorEnable": true,
+  "isEditorEnable": false,
   "banner": {
     "globalBannerExists": false,
     "customBannerExists": false
   },
-  "landing": "landing",
+  "landing": "overview",
   "isanon": false
 }
