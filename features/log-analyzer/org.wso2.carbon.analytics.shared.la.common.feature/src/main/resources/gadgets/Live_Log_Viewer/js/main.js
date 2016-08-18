@@ -17,22 +17,24 @@
  */
 var prefs = new gadgets.Prefs();
 var svrUrl = gadgetUtil.getGadgetSvrUrl(prefs.getString(PARAM_TYPE));
-var client = new AnalyticsClient().init(null,null,svrUrl);
+var client = new AnalyticsClient().init(null, null, svrUrl);
 var logLineArray = [];
 var template = '<span class="logLine"><div class="logTimeStamp">{{time}}</div><div class="logLevel">{{level}}</div><div class="logClassName">{{className}}</div><div class="logContent">{{content}}</div><div class="logTrace">{{trace}}</div></span>';
 var initialRecordCount = -1;
 var currentRecordCount;
 var $ptty;
+var filterType = "";
 
 $(document).ready(function () {
+    $("#selector").on('change', onClickSelector);
     $ptty = $('#terminal').Ptty({
-        theme : 'livelog',
-        i18n : {
-            welcome : 'Welcome to the live log viewer.',
-            error_not_found : 'command not found'
+        theme: 'livelog',
+        i18n: {
+            welcome: 'Welcome to the live log viewer.',
+            error_not_found: 'command not found'
         }
     });
-        fetchInitialRecordCount();
+    fetchInitialRecordCount();
 });
 
 /**
@@ -40,22 +42,22 @@ $(document).ready(function () {
  * sets the data fetching operation
  *
  */
-function fetchInitialRecordCount(){
+function fetchInitialRecordCount() {
     var countQueryInfo = {
         tableName: "LOGANALYZER",
         searchParams: {
             query: "*:*",
         }
     };
-    client.searchCount(countQueryInfo, function(count) {
-        if (count["status"] === "success"){
+    client.searchCount(countQueryInfo, function (count) {
+        if (count["status"] === "success") {
             initialRecordCount = count["message"];
-            if(initialRecordCount >= 0){
+            if (initialRecordCount >= 0) {
                 setInterval(fetchCurrentRecordCount, 5000);
             }
         }
         return initialRecordCount;
-    }, function(error) {
+    }, function (error) {
         console.log("error occured: " + error);
     });
 }
@@ -72,14 +74,13 @@ function fetchCurrentRecordCount() {
             query: "*:*",
         }
     };
-
-    client.searchCount(countQueryInfo, function(count) {
+    client.searchCount(countQueryInfo, function (count) {
         currentRecordCount = count["message"];
         var logCountDifference = currentRecordCount - initialRecordCount;
-        if(logCountDifference > 0){
+        if (logCountDifference > 0) {
             fetchRecords(logCountDifference);
         }
-    }, function(error) {
+    }, function (error) {
         console.log("error occured: " + error);
     });
 }
@@ -88,30 +89,37 @@ function fetchCurrentRecordCount() {
  * This method fetches the newly added data to the table
  *
  */
-function fetchRecords(logCountDifference){
+function fetchRecords(logCountDifference) {
     initialRecordCount = currentRecordCount;
     logLineArray.length = 0;
     var queryInfo;
+    var queryString = "*:*";
+    var filterValue = $('input:text[name=filterValue]').val();
+    if (filterType.length > 0 && filterValue != undefined && filterValue.length > 0) {
+        queryString = filterType + " : \"" + filterValue+ "\"";
+    }
     queryInfo = {
         tableName: "LOGANALYZER",
         searchParams: {
-            query: "*:*",
+            query: queryString + " AND NOT __class : \"AUDIT_LOG\"",
             start: 0,
             count: logCountDifference,
-            sortBy : [
+            sortBy: [
                 {
-                    field : "_timestamp",
-                    sortType : "DESC",
-                    reversed : "true"
+                    field: "_timestamp",
+                    sortType: "DESC",
+                    reversed: "true"
                 }
             ]
         }
     };
 
-    var lineItem = {time : 'Fri, 20 May 2016 12:30:21 GMT ',
-        className : 'fooClass',
+    var lineItem = {
+        time: 'Fri, 20 May 2016 12:30:21 GMT ',
+        className: 'fooClass',
         content: 'fooContent',
-        trace : 'fooTrace'};
+        trace: 'fooTrace'
+    };
 
     client.search(queryInfo, function (data) {
         var obj = JSON.parse(data["message"]);
@@ -127,7 +135,7 @@ function fetchRecords(logCountDifference){
                     trace: obj[i].values._trace
                 };
 
-                if(lineItem.trace == null){
+                if (lineItem.trace == null) {
                     lineItem.trace = "";
                 }
                 writeToLogViewer(lineItem);
@@ -146,6 +154,31 @@ function writeToLogViewer(dataLine) {
     $ptty.echo((createLogList(dataLine)));
 }
 
-function createLogList(templateData){
-    return '<span class="logLine"><div class="logTimeStamp">' +templateData.time + '</div><div class="logLevel">'+templateData.level+'</div><div class="logClassName">' + templateData.className + '</div><div class="logContent">' + templateData.content + '</div><div class="logTrace">' + templateData.trace + '</div></span>';
+function createLogList(templateData) {
+    return '<span class="logLine"><div class="logTimeStamp">' + templateData.time + '</div><div class="logLevel">' + templateData.level + '</div><div class="logClassName">' + templateData.className + '</div><div class="logContent">' + templateData.content + '</div><div class="logTrace">' + templateData.trace + '</div></span>';
+}
+
+function onClickSelector() {
+    switch (this.value) {
+        case "Instance Id":
+            filterType = "__instance"
+            textInputEnable(true);
+            break;
+        case "Ip":
+            filterType = "__ip"
+            textInputEnable(true);
+            break;
+        case "All":
+            filterType = ""
+            textInputEnable(false);
+            break;
+    }
+}
+
+function textInputEnable(isEnable) {
+    if (isEnable) {
+        $("#inputPlaceHolder").html('<input type="text" name="filterValue">');
+    } else {
+        $("#inputPlaceHolder").empty();
+    }
 }
