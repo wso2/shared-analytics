@@ -263,9 +263,11 @@ function drawInvalidLoggingCountChart() {
                 callback: onclick
             }
         ]);
-        $(legendDiv).append("<ul class='legendText' style='list-style-type:none'><li><div id='paginate'></div></li></ul>");
-        $('#paginate').bootstrapPaginator(options);
-        $('[data-toggle="tooltip"]').tooltip();
+        if (totalPages > 1) {
+            $(legendDiv).append("<ul class='legendText' style='list-style-type:none'><li><div id='paginate'></div></li></ul>");
+            $('#paginate').bootstrapPaginator(options);
+            $('[data-toggle="tooltip"]').tooltip();
+        }
     } catch (error) {
         console.log(error);
         error.message = "Error while drawing log viewer.";
