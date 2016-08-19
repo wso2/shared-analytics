@@ -43,7 +43,22 @@
                 <script src="js/ptty.jquery.min.js"></script>
             </head>
             <body bgcolor="#000000">
+                <div class="col-sm-12">
+                <table>
+                    <tr>
+                        <td><label class="control-label">Filtering Type </label></td>
+                        <td>
+                            <select id="selector" class="form-control">
+                                <option>All</option>
+                                <option>Instance Id</option>
+                                <option>Ip</option>
+                            </select>
+                        </td>
+                        <td><div id="inputPlaceHolder"></div></td>
+                    </tr>
+                </table>
                 <div id="terminal"/>
+                </div>
                 <script src="js/main.js"></script>
             </body>
         </html>
