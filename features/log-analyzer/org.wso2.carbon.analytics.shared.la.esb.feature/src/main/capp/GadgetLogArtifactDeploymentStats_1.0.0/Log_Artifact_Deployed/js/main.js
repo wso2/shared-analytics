@@ -24,7 +24,7 @@ var receivedData = [];
 var initState = true;
 var canvasDiv = "#canvas";
 var prefs = new gadgets.Prefs();
-var gadgetConfig = gadgetUtil.getGadgetConf("Log_Artifact_Deployed");
+var gadgetConfig = gadgetUtil.getChart("Log_Artifact_Deployed");
 var async_tasks = gadgetConfig.classes.length;
 var meta = gadgetConfig.meta;
 var configChart;
