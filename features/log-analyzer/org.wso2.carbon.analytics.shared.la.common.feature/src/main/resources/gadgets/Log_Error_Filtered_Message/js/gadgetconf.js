@@ -28,6 +28,16 @@ var tables = [
         actionParameters: ["_content", "timestamp"]
     },
     {
+        name: "ESB",
+        dataSource: "LOGANALYZER",
+        schema: {
+            columns: ["_content", "_class"],
+            titles: ["Message", "Class"]
+        },
+        advancedColumns: [],
+        actionParameters: ["_content", "timestamp"]
+    },
+    {
         name: "APIM_AUDIT_LOG",
         dataSource: "LOGANALYZER_APIM_AUDIT_LOG",
         schema: {
