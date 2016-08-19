@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artifacts>
+    <artifact name="org.wso2.carbon.analytics.shared.la.apim" version="1.0.0" type="carbon/application">
+        <dependency artifact="GadgetLogAPIMMessageProcessing" version="1.0.0" include="true" serverRole="APIManager"/>
+        <dependency artifact="GadgetLogApiTokenByStatus" version="1.0.0" include="true" serverRole="APIManager"/>
+        <dependency artifact="GadgetLogApiTokenByStatusTable" version="1.0.0" include="true" serverRole="APIManager"/>
+        <dependency artifact="GadgetLogArtifactDeleted" version="1.0.0" include="true" serverRole="APIManager"/>
+        <dependency artifact="GadgetLogArtifactDeployed" version="1.0.0" include="true" serverRole="APIManager"/>
+        <!-- Dashboard Definition -->
+        <dependency artifact="APIMDashboard" version="1.0.0" include="true" serverRole="APIManager"/>
+    </artifact>
+</artifacts>

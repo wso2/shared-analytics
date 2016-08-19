@@ -1,0 +1,21 @@
+{
+  "id": "Log_Artifact_Status",
+  "title": "Artifact Deployed Status",
+  "type": "gadget",
+  "thumbnail": "store://gadget/Log_Artifact_Status/img/thumbnail.png",
+  "data": {
+    "url": "store://gadget/Log_Artifact_Status/index.xml"
+  },
+  "notify": {
+    "publisher": {
+      "type": "filter",
+      "description": "This notifies selected filter"
+    }
+  },
+  "listen": {
+    "subscriber": {
+      "type": "date-range",
+      "description": "Used to listen to any date range-selected"
+    }
+  }
+}

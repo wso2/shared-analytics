@@ -21,15 +21,16 @@ var gadgetConfig = {
     "title": "Log Event",
     "datasource": "LOGANALYZER",
     "level": ["DEBUG", "INFO", "WARN", "ERROR", "FATAL"],
+    "checkBoxId" : ["checkboxDebug", "checkboxInfo", "checkboxWarning", "checkboxError", "checkboxFatal"],
     "meta": {
-        "names": ["LogLevel", "Frequency"],
+        "names": ["Log Level", "Frequency"],
         "types": ["ordinal", "linear"]
     },
     "chartConfig": {
-        colorScale: ["#1abc9c", "#3498db", "#9b59b6", "#f1c40f", "#e67e22", "#e74c3c", "#2c3e50", "#2ecc71", "#F16272","#bcbd22"],
+        colorScale: ["#5CB85C", "#438CAD", "#EECA5A", "#D9483D", "#95A5A6"],
         type: "bar",
-        x: "LogLevel",
-        color: "LogLevel",
+        x: "Log Level",
+        color: "Log Level",
         charts: [{y: "Frequency"}],
         width: $(document).width()/1.27,
         height: $(document).height()/1.2,

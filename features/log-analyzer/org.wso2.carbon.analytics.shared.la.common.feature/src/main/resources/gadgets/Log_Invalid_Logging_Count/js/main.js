@@ -17,7 +17,7 @@
  */
 var prefs = new gadgets.Prefs();
 var svrUrl = gadgetUtil.getGadgetSvrUrl(prefs.getString(PARAM_TYPE));
-var client = new AnalyticsClient().init(null,null,svrUrl);
+var client = new AnalyticsClient().init(null, null, svrUrl);
 var timeFrom = gadgetUtil.timeFrom();
 var timeTo = gadgetUtil.timeTo();
 var timeUnit = null;
@@ -109,10 +109,10 @@ function initialize() {
             }
         }
     }, function (error) {
-        if(error === undefined){
+        if (error === undefined) {
             onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
             console.log("Analytics server not found : Please troubleshoot connection problems.");
-        }else{
+        } else {
             error.message = "Internal server error while data indexing.";
             onError(error);
             console.log(error);
@@ -149,10 +149,10 @@ function fetch(start, count) {
                         drawInvalidLoggingCountChart();
                     }
                 }, function (error) {
-                    if(error === undefined){
+                    if (error === undefined) {
                         onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
                         console.log("Analytics server not found : Please troubleshoot connection problems.");
-                    }else{
+                    } else {
                         error.message = "Internal server error while data indexing.";
                         onError(error);
                         console.log(error);
@@ -166,10 +166,10 @@ function fetch(start, count) {
             }
         }
     }, function (error) {
-        if(error === undefined){
+        if (error === undefined) {
             onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
             console.log("Analytics server not found : Please troubleshoot connection problems.");
-        }else{
+        } else {
             error.message = "Internal server error while data indexing.";
             onError(error);
             console.log(error);
@@ -225,7 +225,7 @@ function drawInvalidLoggingCountChart() {
         //perform necessary transformation on input data
         var summarizeData = chartDataBuilder();
         $(legendTitleDiv).empty();
-        $(legendTitleDiv).append("<div style='position:absolute;top: 16px;left: "+(gadgetData.chartConfig.width-50)+";'>Legend</div>");
+        $(legendTitleDiv).append("<div style='position:absolute;top: 16px;left: " + (gadgetData.chartConfig.width - 50) + ";'>Legend</div>");
         for (var i = 0; i < summarizeData.length; i++) {
             if (summarizeData[i][2] != "NoEntries") {
                 drawLegend(summarizeData[i][2]);
@@ -234,14 +234,14 @@ function drawInvalidLoggingCountChart() {
 
         var drawingChartData = [];
         for (var i = 0; i < mockData.length; i++) {
-            var isFound =false;
+            var isFound = false;
             for (var j = 0; j < summarizeData.length; j++) {
                 if (mockData[i][0] === summarizeData[j][0]) {
                     drawingChartData.push(summarizeData[j]);
-                    isFound =true;
+                    isFound = true;
                 }
             }
-            if(!isFound){
+            if (!isFound) {
                 drawingChartData.push(mockData[i]);
             }
         }
@@ -250,22 +250,40 @@ function drawInvalidLoggingCountChart() {
         //finally draw the chart on the given canvas
         gadgetData.chartConfig.colorScale.push("#95a5a6");
         gadgetData.chartConfig.colorDomain.push("NoEntries");
-        var vg = new vizg(gadgetData.schema, JSON.parse(JSON.stringify(gadgetData.chartConfig)));
+
+        var maxValue = getMaximumValue();
+        var configChart = JSON.parse(JSON.stringify(gadgetData.chartConfig));
+        if (maxValue < 10) {
+            configChart.yTicks = maxValue;
+        }
+        var vg = new vizg(gadgetData.schema, configChart);
         vg.draw(canvasDiv, [
             {
                 type: "click",
                 callback: onclick
             }
         ]);
-        $(legendDiv).append("<ul class='legendText' style='list-style-type:none'><li><div id='paginate'></div></li></ul>");
-        $('#paginate').bootstrapPaginator(options);
-        $('[data-toggle="tooltip"]').tooltip();
+        if (totalPages > 1) {
+            $(legendDiv).append("<ul class='legendText' style='list-style-type:none'><li><div id='paginate'></div></li></ul>");
+            $('#paginate').bootstrapPaginator(options);
+            $('[data-toggle="tooltip"]').tooltip();
+        }
     } catch (error) {
         console.log(error);
         error.message = "Error while drawing log viewer.";
         error.status = "";
         onError(error);
     }
+}
+
+function getMaximumValue() {
+    var max = 0;
+    for (var i = 0; i < this.gadgetData.schema[0].data.length; i++) {
+        if (this.gadgetData.schema[0].data[i][1] > max) {
+            max = this.gadgetData.schema[0].data[i][1];
+        }
+    }
+    return max;
 }
 
 function drawLegend(fullContext) {
@@ -392,39 +410,60 @@ function publish(data) {
 var onclick = function (event, item) {
     var selectedDataArray = [];
     var tempFromTime;
+    var eventCount = 0;
     if (item != null) {
         if (item.datum[gadgetData.columns[2]] === "Other") {
             for (var i = 0; i < receivedOtherData.length; i++) {
                 if (receivedOtherData[i]["day"] === item.datum.day) {
-                    selectedDataArray.push([receivedOtherData[i].values[gadgetData.columns[2]], receivedOtherData[i].values[gadgetData.columns[1]]]);
-                    if(tempFromTime === undefined){
+                    selectedDataArray.push(receivedOtherData[i].values[gadgetData.columns[2]].replace(/\"/g, "\\\""));
+                    eventCount = eventCount + receivedOtherData[i].values[gadgetData.columns[1]];
+                    if (tempFromTime === undefined) {
                         tempFromTime = receivedOtherData[i][gadgetData.columns[0]];
                     }
                 }
             }
             publish(
                 {
-                    "selected": selectedDataArray,
+                    "selected": [
+                        {
+                            "filter": "_content",
+                            "values": ["Failed Administrator login attempt%"]
+                        },
+                        {
+                            "filter": "tenantID",
+                            "values": selectedDataArray
+                        }
+                    ],
+                    "count": eventCount,
                     "fromTime": getFromTime(tempFromTime),
-                    "toTime": getToTime(tempFromTime),
-                    "filter": gadgetPropertyName
+                    "toTime": getToTime(tempFromTime)
                 }
             );
         } else {
             for (var i = 0; i < receivedData.length; i++) {
                 if (receivedData[i].values[gadgetData.columns[2]] === item.datum[gadgetData.columns[2]] && receivedData[i]["day"] === item.datum.day) {
-                    selectedDataArray.push([receivedData[i].values[gadgetData.columns[2]], receivedData[i].values[gadgetData.columns[1]]]);
-                    if(tempFromTime === undefined){
+                    selectedDataArray.push(receivedData[i].values[gadgetData.columns[2]].replace(/\"/g, "\\\""));
+                    eventCount = eventCount + receivedData[i].values[gadgetData.columns[1]];
+                    if (tempFromTime === undefined) {
                         tempFromTime = receivedData[i][gadgetData.columns[0]];
                     }
                 }
             }
             publish(
                 {
-                    "selected": selectedDataArray,
+                    "selected": [
+                        {
+                            "filter": "_content",
+                            "values": ["Failed Administrator login attempt%"]
+                        },
+                        {
+                            "filter": "tenantID",
+                            "values": selectedDataArray
+                        }
+                    ],
+                    "count": eventCount,
                     "fromTime": getFromTime(tempFromTime),
-                    "toTime": getToTime(tempFromTime),
-                    "filter": gadgetPropertyName
+                    "toTime": getToTime(tempFromTime)
                 }
             );
         }
@@ -498,8 +537,8 @@ function onErrorCustom(title, message) {
     $(canvasDiv).html(gadgetUtil.getCustemText(title, message));
 }
 
-function createLegendList(bulletColor, fullContext, subContext){
+function createLegendList(bulletColor, fullContext, subContext) {
     return "<ul class='legendText' style='list-style-type:none'><li class='context'><svg width='10' height='10'>" +
-        "<circle cx='5' cy='5' r='6' fill="+bulletColor+"/></svg><span class='textContext'><a class='legendTooltip' " +
-        "data-toggle='tooltip' data-placement='bottom' title=\""+fullContext+"\" style='cursor:default'>"+subContext+"</a></span></li></ul>";
+        "<circle cx='5' cy='5' r='6' fill=" + bulletColor + "/></svg><span class='textContext'><a class='legendTooltip' " +
+        "data-toggle='tooltip' data-placement='bottom' title=\"" + fullContext + "\" style='cursor:default'>" + subContext + "</a></span></li></ul>";
 }

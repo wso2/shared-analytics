@@ -52,7 +52,7 @@
 
 .legend {
     margin-left: -58px;
-    margin-top: -100px;
+    margin-top: 50px;
     position: absolute;
 }
 
@@ -103,3 +103,189 @@ ul.legendText2 {
    font-size: 20px;
    font-weight: bold;
 }
+
+input[type="checkbox"]{
+margin-left: 10px;
+display: none;
+
+}
+
+.checkboxDebug label:before {
+	content: "";
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-left: 17px;
+	position: absolute;
+	left: 0;
+	bottom: 1px;
+	background-color: #5CB85C;
+	border-radius: 3px;
+	box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
+}
+
+.checkboxDebug label {
+	display: inline-block;
+	cursor: pointer;
+	position: relative;
+	padding-left: 40px;
+	margin-right: 15px;
+	font-size: 15px;
+}
+.checkboxDebug label {
+	margin-bottom: 10px;
+}
+
+ .checkbox label:before {
+    border-radius: 3px;
+}
+
+input[type="checkbox"]:checked + label:before {
+    content: "\2713";
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
+    font-size: 15px;
+    color: white;
+    text-align: center;
+    line-height: 15px;
+
+
+}
+
+
+
+
+.checkboxInfo label:before {
+	content: "";
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-left: 17px;
+	position: absolute;
+	left: 0;
+	bottom: 1px;
+	background-color: #438CAD;
+	border-radius: 3px;
+	box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
+}
+
+.checkboxInfo label {
+	display: inline-block;
+	cursor: pointer;
+	position: relative;
+	padding-left: 40px;
+	margin-right: 15px;
+	font-size: 15px;
+}
+.checkboxInfo label {
+	margin-bottom: 10px;
+}
+
+ .checkboxInfo label:before {
+    border-radius: 3px;
+}
+
+
+
+
+.checkboxWarning label:before {
+	content: "";
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-left: 17px;
+	position: absolute;
+	left: 0;
+	bottom: 1px;
+	background-color: #EECA5A;
+	border-radius: 3px;
+	box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
+}
+
+.checkboxWarning label {
+	display: inline-block;
+	cursor: pointer;
+	position: relative;
+	padding-left: 40px;
+	margin-right: 15px;
+	font-size: 15px;
+}
+.checkboxWarning label {
+	margin-bottom: 10px;
+}
+
+.checkboxWarning label:before {
+    border-radius: 3px;
+}
+
+
+
+.checkboxError label:before {
+	content: "";
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-left: 17px;
+	position: absolute;
+	left: 0;
+	bottom: 1px;
+	background-color: #D9483D;
+	border-radius: 3px;
+	box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
+}
+
+.checkboxError label {
+	display: inline-block;
+	cursor: pointer;
+	position: relative;
+	padding-left: 40px;
+	margin-right: 15px;
+	font-size: 15px;
+}
+.checkboxError label {
+	margin-bottom: 10px;
+}
+
+.checkboxError label:before {
+    border-radius: 3px;
+}
+
+
+
+
+.checkboxFatal label:before {
+	content: "";
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-left: 17px;
+	position: absolute;
+	left: 0;
+	bottom: 1px;
+	background-color: #95A5A6;
+	border-radius: 3px;
+	box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
+}
+
+.checkboxFatal label {
+	display: inline-block;
+	cursor: pointer;
+	position: relative;
+	padding-left: 40px;
+	margin-right: 15px;
+	font-size: 15px;
+}
+.checkboxFatal label {
+	margin-bottom: 10px;
+}
+
+.checkboxFatal label:before {
+    border-radius: 3px;
+}
+
+.canvasDefault {
+    height: 200px;
+    width: 1200px;
+    min-height: 200px;
+    min-width: 1200px;
+}
+

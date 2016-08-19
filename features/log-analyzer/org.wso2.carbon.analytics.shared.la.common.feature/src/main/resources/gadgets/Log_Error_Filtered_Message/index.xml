@@ -45,6 +45,7 @@
             <!-- Custom -->
             <link rel="stylesheet" type="text/css" href="../gadget-commons/css/dataTables.bootstrap.css">
             <link rel="stylesheet" type="text/css" href="css/style.css">
+            <link rel="stylesheet" type="text/css" href="css/custom.css">
 
             <!-- JS -->
             <script src="../gadget-commons/js/jquery-1.10.2.js"></script>
@@ -55,7 +56,6 @@
             <script src="../gadget-commons/js/jquery.nanoscroller.min.js"></script>
             <script src="../gadget-commons/js/vega.js"></script>
             <script src="../gadget-commons/js/VizGrammar.js"></script>
-            <script src="../gadget-commons/js/VizGrammarSettings.js"></script>
             <script src="../gadget-commons/js/carbon-analytics.js"></script>
             <script src="../gadget-commons/js/moment.min.js"></script>
             <script src="../gadget-commons/js/gadget-utils.js"></script>

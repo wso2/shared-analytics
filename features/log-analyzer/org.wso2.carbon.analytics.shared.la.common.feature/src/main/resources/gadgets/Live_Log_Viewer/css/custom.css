@@ -1,0 +1,26 @@
+body.dark svg.marks .mark-group .background {
+    fill: #121822 !important;
+}
+
+body.dark svg.marks .mark-group .mark-text text {
+    fill: #c3cbdb !important;
+}
+
+body.dark svg.marks .mark-group .mark-rule line {
+    stroke: #E3E5E6 !important;
+}
+
+.col-sm-12 table {
+    margin-left: 14px;
+    margin-top: 9px;
+}
+
+.control-label {
+    font-weight: 400;
+    margin-right: 5px;
+    margin-top: -5px;
+}
+
+.form-control {
+    width: 111px;
+}

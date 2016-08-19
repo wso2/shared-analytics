@@ -32,49 +32,160 @@ var canvasDivSecondary = "#canvasSecondary";
 var prefs = new gadgets.Prefs();
 var svrUrl = gadgetUtil.getGadgetSvrUrl(prefs.getString(PARAM_TYPE));
 var client = new AnalyticsClient().init(null,null,svrUrl);
-var chartColorScale = ["#1abc9c", "#3498db", "#9b59b6", "#f1c40f", "#e67e22"];
+var fullChartColorScale = ["#5CB85C", "#438CAD", "#EECA5A", "#D9483D", "#95A5A6"];
+var currentChartColorScale = [];
+var chartColorScale2 = ["#EECA5A", "#D9483D", "#95A5A6"];
+var checkedBars= [true, true, true, true , true];
+var xAxisValues= [];
 
 function initialize() {
-    gadgetConfig.chartConfig.colorScale = chartColorScale;
+  xAxisValues.length = 0;
+  currentChartColorScale.length=0;
+  barColorBuilder();
+  xAxisBuilder();
+  initState = true;
+  gadgetConfig.chartConfig.colorScale = currentChartColorScale;
+  async_tasks = xAxisValues.length;
+
+  if(async_tasks> 0){
     fetch();
+  }else{
+    onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
+  }
 }
 
 $(document).ready(function () {
     initialize();
-    drawLegends();
  });
 
-function drawLegends(){
 
-    $("#legend").empty();
-    $("#legendTitleDefault").append("<div style='position:absolute;top: 50px;left: "+(gadgetConfig.chartConfig.width-50)+";'>Legend</div>");
-    for (var i = 0; i < gadgetConfig.level.length; i++) {
-        $("#legendDefault").append(createLegendList(chartColorScale[i], "legendText2",gadgetConfig.level[i]));
-    }
+function debugClick(checkbox) {
+    checkedBars[0] = !checkedBars[0];
+    xAxisValues.length = 0;
+    currentChartColorScale.length=0;
+    barColorBuilder();
+    xAxisBuilder();
+    initState = true;
+    gadgetConfig.chartConfig.colorScale = currentChartColorScale;
+    async_tasks = xAxisValues.length;
 
-    $("#legendSecondary").empty();
-    $("#legendTitleSecondary").append("<div style='position:absolute;top: 50px;left: "+(gadgetConfig.chartConfig.width-50)+";'>Legend</div>");
-    for (var i = 0; i < gadgetConfig.level.length-2; i++) {
-        $("#legendSecondary").append(createLegendList(chartColorScale[i], "legendText2",gadgetConfig.level[i+2]));
-    }
-
-    document.getElementById('drawCanvasDefault').style.display='block';
-    document.getElementById('drawCanvasSecondary').style.display='none';
-
-    $("#checkBox").append("<ul class='checkBoxText' style='list-style-type:none;position:absolute;bottom: 140px;left: "+(gadgetConfig.chartConfig.width-57)+";'><li class='context'><a class='legendTooltip' " +
-                                                             "data-toggle='tooltip' data-placement='bottom' title=\""+"\" style='cursor:default'>"+"<input type=\"checkbox\" checked=\"checked\" onclick='onClickSelector(this);'> Enable Debug and Info Logs<br>"+"</a></span></li></ul>");
-}
-
-function onClickSelector(checkbox) {
-    if(checkbox.checked){
-       document.getElementById('drawCanvasDefault').style.display='block';
-       document.getElementById('drawCanvasSecondary').style.display='none';
+    var dataArray = checkBoxCheckCounter();
+    if(dataArray[0] === 1){
+           document.getElementById(gadgetConfig.checkBoxId[dataArray[1]]).disabled= true;
     }else{
-       document.getElementById('drawCanvasDefault').style.display='none';
-       document.getElementById('drawCanvasSecondary').style.display='block';
+           enableCheckBoxes();
+    }
+    fetch();
+}
+
+function infoClick(checkbox) {
+    checkedBars[1] = !checkedBars[1];
+    xAxisValues.length = 0;
+    currentChartColorScale.length=0;
+    barColorBuilder();
+    xAxisBuilder();
+    gadgetConfig.chartConfig.colorScale = currentChartColorScale;
+    initState = true;
+    async_tasks = xAxisValues.length;
+    var dataArray = checkBoxCheckCounter();
+    if(dataArray[0] === 1){
+           document.getElementById(gadgetConfig.checkBoxId[dataArray[1]]).disabled= true;
+    }else{
+           enableCheckBoxes();
+    }
+    fetch();
+}
+
+function warnClick(checkbox) {
+    checkedBars[2] = !checkedBars[2];
+    xAxisValues.length = 0;
+    currentChartColorScale.length=0;
+    barColorBuilder();
+    xAxisBuilder();
+    gadgetConfig.chartConfig.colorScale = currentChartColorScale;
+    initState = true;
+    async_tasks = xAxisValues.length;
+    var dataArray = checkBoxCheckCounter();
+    if(dataArray[0] === 1){
+           document.getElementById(gadgetConfig.checkBoxId[dataArray[1]]).disabled= true;
+    }else{
+           enableCheckBoxes();
+    }
+    fetch();
+}
+
+function errorClick(checkbox) {
+    checkedBars[3] = !checkedBars[3];
+    xAxisValues.length = 0;
+    currentChartColorScale.length=0;
+    barColorBuilder();
+    xAxisBuilder();
+    gadgetConfig.chartConfig.colorScale = currentChartColorScale;
+    initState = true;
+    async_tasks = xAxisValues.length;
+    var dataArray = checkBoxCheckCounter();
+    if(dataArray[0] === 1){
+           document.getElementById(gadgetConfig.checkBoxId[dataArray[1]]).disabled= true;
+    }else{
+           enableCheckBoxes();
+    }
+    fetch();
+}
+
+function fatalClick(checkbox) {
+    checkedBars[4] = !checkedBars[4];
+    xAxisValues.length = 0;
+    currentChartColorScale.length=0;
+    barColorBuilder();
+    xAxisBuilder();
+    gadgetConfig.chartConfig.colorScale = currentChartColorScale;
+    initState = true;
+    async_tasks = xAxisValues.length;
+    var dataArray = checkBoxCheckCounter();
+    if(dataArray[0] === 1){
+           document.getElementById(gadgetConfig.checkBoxId[dataArray[1]]).disabled= true;
+    }else{
+           enableCheckBoxes();
     }
 
+    fetch();
 }
+
+function enableCheckBoxes(){
+    for(var i =0; i < gadgetConfig.checkBoxId.length; i++){
+        document.getElementById(gadgetConfig.checkBoxId[i]).disabled= false;
+    }
+}
+
+function barColorBuilder(){
+    for( var i = 0; i < checkedBars.length; i++ ){
+        if(checkedBars[i]){
+         currentChartColorScale.push(fullChartColorScale[i]);
+        }
+    }
+}
+
+function checkBoxCheckCounter(){
+    var position
+    var count = 0;
+    for (var i= 0; i < checkedBars.length; i++){
+        if(checkedBars[i]){
+            count++;
+            position = i;
+        }
+    }
+    var dataArray = new Array(count,position);
+    return dataArray;
+}
+function xAxisBuilder(){
+        for( var i = 0; i < checkedBars.length; i++ ){
+           if(checkedBars[i]){
+               xAxisValues.push( gadgetConfig.level[i]);
+        }}
+
+}
+
+
 
 function createLegendList(bulletColor, fullContext, subContext){
     return "<ul class='" +fullContext+"' style='list-style-type:none;'><li class='context'><svg width='10' height='10'>" +
@@ -87,29 +198,24 @@ function fetch(logLevelIndex) {
         receivedData.length = 0;
         logLevelIndex = 0;
     }
-
     var queryInfo = {
         tableName: gadgetConfig.datasource,
         searchParams: {
-            query: "_level:" + gadgetConfig.level[logLevelIndex] + " AND  _eventTimeStamp: [" + from + " TO " + to + "]"
+            query: "_level:" + xAxisValues[logLevelIndex] + " AND  _eventTimeStamp: [" + from + " TO " + to + "]"
         }
     };
 
     client.searchCount(queryInfo, function (d) {
-    if (d["status"] === "success") {
-            receivedData.push([gadgetConfig.level[logLevelIndex], parseInt(d["message"])]);
+        if (d["status"] === "success") {
+            receivedData.push([xAxisValues[logLevelIndex], parseInt(d["message"])]);
             async_tasks--;
             if (async_tasks == 0) {
                 if (!initState) {
-                    redrawDefaultLogLevelChart();
-
+                    redrawLogLevelChart();
                 } else {
-                    drawDefaultLogLevelChart();
-                    initState = true;
+                    drawLogLevelChart();
+                    initState = false;
                 }
-                receivedData.length = 0;
-                async_tasks = 3;
-                fetchWithDebugAndInfo(2);
             } else {
                 fetch(++logLevelIndex);
             }
@@ -126,48 +232,17 @@ function fetch(logLevelIndex) {
     });
 }
 
-function fetchWithDebugAndInfo(logLevelIndex) {
-    if (!logLevelIndex) {
-        receivedData.length = 0;
-        logLevelIndex = 0;
-    }
 
-    var queryInfo = {
-        tableName: gadgetConfig.datasource,
-        searchParams: {
-            query: "_level:" + gadgetConfig.level[logLevelIndex] + " AND  _eventTimeStamp: [" + from + " TO " + to + "]"
-        }
-    };
+function drawLogLevelChart() {
 
-    client.searchCount(queryInfo, function (d) {
+chartDefault = null;
+configChart = null;
+configChart = JSON.parse(JSON.stringify(gadgetConfig.chartConfig));
 
-    if (d["status"] === "success") {
-        receivedData.push([gadgetConfig.level[logLevelIndex], parseInt(d["message"])]);
-        async_tasks--;
-        if (async_tasks == 0) {
-            if (!initState) {
-                 redrawDefaultLogLevelChart(true);
-            } else {
-                 drawWithDebugLogLevelChart();
-                 initState = false;
-                }
-            } else {
-                fetchWithDebugAndInfo(++logLevelIndex);
-            }
-        }
-    }, function (error) {
-        if(error === undefined){
-            onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
-            console.log("Analytics server not found : Please troubleshoot connection problems.");
-        }else{
-            error.message = "Internal server error while data indexing.";
-            onError(error);
-            console.log(error);
-        }
-    });
+var maxValue = getMaximumValue(receivedData);
+if(maxValue < 10){
+      configChart.yTicks = maxValue;
 }
-
-function drawDefaultLogLevelChart() {
     try {
         $(canvasDiv).empty();
 
@@ -190,30 +265,6 @@ function drawDefaultLogLevelChart() {
     }
 }
 
-function drawWithDebugLogLevelChart() {
-    try {
-       $(canvasDivSecondary).empty();
-       chartSecondary = new vizg(
-           [
-               {
-                   "metadata": {
-                   "names": ["LogLevel", "Frequency"],
-                   "types": ["ordinal", "linear"]
-                    },
-                   "data": receivedData
-               }
-           ],
-       configChartSecondary
-       );
-       chartSecondary.draw(canvasDivSecondary);
-    } catch (error) {
-        console.log(error);
-        error.message = "Error while drawing log event chart.";
-        error.status = "";
-        onError(error);
-    }
-}
-
 function redrawDefaultLogLevelChart(withDebugAndInfo) {
      for (var i in receivedData) {
           if(!withDebugAndInfo){
@@ -224,6 +275,15 @@ function redrawDefaultLogLevelChart(withDebugAndInfo) {
      }
 }
 
+function getMaximumValue(receivedData){
+    var max = 0;
+    for(var i=0;i<receivedData.length;i++){
+        if(receivedData[i][1] > max){
+            max = receivedData[i][1];
+        }
+    }
+    return max;
+}
 function subscribe(callback) {
     gadgets.HubSettings.onConnect = function () {
         gadgets.Hub.subscribe("subscriber", function (topic, data, subscriber) {
@@ -235,8 +295,21 @@ function subscribe(callback) {
 subscribe(function (topic, data, subscriber) {
     from = parseInt(data["timeFrom"]);
     to = parseInt(data["timeTo"]);
-    async_tasks = gadgetConfig.level.length;
-    fetch();
+   xAxisValues.length = 0;
+   currentChartColorScale.length=0;
+   barColorBuilder();
+   xAxisBuilder();
+   gadgetConfig.chartConfig.colorScale = currentChartColorScale;
+   initState = true;
+   async_tasks = xAxisValues.length;
+   var dataArray = checkBoxCheckCounter();
+   if(dataArray[0] === 1){
+          document.getElementById(gadgetConfig.checkBoxId[dataArray[1]]).disabled= true;
+   }else{
+          enableCheckBoxes();
+   }
+
+     fetch();
 });
 
 function onError(msg) {

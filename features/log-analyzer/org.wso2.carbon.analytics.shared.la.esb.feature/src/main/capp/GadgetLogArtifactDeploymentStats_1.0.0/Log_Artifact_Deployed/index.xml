@@ -30,63 +30,64 @@
     <UserPref name="type" display_name="Gadget Type" required="true" />
     <Content type="html">
         <![CDATA[
-            <head>
-                <meta charset="utf-8"/>
-                <title>Log Error Bar Chart</title>
-                <!-- WSO2 Theme -->
-                <link rel="stylesheet" type="text/css" href="/portal/libs/font-wso2_1.0.0/css/font-wso2.min.css" />
-                <link rel="stylesheet" type="text/css" href="/portal/libs/theme-wso2_1.0/css/theme-wso2.css" />
+        <head>
+            <meta charset="utf-8"/>
+            <title>Log Error Bar Chart</title>
+            <!-- WSO2 Theme -->
+            <link rel="stylesheet" type="text/css" href="/portal/libs/font-wso2_1.0.0/css/font-wso2.min.css" />
+            <link rel="stylesheet" type="text/css" href="/portal/libs/theme-wso2_1.0/css/theme-wso2.css" />
 
 
-                <!-- CSS -->
-                <link rel="stylesheet" type="text/css" href="../gadget-commons/css/gadget.css" />
-                <link rel="stylesheet" type="text/css" href="../gadget-commons/css/bootstrap.min.css" />
-                <link rel="stylesheet" type="text/css" href="css/style.css" />
+            <!-- CSS -->
+            <link rel="stylesheet" type="text/css" href="../gadget-commons/css/gadget.css" />
+            <link rel="stylesheet" type="text/css" href="../gadget-commons/css/bootstrap.min.css" />
+            <link rel="stylesheet" type="text/css" href="css/style.css" />
+            <link rel="stylesheet" type="text/css" href="css/custom.css">
 
-                <!-- jQuery -->
-                <script src="../gadget-commons/js/jquery-1.10.2.js"></script>
-                <script src="../gadget-commons/js/moment.min.js"></script>
-                <script src="../gadget-commons/js/gadget-utils.js"></script>
-                <script src="../gadget-commons/js/bootstrap-paginator.min.js"></script>
-                <script src="../gadget-commons/js/carbon-analytics.js"></script>
-                <script src="../gadget-commons/js/bootstrap.min.js"></script>
+            <!-- jQuery -->
+            <script src="../gadget-commons/js/jquery-1.10.2.js"></script>
+            <script src="../gadget-commons/js/moment.min.js"></script>
+            <script src="../gadget-commons/js/gadget-utils.js"></script>
+            <script src="../gadget-commons/js/bootstrap-paginator.min.js"></script>
+            <script src="../gadget-commons/js/carbon-analytics.js"></script>
+            <script src="../gadget-commons/js/bootstrap.min.js"></script>
 
-                <!-- Include VizGrammar -->
-                <script src="../gadget-commons/js/d3.min.js"></script>
-                <script src="../gadget-commons/js/vega.js"></script>
-                <script src="../gadget-commons/js/VizGrammar.js"></script>
+            <!-- Include VizGrammar -->
+            <script src="../gadget-commons/js/d3.min.js"></script>
+            <script src="../gadget-commons/js/vega.js"></script>
+            <script src="../gadget-commons/js/VizGrammar.js"></script>
 
-                <!-- Custom -->
-                <script src="js/gadgetconf.js"></script>
-                <script src="js/main.js"></script>
+            <!-- Custom -->
+            <script src="js/gadgetconf.js"></script>
+            <script src="js/main.js"></script>
 
-                <!--Twitter typeahead-->
-                <script src="../commons/js/typeahead.bundle.js"></script>
+            <!--Twitter typeahead-->
+            <script src="../commons/js/typeahead.bundle.js"></script>
 
-            </head>
-            <body>
-                <div class="col-sm-12">
-                <table>
-                </table>
-                </div>
-                <div id="errorDiv"></div>
+        </head>
+        <body>
+        <div class="col-sm-12">
+            <table>
+            </table>
+        </div>
+        <div id="errorDiv"></div>
 
-                <div id= "drawCanvas" class="drawCanvas">
-                    <table>
-                        <tr>
-                            <td>
-                               <div id="canvas"></div>
-                            </td>
-                            <td>
-                                <div>
-                                    <div id="legendTitle"></div>
-                                    <div id="legend" class="legend"></div>
-                                <div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </body>
+        <div id= "drawCanvas" class="drawCanvas">
+            <table>
+                <tr>
+                    <td>
+                        <div id="canvas"></div>
+                    </td>
+                    <td>
+                        <div>
+                            <div id="legendTitle"></div>
+                            <div id="legend" class="legend"></div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        </body>
         ]]>
     </Content>
 </Module>

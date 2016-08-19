@@ -18,19 +18,20 @@
 
 var prefs = new gadgets.Prefs();
 var svrUrl = gadgetUtil.getGadgetSvrUrl(prefs.getString(PARAM_TYPE));
-var client = new AnalyticsClient().init(null,null,svrUrl);
+var client = new AnalyticsClient().init(null, null, svrUrl);
 var fromTime;
 var toTime;
 var receivedData = [];
-var filteredMessageArray  = [];
-var filteringByField;
-var nanoScrollerSelector = $(".nano");
 var canvasDiv = "#canvas";
-var iteratorCount = 0;
+var gadgetData = gadgetUtil.getTable(prefs.getString(PARAM_TYPE));
+var viewFunctionMap = [];
+var nanoScrollerSelector = $(".nano");
 var dataTable;
+var queryString = "";
+var count = 0;
 
 function initialize() {
-    $(canvasDiv).html(gadgetUtil.getCustemText("No content to display","Please click on an error category from the above" +
+    $(canvasDiv).html(gadgetUtil.getCustemText("No content to display", "Please click on an error category from the above" +
         " chart to view the log events."));
     nanoScrollerSelector.nanoScroller();
 }
@@ -39,32 +40,49 @@ $(document).ready(function () {
     initialize();
 });
 
-function fetch(messageElement, countElement) {
-    var queryInfo;
-    queryInfo = {
-        tableName: "LOGANALYZER",
+function fetch() {
+    viewFunctionMap.length = 0;
+    receivedData.length = 0;
+    var queryInfo = {
+        tableName: gadgetData.dataSource,
         searchParams: {
-            query: filteringByField + ": \"" + messageElement + "\" AND  _timestamp: [" + fromTime + " TO " + toTime + "] AND __level: \"ERROR\"",
+            query: queryString,
             start: 0, //starting index of the matching record set
-            count: countElement //page size for pagination
+            count: count //page size for pagination
         }
     };
     client.search(queryInfo, function (d) {
         var obj = JSON.parse(d["message"]);
         if (d["status"] === "success") {
-            iteratorCount++;
+            var formattedEntry = [];
             for (var i = 0; i < obj.length; i++) {
-                var msg = obj[i].values._content.replace('\n',"");
-                msg = msg.replace(/[\r\n]/g, "");
-                receivedData.push([moment(obj[i].timestamp).format("YYYY-MM-DD HH:mm:ss.SSS"), obj[i].values._content, obj[i].values._class,
-                    '<a href="#" class="btn padding-reduce-on-grid-view" onclick= "viewFunction(\''+obj[i].values._eventTimeStamp+'\',\''+msg+'\')"> <span class="fw-stack"> ' +
-                    '<i class="fw fw-ring fw-stack-2x"></i> <i class="fw fw-view fw-stack-1x"></i> </span> <span class="hidden-xs">View</span> </a>']);
+                formattedEntry.length = 0;
+                formattedEntry.push(moment(obj[i].timestamp).format("YYYY-MM-DD HH:mm:ss.SSS"));
+                for (var column in gadgetData.schema.columns) {
+                    var columnData = obj[i].values[gadgetData.schema.columns[column]];
+                    for (var advancedColumn in gadgetData.advancedColumns) {
+                        if (gadgetData.advancedColumns[advancedColumn].id === gadgetData.schema.columns[column]) {
+                            columnData = columnFormatter(columnData, gadgetData.advancedColumns[advancedColumn].formatters)
+                        }
+                    }
+                    formattedEntry.push(columnData);
+                }
+                if (gadgetData.actionParameters.length > 0) {
+                    var viewFunctionParamerters = {};
+                    for (var actionParameter in gadgetData.actionParameters) {
+                        if (gadgetData.actionParameters[actionParameter] === "timestamp") {
+                            viewFunctionParamerters["timestamp"] = obj[i].timestamp;
+                        } else {
+                            viewFunctionParamerters[gadgetData.actionParameters[actionParameter]] = obj[i].values[gadgetData.actionParameters[actionParameter]];
+                        }
+                    }
+                    viewFunctionMap.push(viewFunctionParamerters);
+                    formattedEntry.push('<a href="#" class="btn padding-reduce-on-grid-view" onclick= "viewFunction(\'' + viewFunctionMap.length + '\')"> <span class="fw-stack"> ' +
+                        '<i class="fw fw-ring fw-stack-2x"></i> <i class="fw fw-view fw-stack-1x"></i> </span> <span class="hidden-xs">View</span> </a>')
+                }
+                receivedData.push(formattedEntry);
             }
-            if(iteratorCount < filteredMessageArray.length){
-                fetch(filteredMessageArray[iteratorCount][0].replace(/\"/g, "\\\""), filteredMessageArray[iteratorCount][1]);
-            }else{
-                drawLogErrorFilteredTable();
-            }
+            drawLogErrorFilteredTable();
         }
     }, function (error) {
         console.log(error);
@@ -73,28 +91,54 @@ function fetch(messageElement, countElement) {
     });
 }
 
+function columnFormatter(columnData, formatters) {
+    var processedMessage = "";
+    for (var formatter in formatters) {
+        if (formatters[formatter].type === "json") {
+            columnData = JSON.parse(columnData);
+            for (var i = 0; i < formatters[formatter].keys.length; i++) {
+                if (columnData[formatters[formatter].keys[i]] != undefined) {
+                    processedMessage = processedMessage.concat(formatters[formatter].titles[i] + " : " + columnData[formatters[formatter].keys[i]] + formatters[formatter].delimiter);
+                }
+            }
+        }
+
+        if (formatters[formatter].type === "regx") {
+            processedMessage = (processedMessage).match(formatters[formatter].pattern);
+        }
+
+        if (formatters[formatter].type === "substring") {
+            processedMessage = processedMessage.substring(formatters[formatter].start, formatters[formatter].end);
+        }
+    }
+    return processedMessage;
+}
+
 function drawLogErrorFilteredTable() {
     try {
         $(canvasDiv).empty();
-        if ( $.fn.dataTable.isDataTable( '#tblMessages' ) ) {
+        if ($.fn.dataTable.isDataTable('#tblMessages')) {
             dataTable.destroy();
+        }
+        var colNames = [];
+        colNames.push({title: "Timestamp"});
+        for (var i = 0; i < gadgetData.schema.titles.length; i++) {
+            colNames.push({title: gadgetData.schema.titles[i]})
+        }
+        if (gadgetData.actionParameters.length > 0) {
+            colNames.push({title: "Action"})
         }
         dataTable = $("#tblMessages").DataTable({
             data: receivedData,
-            columns: [
-                { title: "Timestamp" },
-                { title: "Message" },
-                { title: "Class" },
-                { title: "Action" }
-            ],
+            columns: colNames,
             dom: '<"dataTablesTop"' +
-                'f' +
-                '<"dataTables_toolbar">' +
-                '>' +
-                'rt' +
-                '<"dataTablesBottom"' +
-                'lip' +
-                '>'
+            'f' +
+            '<"dataTables_toolbar">' +
+            '>' +
+            'rt' +
+            '<"dataTablesBottom"' +
+            'lip' +
+            '>'
         });
         nanoScrollerSelector[0].nanoscroller.reset();
         dataTable.on('draw', function () {
@@ -108,11 +152,6 @@ function drawLogErrorFilteredTable() {
     }
 }
 
-
-function publish(data) {
-    gadgets.Hub.publish("publisher", data);
-};
-
 function subscribe(callback) {
     gadgets.HubSettings.onConnect = function () {
         gadgets.Hub.subscribe("subscriber", function (topic, data, subscriber) {
@@ -123,25 +162,28 @@ function subscribe(callback) {
 
 subscribe(function (topic, data, subscriber) {
     $(canvasDiv).html(gadgetUtil.getLoadingText());
-    filteredMessageArray = data["selected"];
+    var selectedArray = data["selected"];
+    queryString = "";
+    for (var i = 0; i < selectedArray.length; i++) {
+        if (i != 0) {
+            queryString = queryString.concat(" AND ");
+        }
+        for (var j = 0; j < selectedArray[i].values.length; j++) {
+            if (j != 0) {
+                queryString = queryString.concat(" OR ");
+            }
+            queryString = queryString.concat(selectedArray[i].filter + " : \"" + selectedArray[i].values[j] + "\"");
+        }
+    }
     fromTime = data["fromTime"];
     toTime = data["toTime"];
-    filteringByField = data["filter"];
-    if (filteringByField === "MESSAGE_LEVEL_ERROR") {
-        filteringByField = "__content";
-    } else {
-        filteringByField = "__class";
-    }
-    iteratorCount=0;
-    receivedData.length = 0;
-    fetch(filteredMessageArray[0][0].replace(/\"/g, "\\\""),filteredMessageArray[0][1]);
+    count = data["count"];
+    queryString = queryString.concat(" AND  _timestamp: [" + fromTime + " TO " + toTime + "]");
+    fetch();
 });
 
-function viewFunction(timestamp, message) {
-    publish({
-        timestamp: timestamp,
-        message: message
-    });
+function viewFunction(data) {
+    gadgets.Hub.publish("publisher", viewFunctionMap[data-1]);
 }
 
 function onError(msg) {
