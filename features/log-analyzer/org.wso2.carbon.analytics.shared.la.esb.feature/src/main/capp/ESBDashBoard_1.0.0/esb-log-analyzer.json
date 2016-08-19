@@ -352,19 +352,35 @@
           "loggedIn": {
             "blocks": [
               {
-                "id": "51f0693c5531a9afef1967e213ec272f",
+                "id": "logging-stats-date-range-picker",
                 "x": 0,
                 "y": 0,
                 "width": 12,
-                "height": 3,
+                "height": 2,
                 "banner": false
               },
               {
-                "id": "8f056a4a04a48a2be66e38e875fad945",
+                "id": "logging-stats-invalid-logging-count",
                 "x": 0,
-                "y": 3,
+                "y": 2,
+                "width": 12,
+                "height": 6,
+                "banner": false
+              },
+              {
+                "id": "logging-stats-filtered-message",
+                "x": 0,
+                "y": 8,
                 "width": 12,
                 "height": 7,
+                "banner": false
+              },
+              {
+                "id": "logging-stats-log-viewer",
+                "x": 0,
+                "y": 15,
+                "width": 12,
+                "height": 6,
                 "banner": false
               }
             ]
@@ -375,18 +391,17 @@
       "isanon": false,
       "content": {
         "default": {
-          "51f0693c5531a9afef1967e213ec272f": [
+          "logging-stats-date-range-picker": [
             {
-              "id": "Log_Date_Range_Picker-0",
+              "id": "Log_Date_Range_Picker-logging-stats",
               "content": {
                 "id": "Log_Date_Range_Picker",
-                "title": "Log Date Range Picker",
+                "title": "Date Range Picker",
                 "type": "gadget",
+                "category": "Widgets",
                 "thumbnail": "fs://gadget/Log_Date_Range_Picker/index.png",
-                "data": {"url": "fs://gadget/Log_Date_Range_Picker/index.xml"},
-                "styles": {
-                  "borders": false,
-                  "title": "Log Date Range Picker"
+                "data": {
+                  "url": "fs://gadget/Log_Date_Range_Picker/index.xml"
                 },
                 "notify": {
                   "range-selected": {
@@ -400,20 +415,40 @@
                     "description": "This notifies message generated in publisher"
                   }
                 },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
+                "styles": {
+                  "no_heading": false,
+                  "hide_gadget": false,
+                  "borders": false,
+                  "titlePosition": "left",
+                  "title": "Date Range Picker"
+                },
                 "options": {},
-                "locale_titles": {}
+                "locale_titles": {
+                  "en-US": "Date Range Picker"
+                },
+                "settings": {}
               }
             }
           ],
-          "8f056a4a04a48a2be66e38e875fad945": [
+          "logging-stats-invalid-logging-count": [
             {
-              "id": "Log_Invalid_Logging_Count-0",
+              "id": "invalidLoggingCount-logging-stats",
               "content": {
                 "id": "Log_Invalid_Logging_Count",
-                "title": "Invalid login count",
+                "title": "Invalid Login Count",
                 "type": "gadget",
                 "thumbnail": "fs://gadget/Log_Invalid_Logging_Count/img/thumbnail.png",
-                "data": {"url": "fs://gadget/Log_Invalid_Logging_Count/index.xml"},
+                "data": {
+                  "url": "fs://gadget/Log_Invalid_Logging_Count/index.xml"
+                },
                 "notify": {
                   "publisher": {
                     "type": "filter",
@@ -426,17 +461,25 @@
                     "description": "Used to listen to any date range-selected",
                     "on": [
                       {
-                        "from": "Log_Date_Range_Picker-0",
+                        "from": "Log_Date_Range_Picker-logging-stats",
                         "event": "range-selected"
                       }
                     ]
                   }
                 },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
                   "titlePosition": "left",
-                  "title": "Invalid login count"
+                  "title": "Invalid Login Count"
                 },
                 "options": {
                   "type": {
@@ -447,11 +490,122 @@
                     "required": true
                   }
                 },
-                "locale_titles": {"en-US": "Invalid login count"},
-                "settings": {
-                  "priority": "5",
-                  "timeoutInterval": "60000"
-                }
+                "locale_titles": {
+                  "en-US": "Invalid Login Count"
+                },
+                "settings": {}
+              }
+            }
+          ],
+          "logging-stats-filtered-message": [
+            {
+              "id": "filteredLogMessages-logging-stats",
+              "content": {
+                "id": "Log_Error_Filtered_Message",
+                "title": "ESB Filtered Messages",
+                "type": "gadget",
+                "thumbnail": "fs://gadget/Log_Error_Filtered_Message/img/thumbnail.png",
+                "data": {
+                  "url": "fs://gadget/Log_Error_Filtered_Message/index.xml"
+                },
+                "notify": {
+                  "publisher": {
+                    "type": "filter-range",
+                    "description": "This notifies selected filter"
+                  }
+                },
+                "listen": {
+                  "subscriber": {
+                    "type": "filter",
+                    "description": "Used to listen to any filters",
+                    "on": [
+                      {
+                        "from": "invalidLoggingCount-logging-stats",
+                        "event": "publisher"
+                      }
+                    ]
+                  }
+                },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
+                "styles": {
+                  "no_heading": false,
+                  "hide_gadget": false,
+                  "titlePosition": "left",
+                  "title": "Filtered Messages"
+                },
+                "options": {
+                  "type": {
+                    "type": "STRING",
+                    "title": "Gadget Type",
+                    "value": "ESB",
+                    "options": [],
+                    "required": true
+                  }
+                },
+                "locale_titles": {
+                  "en-US": "Filtered Messages"
+                },
+                "settings": {}
+              }
+            }
+          ],
+          "logging-stats-log-viewer": [
+            {
+              "id": "logViewer-logging-stats",
+              "content": {
+                "id": "Log_Viewer",
+                "title": "Log Viewer",
+                "type": "gadget",
+                "thumbnail": "fs://gadget/Log_Viewer/index.png",
+                "data": {
+                  "url": "fs://gadget/Log_Viewer/index.xml"
+                },
+                "listen": {
+                  "subscriber": {
+                    "type": "filter-range",
+                    "description": "Used to listen to any filters",
+                    "on": [
+                      {
+                        "from": "filteredLogMessages-logging-stats",
+                        "event": "publisher"
+                      }
+                    ]
+                  }
+                },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
+                "styles": {
+                  "no_heading": false,
+                  "hide_gadget": false,
+                  "titlePosition": "left",
+                  "title": "Log Viewer"
+                },
+                "options": {
+                  "type": {
+                    "type": "STRING",
+                    "title": "Gadget Type",
+                    "value": "ESB",
+                    "options": [],
+                    "required": true
+                  }
+                },
+                "locale_titles": {
+                  "en-US": "Log Viewer"
+                },
+                "settings": {}
               }
             }
           ]
