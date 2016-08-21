@@ -16,8 +16,8 @@
  * under the License.
  */
 
-var gadgetConfigs = [{
-    "id": "Log_Artifact_Deployed",
+var charts = [{
+    "name": "Log_Artifact_Deployed",
     "title": "Log Event",
     "barData": {
             "datasources": ["LOGANALYZER_ARTIFACT_DEPLOYMENT_DAILY", "LOGANALYZER_ARTIFACT_DELETED_DAILY"],
