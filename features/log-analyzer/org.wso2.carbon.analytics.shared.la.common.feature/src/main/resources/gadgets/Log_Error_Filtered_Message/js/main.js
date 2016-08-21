@@ -126,7 +126,7 @@ function drawLogErrorFilteredTable() {
             colNames.push({title: gadgetData.schema.titles[i]})
         }
         if (gadgetData.actionParameters.length > 0) {
-            colNames.push({title: "Action"})
+            colNames.push({title: ""})
         }
         dataTable = $("#tblMessages").DataTable({
             data: receivedData,
@@ -138,7 +138,10 @@ function drawLogErrorFilteredTable() {
             'rt' +
             '<"dataTablesBottom"' +
             'lip' +
-            '>'
+            '>',
+            columnDefs: [
+                {"orderable": false, "targets": -1}
+            ]
         });
         nanoScrollerSelector[0].nanoscroller.reset();
         dataTable.on('draw', function () {
