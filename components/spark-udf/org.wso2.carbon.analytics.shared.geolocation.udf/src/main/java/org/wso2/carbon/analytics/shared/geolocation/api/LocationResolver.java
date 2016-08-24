@@ -35,4 +35,6 @@ public abstract class LocationResolver {
     }
 
     public abstract void setPersistInDataBase(boolean persistInDataBase);
+
+    public abstract void setIpToLongCacheCount(int ipToLongCacheCount);
 }
