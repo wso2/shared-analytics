@@ -129,13 +129,35 @@
 
         INCREMENTAL_TABLE_COMMIT errorCodeDistributionDaily;
 
-        INSERT OVERWRITE table errorCodeDistributionDaily SELECT temp.tenantID AS tenantID, temp.errorCode AS ErrorCode, CASE WHEN  temp.errorCode &gt;= 101000 OR temp.errorCode &lt;= 101510 THEN 'Transport Error' ELSE CASE WHEN  temp.errorCode &gt;= 303000 OR temp.errorCode &lt;= 303002 THEN 'General Errors' ELSE CASE WHEN  temp.errorCode &gt;= 309001 OR temp.errorCode &lt;= 309003 THEN 'Failure on Endpoint in the Session' ELSE CASE WHEN  temp.errorCode &gt;= 303100 OR temp.errorCode &lt;= 304100 THEN 'Non-Fatal Warnings' ELSE CASE WHEN  temp.errorCode = 305100 THEN 'Referring Real Endpoint is Null' ELSE CASE WHEN  temp.errorCode = 401000 THEN 'Callout Operation Failed' END END END END END END AS ErrorType, SUM(temp.errorCount) AS
-        ErrorCount, getDateStartingTime(temp.byYear, temp.byMonth , temp.byDay) AS _timestamp FROM (SELECT
-        getRegexMatch(_content,'(?&lt;=\ ERROR_CODE = )(.*?)(?=\,)') AS errorCode, getYear(_eventTimeStamp) AS byYear, getMonth(_eventTimeStamp) AS byMonth,
-        getDay(_eventTimeStamp) AS byDay, count(*) as errorCount,tenantID AS tenantID FROM
-        CopyOfLoganalyzer WHERE _content LIKE '%ERROR_CODE%' GROUP BY _content, _eventTimeStamp, tenantID ORDER BY
-        _eventTimeStamp)temp GROUP BY temp.tenantID, temp.errorCode, temp.byYear, temp.byMonth, temp.byDay ORDER BY temp.byYear,
-        temp.byMonth, temp.byDay;
+        INSERT OVERWRITE table errorCodeDistributionDaily
+        SELECT
+            temp.tenantID AS tenantID,
+            temp.errorCode AS ErrorCode,
+            CASE WHEN  temp.errorCode &gt;= 101000 AND temp.errorCode &lt;= 101510 THEN 'Transport Error'
+            ELSE CASE WHEN  temp.errorCode &gt;= 303000 AND temp.errorCode &lt;= 303002 THEN 'General Errors'
+            ELSE CASE WHEN  temp.errorCode &gt;= 309001 AND temp.errorCode &lt;= 309003 THEN 'Failure on Endpoint in the Session'
+            ELSE CASE WHEN  temp.errorCode &gt;= 303100 AND temp.errorCode &lt;= 304100 THEN 'Non-Fatal Warnings'
+            ELSE CASE WHEN  temp.errorCode = 305100 THEN 'Referring Real Endpoint is Null'
+            ELSE CASE WHEN  temp.errorCode = 401000 THEN 'Callout Operation Failed'
+            END END END END END END AS ErrorType,
+            SUM(temp.errorCount) AS ErrorCount,
+            getDateStartingTime(temp.byYear, temp.byMonth , temp.byDay) AS _timestamp
+            FROM
+            (
+                SELECT
+                getRegexMatch(_content,'(?&lt;=\ ERROR_CODE = )(.*?)(?=\,)') AS errorCode,
+                getYear(_eventTimeStamp) AS byYear,
+                getMonth(_eventTimeStamp) AS byMonth,
+                getDay(_eventTimeStamp) AS byDay,
+                count(*) AS errorCount,
+                tenantID AS tenantID
+                FROM CopyOfLoganalyzer
+                WHERE _content LIKE '%ERROR_CODE%'
+                GROUP BY _content, _eventTimeStamp, tenantID
+                ORDER BY _eventTimeStamp
+            )temp
+        GROUP BY temp.tenantID, temp.errorCode, temp.byYear, temp.byMonth, temp.byDay
+        ORDER BY temp.byYear, temp.byMonth, temp.byDay;
 
         CREATE TEMPORARY TABLE artifactDeploymentDaily USING CarbonAnalytics OPTIONS (tableName
         "LOGANALYZER_ARTIFACT_DEPLOYMENT_DAILY", schema "TenantID string -i, ArtifactType string -i, _timestamp
