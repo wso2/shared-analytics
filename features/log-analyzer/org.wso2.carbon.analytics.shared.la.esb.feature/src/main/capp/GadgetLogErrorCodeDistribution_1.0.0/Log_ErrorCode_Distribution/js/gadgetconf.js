@@ -19,7 +19,7 @@
 var gadgetConfig = {
     "id": "logEventChart",
     "title": "Error Code Distribution",
-    "datasource": "LOGANALYZER",
+    "datasource": "LOGANALYZER_ERROR_CODE_DISTRIBUTION_DAILY",
     "errorType": ["Transport Error", "General Errors", "Failure on Endpoint in the Session", "Non-Fatal Warnings", "Referring Real Endpoint is Null", "Callout Operation Failed"],
     "meta": {
         "names": ["ErrorType", "Frequency"],

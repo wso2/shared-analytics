@@ -27,7 +27,7 @@ var meta = gadgetConfig.meta;
 var configChart = gadgetConfig.chartConfig;
 var canvasDiv = "#canvas";
 var prefs = new gadgets.Prefs();
-var svrUrl = gadgetUtil.getGadgetSvrUrl(prefs.getString(PARAM_TYPE));
+var svrUrl = gadgetUtil.getGadgetSvrUrl("ESB");
 var client = new AnalyticsClient().init(null,null,svrUrl);
 
 function initialize() {
@@ -46,7 +46,7 @@ function fetch(logLevelIndex) {
     var queryInfo = {
         tableName: gadgetConfig.datasource,
         searchParams: {
-            query: "ErrorType:" + gadgetConfig.errorType[logLevelIndex] + " AND  _eventTimeStamp: [" + from + " TO " + to + "]"
+            query: "ErrorType:\"" + gadgetConfig.errorType[logLevelIndex] + "\" AND  _timestamp: [" + from + " TO " + to + "]"
         }
     };
 
