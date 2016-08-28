@@ -419,10 +419,8 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
                     stacktrace = "";
                 }
             }
-            Date date;
-            DateFormat formatter;
-            formatter = new SimpleDateFormat(LoggingConstants.DATE_TIME_FORMATTER);
-            date = formatter.parse(logTime);
+            DateFormat formatter = new SimpleDateFormat(LoggingConstants.DATE_TIME_FORMATTER);
+            Date date = formatter.parse(logTime);
             Map<String, String> arbitraryDataMap = new HashMap<String, String>();
             arbitraryDataMap.put(columns[0], serverName);
             arbitraryDataMap.put(columns[1], appName);
