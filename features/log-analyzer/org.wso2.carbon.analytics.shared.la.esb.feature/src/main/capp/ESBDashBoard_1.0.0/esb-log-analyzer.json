@@ -16,7 +16,7 @@
           "loggedIn": {
             "blocks": [
               {
-                "id": "3d7a3b937e76a9d814fac2579b2da77e",
+                "id": "loganalyzer_overview_logevents_barchart",
                 "x": 0,
                 "y": 3,
                 "width": 12,
@@ -24,11 +24,27 @@
                 "banner": false
               },
               {
-                "id": "a510d6e13e5989a4a9717146ee3dff9a",
+                "id": "loganalyzer_overview_date_range_picker",
                 "x": 0,
                 "y": 0,
                 "width": 12,
                 "height": 3,
+                "banner": false
+              },
+              {
+                "id": "loganalyzer_overview_filtered_messages",
+                "x": 0,
+                "y": 10,
+                "width": 12,
+                "height": 5,
+                "banner": false
+              },
+              {
+                "id": "logannalyzer_overview_log_viewer",
+                "x": 0,
+                "y": 15,
+                "width": 12,
+                "height": 5,
                 "banner": false
               }
             ]
@@ -39,9 +55,7 @@
       "isanon": false,
       "content": {
         "default": {
-          "6b0a5dc03e03966c15d66274076ae16c": [],
-          "93f3718dbf3574038ed2600cc35d0fc1": [],
-          "a510d6e13e5989a4a9717146ee3dff9a": [
+          "loganalyzer_overview_date_range_picker": [
             {
               "id": "Log_Date_Range_Picker-0",
               "content": {
@@ -71,7 +85,7 @@
               }
             }
           ],
-          "3d7a3b937e76a9d814fac2579b2da77e": [
+          "loganalyzer_overview_logevents_barchart": [
             {
               "id": "Log_Events-0",
               "content": {
@@ -80,6 +94,12 @@
                 "type": "gadget",
                 "thumbnail": "fs://gadget/Log_Events/img/thumbnail.png",
                 "data": {"url": "fs://gadget/Log_Events/index.xml"},
+                "notify": {
+                  "publisher": {
+                    "type": "filter",
+                    "description": "This notifies selected state"
+                  }
+                },
                 "listen": {
                   "subscriber": {
                     "type": "date-range",
@@ -108,6 +128,100 @@
                   }
                 },
                 "locale_titles": {"en-US": "Log Event Chart"},
+                "settings": {
+                  "priority": "5",
+                  "timeoutInterval": "60000"
+                }
+              }
+            }
+          ],
+          "loganalyzer_overview_filtered_messages": [
+          {
+              "id": "Log_Error_Filtered_Message-0",
+              "content": {
+                "id": "Log_Error_Filtered_Message",
+                "title": "Filtered Messages",
+                "type": "gadget",
+                "thumbnail": "fs://gadget/Log_Error_Filtered_Message/img/thumbnail.png",
+                "data": {"url": "fs://gadget/Log_Error_Filtered_Message/index.xml"},
+                "notify": {
+                  "publisher": {
+                    "type": "filter-range",
+                    "description": "This notifies selected filter"
+                  }
+                },
+                "listen": {
+                  "subscriber": {
+                    "type": "filter",
+                    "description": "Used to listen to any filters",
+                    "on": [
+                      {
+                        "from": "Log_Events-0",
+                        "event": "publisher"
+                      }
+                    ]
+                  }
+                },
+                "styles": {
+                  "no_heading": false,
+                  "hide_gadget": false,
+                  "titlePosition": "left",
+                  "title": "Filtered Messages"
+                },
+                "options": {
+                  "type": {
+                    "type": "STRING",
+                    "title": "Gadget Type",
+                    "value": "ESB",
+                    "options": [],
+                    "required": true
+                  }
+                },
+                "locale_titles": {"en-US": "Filtered Messages"},
+                "settings": {
+                  "priority": "5",
+                  "timeoutInterval": "60000"
+                }
+              }
+            }
+          ],
+          "logannalyzer_overview_log_viewer": [
+            {
+              "id": "Log_Viewer-0",
+              "content": {
+                "id": "Log_Viewer",
+                "title": "Log Viewer",
+                "type": "gadget",
+                "thumbnail": "fs://gadget/Log_Viewer/index.png",
+                "data": {"url": "fs://gadget/Log_Viewer/index.xml"},
+                "listen": {
+                  "subscriber": {
+                    "type": "filter-range",
+                    "description": "Used to listen to any filters",
+                    "on": [
+                      {
+                        "from": "Log_Error_Filtered_Message-0",
+                        "event": "publisher"
+                      }
+                    ]
+                  }
+                },
+                "styles": {
+                  "no_heading": false,
+                  "hide_gadget": false,
+                  "titlePosition": "left",
+                  "title": "Log Viewer"
+                },
+                "options": {
+                  "type": {
+                    "type": "STRING",
+                    "title": "Gadget Type",
+                    "value": "ESB",
+                    "options": [],
+                    "required": true
+                  }
+                },
+                "locale_titles": {"en-US": "Log Viewer"},
                 "settings": {
                   "priority": "5",
                   "timeoutInterval": "60000"

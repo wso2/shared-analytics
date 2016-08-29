@@ -255,7 +255,12 @@ if(maxValue < 10){
                     ],
                     configChart
                 );
-                chartDefault.draw(canvasDiv);
+                chartDefault.draw(canvasDiv, [
+                    {
+                        type: "click",
+                        callback: onclick
+                    }
+                ]);
 
     } catch (error) {
         console.log(error);
@@ -264,6 +269,27 @@ if(maxValue < 10){
         onError(error);
     }
 }
+
+var onclick = function (event, item) {
+	 publish(
+            {
+                "selected":[
+                	{
+                		"filter": "__level",
+                		"values": [item.datum["Log Level"]],
+                	}
+                ],
+                "count": item.datum["Frequency"],
+                "fromTime": from,
+                "toTime": to
+            }
+        );
+};
+
+
+function publish(data) {
+    gadgets.Hub.publish("publisher", data);
+};
 
 function redrawDefaultLogLevelChart(withDebugAndInfo) {
      for (var i in receivedData) {
@@ -293,8 +319,8 @@ function subscribe(callback) {
 }
 
 subscribe(function (topic, data, subscriber) {
-    from = parseInt(data["timeFrom"]);
-    to = parseInt(data["timeTo"]);
+   from = parseInt(data["timeFrom"]);
+   to = parseInt(data["timeTo"]);
    xAxisValues.length = 0;
    currentChartColorScale.length=0;
    barColorBuilder();

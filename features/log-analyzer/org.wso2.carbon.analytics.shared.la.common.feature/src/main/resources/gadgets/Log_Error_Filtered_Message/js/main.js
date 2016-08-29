@@ -54,8 +54,8 @@ function fetch() {
     client.search(queryInfo, function (d) {
         var obj = JSON.parse(d["message"]);
         if (d["status"] === "success") {
-            var formattedEntry = [];
             for (var i = 0; i < obj.length; i++) {
+                var formattedEntry = [];
                 formattedEntry.length = 0;
                 formattedEntry.push(moment(obj[i].timestamp).format("YYYY-MM-DD HH:mm:ss.SSS"));
                 for (var column in gadgetData.schema.columns) {
