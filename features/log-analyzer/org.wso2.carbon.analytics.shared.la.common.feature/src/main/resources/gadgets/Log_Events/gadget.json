@@ -6,6 +6,12 @@
   "data": {
     "url": "store://gadget/Log_Events/index.xml"
   },
+  "notify": {
+    "publisher": {
+      "type": "filter",
+      "description": "This notifies selected filter"
+    }
+  },
   "listen": {
     "subscriber": {
       "type": "date-range",
