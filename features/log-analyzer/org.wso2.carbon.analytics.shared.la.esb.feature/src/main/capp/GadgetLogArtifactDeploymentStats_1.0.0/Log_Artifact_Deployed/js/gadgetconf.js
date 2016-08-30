@@ -43,7 +43,7 @@ var charts = [{
         width: $('body').width(),
         height: $('body').height(),
         padding: {"top": 10, "left": 80, "bottom": 70, "right": 200},
-        tooltip: {"enabled":true, "color":"#e5f2ff", "type":"symbol", "content":["classes","Frequency","Status"], "label":true}
+        tooltip: {"enabled":true, "color":"#e5f2ff", "type":"symbol", "content":["classes","Count","Status"], "label":true}
     },
     "domain": "carbon.super"
 }];
