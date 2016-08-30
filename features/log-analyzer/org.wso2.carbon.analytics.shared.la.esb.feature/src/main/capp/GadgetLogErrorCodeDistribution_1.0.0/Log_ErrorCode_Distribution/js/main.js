@@ -78,6 +78,11 @@ function fetch(logLevelIndex) {
 }
 
 function drawLogLevelChart() {
+    var maxValue = getMaximumValue(receivedData);
+    if(maxValue < 10){
+      configChart.yTicks = maxValue;
+    }
+
     try {
         $(canvasDiv).empty();
         chart = new vizg(
@@ -96,6 +101,16 @@ function drawLogLevelChart() {
         error.status = "";
         onError(error);
     }
+}
+
+function getMaximumValue(receivedData){
+    var max = 0;
+    for(var i=0;i<receivedData.length;i++){
+        if(receivedData[i][1] > max){
+            max = receivedData[i][1];
+        }
+    }
+    return max;
 }
 
 function redrawLogLevelChart() {
