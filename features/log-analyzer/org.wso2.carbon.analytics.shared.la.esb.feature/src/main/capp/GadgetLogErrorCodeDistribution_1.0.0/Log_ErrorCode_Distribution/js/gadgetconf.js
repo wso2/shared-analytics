@@ -22,15 +22,15 @@ var gadgetConfig = {
     "datasource": "LOGANALYZER_ERROR_CODE_DISTRIBUTION_DAILY",
     "errorType": ["Transport Error", "General Errors", "Failure on Endpoint in the Session", "Non-Fatal Warnings", "Referring Real Endpoint is Null", "Callout Operation Failed"],
     "meta": {
-        "names": ["ErrorType", "Frequency"],
+        "names": ["Error Type", "Count"],
         "types": ["ordinal", "linear"]
     },
     "chartConfig": {
         colorScale: ["#5CB85C", "#438CAD", "#EECA5A", "#D9483D", "#95A5A6"],
         type: "bar",
-        x: "ErrorType",
-        color: "ErrorType",
-        charts: [{y: "Frequency"}],
+        x: "Error Type",
+        color: "Error Type",
+        charts: [{y: "Count"}],
         width: $('body').width(),
         height: $('body').height(),
         padding: {"top": 10, "left": 80, "bottom": 70, "right": 200}

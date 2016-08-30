@@ -23,7 +23,7 @@ var gadgetConfig = {
     "level": ["DEBUG", "INFO", "WARN", "ERROR", "FATAL"],
     "checkBoxId" : ["checkboxDebug", "checkboxInfo", "checkboxWarning", "checkboxError", "checkboxFatal"],
     "meta": {
-        "names": ["Log Level", "Frequency"],
+        "names": ["Log Level", "Count"],
         "types": ["ordinal", "linear"]
     },
     "chartConfig": {
@@ -31,7 +31,7 @@ var gadgetConfig = {
         type: "bar",
         x: "Log Level",
         color: "Log Level",
-        charts: [{y: "Frequency"}],
+        charts: [{y: "Count"}],
         width: $(document).width()/1.27,
         height: $(document).height()/1.2,
         legend: false,

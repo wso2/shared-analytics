@@ -26,7 +26,7 @@ var charts = [{
     "classes": ["API", "Proxy service", "Template", "Local entry", "Endpoint", "Sequence","Startup","Event source","Priority executor", "Inbound Endpoint"],
     "barCount" : 2,
     "meta": {
-        "names": ["class", "Status", "Frequency"],
+        "names": ["class", "Status", "Count"],
         "types": ["ordinal","ordinal", "linear"]
     },
 
@@ -39,7 +39,7 @@ var charts = [{
         colorScale: ["#5CB85C", "#FF0000"],
         type: "bar",
         x: "class",
-       charts : [{type: "bar",  y : "Frequency", color: "Status", mode:"group"}],
+       charts : [{type: "bar",  y : "Count", color: "Status", mode:"group"}],
         width: $('body').width(),
         height: $('body').height(),
         padding: {"top": 10, "left": 80, "bottom": 70, "right": 200},
