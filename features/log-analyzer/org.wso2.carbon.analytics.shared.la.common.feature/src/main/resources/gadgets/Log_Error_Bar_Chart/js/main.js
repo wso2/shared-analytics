@@ -235,7 +235,6 @@ function drawErrorChart() {
         //perform necessary transformation on input data
         var summarizeData = chartDataBuilder();
         $(legendTitleDiv).empty();
-        $(legendTitleDiv).append("<div style='position:absolute;top: 16px;left: " + (gadgetData.chartConfig.width - 50) + ";'>Legend</div>");
         for (var i = 0; i < summarizeData.length; i++) {
             drawLegend(summarizeData[i][2], summarizeData[i][3]);
         }

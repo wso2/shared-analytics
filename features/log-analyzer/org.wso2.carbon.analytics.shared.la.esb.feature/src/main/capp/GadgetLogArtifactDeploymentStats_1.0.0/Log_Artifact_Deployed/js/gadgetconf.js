@@ -35,11 +35,12 @@ var charts = [{
 },
 
     "chartConfig": {
+        legendTitle: "",
         mode:"group",
         colorScale: ["#5CB85C", "#FF0000"],
         type: "bar",
         x: "class",
-       charts : [{type: "bar",  y : "Count", color: "Status", mode:"group"}],
+        charts : [{type: "bar",  y : "Count", color: "Status", mode:"group"}],
         width: $('body').width(),
         height: $('body').height(),
         padding: {"top": 10, "left": 80, "bottom": 70, "right": 200},

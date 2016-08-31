@@ -225,7 +225,6 @@ function drawInvalidLoggingCountChart() {
         //perform necessary transformation on input data
         var summarizeData = chartDataBuilder();
         $(legendTitleDiv).empty();
-        $(legendTitleDiv).append("<div style='position:absolute;top: 16px;left: " + (gadgetData.chartConfig.width - 50) + ";'>Legend</div>");
         for (var i = 0; i < summarizeData.length; i++) {
             if (summarizeData[i][2] != "NoEntries") {
                 drawLegend(summarizeData[i][2]);

@@ -26,6 +26,7 @@ var gadgetConfig = {
         "types": ["ordinal", "linear"]
     },
     "chartConfig": {
+            legendTitle: "",
         colorScale: ["#5CB85C", "#438CAD", "#EECA5A", "#D9483D", "#95A5A6"],
         type: "bar",
         x: "Error Type",
