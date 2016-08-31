@@ -279,7 +279,7 @@ var onclick = function (event, item) {
                 		"values": [item.datum["Log Level"]],
                 	}
                 ],
-                "count": item.datum["Frequency"],
+                "count": item.datum["Count"],
                 "fromTime": from,
                 "toTime": to
             }
