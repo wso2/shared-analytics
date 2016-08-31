@@ -34,6 +34,6 @@ public class RegExrUDF implements CarbonUDF {
         if (matcher.find()) {
             return matcher.group(0);
         }
-        return null;
+        return "";
     }
 }
