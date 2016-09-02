@@ -397,6 +397,9 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         private void publishLogEvent(TenantDomainAwareLoggingEvent event) throws ParseException {
             String tenantID = tenantIDLayout.format(event);
             String tenantDomain = tenantDomainLayout.format(event);
+            if (tenantDomain == null || tenantDomain.isEmpty()){
+                tenantDomain = "[Not Available]";
+            }
             String serverName = serverNameLayout.format(event);
             String appName = appNameLayout.format(event);
             String logTime = logTimeLayout.format(event);
