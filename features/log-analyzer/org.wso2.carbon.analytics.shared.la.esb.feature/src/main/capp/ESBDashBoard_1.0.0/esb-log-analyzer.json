@@ -80,6 +80,14 @@
                     "description": "This notifies message generated in publisher"
                   }
                 },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
                 "options": {},
                 "locale_titles": {}
               }
@@ -111,6 +119,14 @@
                       }
                     ]
                   }
+                },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
                 },
                 "styles": {
                   "no_heading": false,
@@ -162,6 +178,14 @@
                     ]
                   }
                 },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
@@ -205,6 +229,14 @@
                       }
                     ]
                   }
+                },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
                 },
                 "styles": {
                   "no_heading": false,
@@ -305,6 +337,14 @@
                     "description": "This notifies message generated in publisher"
                   }
                 },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
                 "options": {},
                 "locale_titles": {}
               }
@@ -336,6 +376,14 @@
                       }
                     ]
                   }
+                },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
                 },
                 "styles": {
                   "no_heading": false,
@@ -387,6 +435,14 @@
                     ]
                   }
                 },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
@@ -430,6 +486,14 @@
                       }
                     ]
                   }
+                },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
                 },
                 "styles": {
                   "no_heading": false,
@@ -783,6 +847,14 @@
                     "description": "This notifies message generated in publisher"
                   }
                 },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
                 "options": {},
                 "locale_titles": {}
               }
@@ -818,6 +890,14 @@
                       }
                     ]
                   }
+                },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
                 },
                 "styles": {
                   "no_heading": false,
@@ -875,6 +955,13 @@
                     "type": "date-range",
                     "description": "Used to listen to any date range-selected"
                   }
+                },
+                "toolbarButtons": {
+                  "default": {
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
                 },
                 "styles": {
                   "no_heading": false,
@@ -977,6 +1064,14 @@
                     ]
                   }
                 },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
                 "styles": {
                   "no_heading": false,
                   "hide_gadget": false,
@@ -1025,6 +1120,14 @@
                     "description": "This notifies message generated in publisher"
                   }
                 },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
                 "options": {},
                 "locale_titles": {}
               }
@@ -1056,6 +1159,14 @@
                       }
                     ]
                   }
+                },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
                 },
                 "styles": {
                   "no_heading": false,
@@ -1100,6 +1211,14 @@
                       }
                     ]
                   }
+                },
+                "toolbarButtons": {
+                  "default": {
+                    "maximize": false,
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
                 },
                 "styles": {
                   "no_heading": false,
