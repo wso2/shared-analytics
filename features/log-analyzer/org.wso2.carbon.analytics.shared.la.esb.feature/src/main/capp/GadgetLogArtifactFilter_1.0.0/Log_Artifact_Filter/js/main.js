@@ -73,7 +73,7 @@ function fetch(artifactType, status) {
                 var msg = obj[i].values._content.replace('\n',"");
                 msg = msg.replace(/[\r\n]/g, "");
                 receivedData.push([moment(obj[i].timestamp).format("YYYY-MM-DD HH:mm:ss.SSS"), artifactType, artifactName , containerName, obj[i].values._content, '<a href="#" class="btn padding-reduce-on-grid-view" onclick= "viewFunction(\''+obj[i].values._eventTimeStamp+'\',\''+msg+'\')"> <span class="fw-stack"> ' +
-                                                                                                                                                                        '<i class="fw fw-ring fw-stack-2x"></i> <i class="fw fw-view fw-stack-1x"></i> </span> <span class="hidden-xs">View</span> </a>']);
+                                                                                                                                                                        '<i class="fw fw-ring fw-stack-2x"></i> <i class="fw fw-view fw-stack-1x"></i> </span> <span title="Locate on Log Viewer" class="hidden-xs">Locate</span> </a>']);
             }
                 drawLogErrorFilteredTable();
         }
@@ -87,7 +87,7 @@ function fetch(artifactType, status) {
 function viewFunction(timestamp, message) {
     publish({
         timestamp: timestamp,
-        message: message,
+        _content: message,
         type: true
     });
 }
