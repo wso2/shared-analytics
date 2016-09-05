@@ -51,8 +51,10 @@
 }
 
 .legend {
+	left: 1400;
+	top: 5;
     margin-left: -58px;
-    margin-top: 50px;
+    margin-top: 20px;
     position: absolute;
 }
 
