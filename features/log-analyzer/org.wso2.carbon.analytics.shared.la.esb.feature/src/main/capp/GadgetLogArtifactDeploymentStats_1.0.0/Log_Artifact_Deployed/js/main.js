@@ -187,7 +187,7 @@ var onclick = function (event, item) {
     if (item != null) {
            publish(
                 {
-                    "ArtifactType": item.datum["class"],
+                    "ArtifactType": item.datum["Artifact Type"],
                     "Status": item.datum["Status"],
                     "fromTime": from,
                     "toTime": to

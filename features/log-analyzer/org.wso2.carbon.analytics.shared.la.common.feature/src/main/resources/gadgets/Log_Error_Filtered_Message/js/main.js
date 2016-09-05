@@ -78,7 +78,7 @@ function fetch() {
                     }
                     viewFunctionMap.push(viewFunctionParamerters);
                     formattedEntry.push('<a href="#" class="btn padding-reduce-on-grid-view" onclick= "viewFunction(\'' + viewFunctionMap.length + '\')"> <span class="fw-stack"> ' +
-                        '<i class="fw fw-ring fw-stack-2x"></i> <i class="fw fw-view fw-stack-1x"></i> </span> <span class="hidden-xs">View</span> </a>')
+                        '<i class="fw fw-ring fw-stack-2x"></i> <i class="fw fw-view fw-stack-1x"></i> </span> <span  title="Locate on Log Viewer" class="hidden-xs">Locate</span> </a>')
                 }
                 receivedData.push(formattedEntry);
             }
