@@ -171,7 +171,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         try {
             dataPublisher = new DataPublisher("Thrift", url, authURLs, userName, password);
         } catch (DataEndpointAgentConfigurationException e) {
-            logError("Invalid urls passed for receiver and auth, and hence expected to fail "  + e.getMessage(), e);
+            logError("Invalid urls passed for receiver and auth, and hence expected to fail " + e.getMessage(), e);
         } catch (DataEndpointException e) {
             logError("Error while trying to publish events to data receiver " + e.getMessage(), e);
         } catch (DataEndpointConfigurationException e) {
@@ -179,7 +179,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         } catch (DataEndpointAuthenticationException e) {
             logError("Error while trying to login to data receiver : " + e.getMessage(), e);
         } catch (TransportException e) {
-            logError( "Thrift transport exception occurred " + e.getMessage(), e);
+            logError("Thrift transport exception occurred " + e.getMessage(), e);
         }
     }
 
@@ -237,7 +237,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
                 }
             });
 
-           tenantEvent.setTenantDomain(tenantDomain);
+            tenantEvent.setTenantDomain(tenantDomain);
 
             if (tenantId == MultitenantConstants.INVALID_TENANT_ID) {
                 if (tenantDomain != null && !tenantDomain.equals("")) {
@@ -264,7 +264,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     }
 
 
-    public static void logError(String message, Throwable exception){
+    public static void logError(String message, Throwable exception) {
         System.err.println(message);
         if (exception != null) {
             exception.printStackTrace();
@@ -382,7 +382,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
                     publishLogEvent(tenantDomainAwareLoggingEvent);
                 }
             } catch (Throwable t) {
-                logError("FATAL: LogEventAppender Cannot publish log events", t);
+                logError("FATAL: LogEventAppender Cannot publish log events, " + t.getMessage(), t);
                 numOfConsecutiveFailures++;
                 if (numOfConsecutiveFailures >= getMaxTolerableConsecutiveFailure()) {
                     logError("WARN: Number of consecutive log publishing failures reached the threshold of " +
@@ -399,7 +399,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
          * @param event log event which is wrapped TenantAwareLoggingEvent.
          * @throws ParseException
          */
-        private void publishLogEvent(TenantDomainAwareLoggingEvent event) throws ParseException {
+        private void publishLogEvent(TenantDomainAwareLoggingEvent event) throws Exception {
             String tenantID = tenantIDLayout.format(event);
             String tenantDomain = tenantDomainLayout.format(event);
             String serverName = serverNameLayout.format(event);
@@ -409,7 +409,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
             String priority = priorityLayout.format(event);
             String message = messageLayout.format(event);
             String ip = ipLayout.format(event);
-            String instance = (getInstanceId() == null || getInstanceId().isEmpty()) ? instanceLayout.format(event) : getInstanceId() ;
+            String instance = (getInstanceId() == null || getInstanceId().isEmpty()) ? instanceLayout.format(event) : getInstanceId();
             String stacktrace = "";
 
             if (isStackTrace) {
@@ -433,8 +433,18 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
             if (event.getThrowableInformation() != null) {
                 arbitraryDataMap.put(columns[8], stacktrace);
             }
-            Event laEvent = new Event(streamDef, date.getTime(), null, null, new String[]{tenantDomain}, arbitraryDataMap);
-            dataPublisher.publish(laEvent);
+            Event logEvent = new Event(streamDef, date.getTime(), null, null, new String[]{tenantDomain},
+                    arbitraryDataMap);
+            if (dataPublisher != null) {
+                dataPublisher.publish(logEvent);
+            } else {
+                publisherInitializer();
+                if (dataPublisher != null) {
+                    dataPublisher.publish(logEvent);
+                } else {
+                    throw new Exception("Data Publisher not initialize for url : " + url);
+                }
+            }
         }
     }
 
