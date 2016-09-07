@@ -132,7 +132,7 @@ display: none;
 	position: relative;
 	padding-left: 40px;
 	margin-right: 15px;
-	font-size: 15px;
+	font-size: 13px;
 }
 .checkboxDebug label {
 	margin-bottom: 10px;
@@ -176,7 +176,7 @@ input[type="checkbox"]:checked + label:before {
 	position: relative;
 	padding-left: 40px;
 	margin-right: 15px;
-	font-size: 15px;
+	font-size: 13px;
 }
 .checkboxInfo label {
 	margin-bottom: 10px;
@@ -209,7 +209,7 @@ input[type="checkbox"]:checked + label:before {
 	position: relative;
 	padding-left: 40px;
 	margin-right: 15px;
-	font-size: 15px;
+	font-size: 13px;
 }
 .checkboxWarning label {
 	margin-bottom: 10px;
@@ -241,7 +241,7 @@ input[type="checkbox"]:checked + label:before {
 	position: relative;
 	padding-left: 40px;
 	margin-right: 15px;
-	font-size: 15px;
+	font-size: 13px;
 }
 .checkboxError label {
 	margin-bottom: 10px;
@@ -274,7 +274,7 @@ input[type="checkbox"]:checked + label:before {
 	position: relative;
 	padding-left: 40px;
 	margin-right: 15px;
-	font-size: 15px;
+	font-size: 13px;
 }
 .checkboxFatal label {
 	margin-bottom: 10px;
