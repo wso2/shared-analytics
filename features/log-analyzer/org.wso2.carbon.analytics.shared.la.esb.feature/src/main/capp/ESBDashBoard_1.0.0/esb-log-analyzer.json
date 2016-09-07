@@ -57,16 +57,19 @@
         "default": {
           "overview-date-range-picker": [
             {
-              "id": "Log_Date_Range_Picker-0",
+              "id": "Log_ESB_Date_Range_Picker-overview",
               "content": {
-                "id": "Log_Date_Range_Picker",
-                "title": "Log Date Range Picker",
-                "type": "gadget",
-                "thumbnail": "fs://gadget/Log_Date_Range_Picker/index.png",
-                "data": {"url": "fs://gadget/Log_Date_Range_Picker/index.xml"},
+                "id": "Log_ESB_Date_Range_Picker",
+                "title": "Date Range Picker",
+                "type": "widget",
+                "category": "Widgets",
+                "thumbnail": "fs://gadget/Log_ESB_Date_Range_Picker/index.png",
+                "data": {
+                  "url": "fs://gadget/Log_ESB_Date_Range_Picker/index.xml"
+                },
                 "styles": {
                   "borders": false,
-                  "title": "Log Date Range Picker"
+                  "title": "Date Range Picker"
                 },
                 "notify": {
                   "range-selected": {
@@ -85,11 +88,17 @@
                     "maximize": false,
                     "configurations": false
                   },
-                  "custom": [],
+                  "custom": [
+
+                  ],
                   "isDropdownView": false
                 },
-                "options": {},
-                "locale_titles": {}
+                "options": {
+
+                },
+                "locale_titles": {
+
+                }
               }
             }
           ],
@@ -114,7 +123,7 @@
                     "description": "Used to listen to any date range-selected",
                     "on": [
                       {
-                        "from": "Log_Date_Range_Picker-0",
+                        "from": "Log_ESB_Date_Range_Picker-overview",
                         "event": "range-selected"
                       }
                     ]
@@ -314,16 +323,19 @@
         "default": {
           "app-errors-date-range-picker": [
             {
-              "id": "Log_Date_Range_Picker-0",
+              "id": "Log_ESB_Date_Range_Picker-app-errors",
               "content": {
-                "id": "Log_Date_Range_Picker",
-                "title": "Log Date Range Picker",
-                "type": "gadget",
-                "thumbnail": "fs://gadget/Log_Date_Range_Picker/index.png",
-                "data": {"url": "fs://gadget/Log_Date_Range_Picker/index.xml"},
+                "id": "Log_ESB_Date_Range_Picker",
+                "title": "Date Range Picker",
+                "type": "widget",
+                "category": "Widgets",
+                "thumbnail": "fs://gadget/Log_ESB_Date_Range_Picker/index.png",
+                "data": {
+                  "url": "fs://gadget/Log_ESB_Date_Range_Picker/index.xml"
+                },
                 "styles": {
                   "borders": false,
-                  "title": "Log Date Range Picker"
+                  "title": "Date Range Picker"
                 },
                 "notify": {
                   "range-selected": {
@@ -342,11 +354,17 @@
                     "maximize": false,
                     "configurations": false
                   },
-                  "custom": [],
+                  "custom": [
+
+                  ],
                   "isDropdownView": false
                 },
-                "options": {},
-                "locale_titles": {}
+                "options": {
+
+                },
+                "locale_titles": {
+
+                }
               }
             }
           ],
@@ -371,7 +389,7 @@
                     "description": "Used to listen to any date range-selected",
                     "on": [
                       {
-                        "from": "Log_Date_Range_Picker-0",
+                        "from": "Log_ESB_Date_Range_Picker-app-errors",
                         "event": "range-selected"
                       }
                     ]
@@ -571,15 +589,19 @@
         "default": {
           "logging-stats-date-range-picker": [
             {
-              "id": "Log_Date_Range_Picker-logging-stats",
+              "id": "Log_ESB_Date_Range_Picker-logging-stats",
               "content": {
-                "id": "Log_Date_Range_Picker",
+                "id": "Log_ESB_Date_Range_Picker",
                 "title": "Date Range Picker",
-                "type": "gadget",
+                "type": "widget",
                 "category": "Widgets",
-                "thumbnail": "fs://gadget/Log_Date_Range_Picker/index.png",
+                "thumbnail": "fs://gadget/Log_ESB_Date_Range_Picker/index.png",
                 "data": {
-                  "url": "fs://gadget/Log_Date_Range_Picker/index.xml"
+                  "url": "fs://gadget/Log_ESB_Date_Range_Picker/index.xml"
+                },
+                "styles": {
+                  "borders": false,
+                  "title": "Date Range Picker"
                 },
                 "notify": {
                   "range-selected": {
@@ -598,21 +620,17 @@
                     "maximize": false,
                     "configurations": false
                   },
-                  "custom": [],
+                  "custom": [
+
+                  ],
                   "isDropdownView": false
                 },
-                "styles": {
-                  "no_heading": false,
-                  "hide_gadget": false,
-                  "borders": false,
-                  "titlePosition": "left",
-                  "title": "Date Range Picker"
+                "options": {
+
                 },
-                "options": {},
                 "locale_titles": {
-                  "en-US": "Date Range Picker"
-                },
-                "settings": {}
+
+                }
               }
             }
           ],
@@ -639,7 +657,7 @@
                     "description": "Used to listen to any date range-selected",
                     "on": [
                       {
-                        "from": "Log_Date_Range_Picker-logging-stats",
+                        "from": "Log_ESB_Date_Range_Picker-logging-stats",
                         "event": "range-selected"
                       }
                     ]
@@ -824,16 +842,19 @@
         "default": {
           "error-code-dist-date-range-picker": [
             {
-              "id": "Log_Date_Range_Picker-0",
+              "id": "Log_ESB_Date_Range_Picker-error-code-dist",
               "content": {
-                "id": "Log_Date_Range_Picker",
-                "title": "Log Date Range Picker",
-                "type": "gadget",
-                "thumbnail": "fs://gadget/Log_Date_Range_Picker/index.png",
-                "data": {"url": "fs://gadget/Log_Date_Range_Picker/index.xml"},
+                "id": "Log_ESB_Date_Range_Picker",
+                "title": "Date Range Picker",
+                "type": "widget",
+                "category": "Widgets",
+                "thumbnail": "fs://gadget/Log_ESB_Date_Range_Picker/index.png",
+                "data": {
+                  "url": "fs://gadget/Log_ESB_Date_Range_Picker/index.xml"
+                },
                 "styles": {
                   "borders": false,
-                  "title": "Log Date Range Picker"
+                  "title": "Date Range Picker"
                 },
                 "notify": {
                   "range-selected": {
@@ -852,11 +873,17 @@
                     "maximize": false,
                     "configurations": false
                   },
-                  "custom": [],
+                  "custom": [
+
+                  ],
                   "isDropdownView": false
                 },
-                "options": {},
-                "locale_titles": {}
+                "options": {
+
+                },
+                "locale_titles": {
+
+                }
               }
             }
           ],
@@ -885,7 +912,7 @@
                     "description": "Used to listen to any date range-selected",
                     "on": [
                       {
-                        "from": "Log_Date_Range_Picker-0",
+                        "from": "Log_ESB_Date_Range_Picker-error-code-dist",
                         "event": "range-selected"
                       }
                     ]
@@ -1097,16 +1124,19 @@
           ],
           "artifact-stats-date-range-picker": [
             {
-              "id": "Log_Date_Range_Picker-0",
+              "id": "Log_ESB_Date_Range_Picker-artifact-stats",
               "content": {
-                "id": "Log_Date_Range_Picker",
-                "title": "Log Date Range Picker",
-                "type": "gadget",
-                "thumbnail": "fs://gadget/Log_Date_Range_Picker/index.png",
-                "data": {"url": "fs://gadget/Log_Date_Range_Picker/index.xml"},
+                "id": "Log_ESB_Date_Range_Picker",
+                "title": "Date Range Picker",
+                "type": "widget",
+                "category": "Widgets",
+                "thumbnail": "fs://gadget/Log_ESB_Date_Range_Picker/index.png",
+                "data": {
+                  "url": "fs://gadget/Log_ESB_Date_Range_Picker/index.xml"
+                },
                 "styles": {
                   "borders": false,
-                  "title": "Log Date Range Picker"
+                  "title": "Date Range Picker"
                 },
                 "notify": {
                   "range-selected": {
@@ -1125,11 +1155,17 @@
                     "maximize": false,
                     "configurations": false
                   },
-                  "custom": [],
+                  "custom": [
+
+                  ],
                   "isDropdownView": false
                 },
-                "options": {},
-                "locale_titles": {}
+                "options": {
+
+                },
+                "locale_titles": {
+
+                }
               }
             }
           ],
@@ -1154,7 +1190,7 @@
                     "description": "Used to listen to any date range-selected",
                     "on": [
                       {
-                        "from": "Log_Date_Range_Picker-0",
+                        "from": "Log_ESB_Date_Range_Picker-artifact-stats",
                         "event": "range-selected"
                       }
                     ]
