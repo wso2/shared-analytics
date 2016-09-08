@@ -155,7 +155,17 @@ function writeToLogViewer(dataLine) {
 }
 
 function createLogList(templateData) {
-    return '<span class="logLine"><div class="logTimeStamp">' + templateData.time + '</div><div class="logLevel">' + templateData.level + '</div><div class="logClassName">' + templateData.className + '</div><div class="logContent">' + templateData.content + '</div><div class="logTrace">' + templateData.trace + '</div></span>';
+        var spanTag = "";
+        if (templateData.level == 'ERROR' || templateData.level == 'FATEL'){
+            spanTag = '<span class="logError">';
+        } else if (templateData.level == 'WARN'){
+            spanTag = '<span class="logWarn">';
+        } else {
+            spanTag = '<span class="logLine">';
+        }
+
+        return spanTag + '<div>' + templateData.time + '</div><div>' 
+        + templateData.level + '</div><div>' + templateData.className + '</div><div>' + templateData.content + '</div><div>' + templateData.trace + '</div></span>';
 }
 
 function onClickSelector() {

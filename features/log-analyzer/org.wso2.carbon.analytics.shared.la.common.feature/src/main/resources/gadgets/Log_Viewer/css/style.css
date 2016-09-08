@@ -20,6 +20,7 @@
     border-left-width:5px;
     border-left-style:solid;
     border-left-color:#D9483D;
+    color: #808080;
 }
 
 .logDebug{
@@ -27,6 +28,7 @@
     border-left-width:5px;
     border-left-style:solid;
     border-left-color:#5CB85C;
+    color: #808080;
 }
 
 .logWarn{
@@ -34,6 +36,7 @@
     border-left-width:5px;
     border-left-style:solid;
     border-left-color:#EECA5A;
+    color: #808080;
 }
 
 .logInfo{
@@ -41,6 +44,7 @@
     border-left-width:5px;
     border-left-style:solid;
     border-left-color:#438CAD;
+    color: #808080;
 }
 
 .logFatal{
@@ -48,6 +52,7 @@
     border-left-width:5px;
     border-left-style:solid;
     border-left-color:#95A5A6;
+    color: #808080;
 }
 
 .selectedError{
@@ -55,6 +60,7 @@
     border-width:5px;
     border-style:solid;
     border-color:#D9483D;
+    color: #808080;
 }
 
 .selectedWarn{
@@ -62,6 +68,7 @@
     border-width:5px;
     border-style:solid;
     border-color:#EECA5A;
+    color: #808080;
 }
 
 .selectedInfo{
@@ -69,6 +76,7 @@
     border-width:5px;
     border-style:solid;
     border-color:#438CAD;
+    color: #808080;
 }
 
 .trace{
