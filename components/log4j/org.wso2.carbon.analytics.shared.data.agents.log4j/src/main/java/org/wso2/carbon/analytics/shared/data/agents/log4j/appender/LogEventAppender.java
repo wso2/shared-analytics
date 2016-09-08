@@ -194,7 +194,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
             try {
                 scheduler.awaitTermination(10, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
-                LogLog.error("Interrupted while awaiting for Schedule Executor termination");
+                LogLog.error("Interrupted while awaiting for Schedule Executor termination" + e.getMessage(), e);
             }
         }
         try {
