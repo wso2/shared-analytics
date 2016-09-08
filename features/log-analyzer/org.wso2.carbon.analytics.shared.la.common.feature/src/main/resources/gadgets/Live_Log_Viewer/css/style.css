@@ -17,7 +17,7 @@
  */
 
 .logLine {
-    color:#00FF00;
+    color:#FFFFFF;
     white-space:normal;
 }
 
@@ -26,21 +26,36 @@
     padding-left: 8px;
 }
 
-.logTimeStamp {
-    color:#00CCFF;
+.logError {
+    color: #FF0000;
+    white-space:normal;
 }
 
-.logLevel {
-    color: #ffffff;
+.logError div {
+    display:inline-block;
+    padding-left: 8px;
 }
 
-.logClassName {
-    color: #dddd00;
+.logWarn {
+     color: #FFFF00;
+     white-space:normal;
 }
 
-.logTrace {
-    color: #d33333;
+.logWarn div {
+    display:inline-block;
+    padding-left: 8px;
 }
+
+.logFatel{
+    color: #8B0000;
+    white-space:normal;
+}
+
+.logFatel div {
+    display:inline-block;
+    padding-left: 8px;
+}
+
 
 .livelog a {
     color:#00FF00;
