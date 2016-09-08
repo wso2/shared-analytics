@@ -26,7 +26,7 @@ var charts = [{
     "classes": ["API", "Proxy service", "Template", "Local entry", "Endpoint", "Sequence","Startup","Event source","Priority executor", "Inbound Endpoint"],
     "barCount" : 2,
     "meta": {
-        "names": ["class", "Status", "Count"],
+        "names": ["Artifact Type", "Status", "Count"],
         "types": ["ordinal","ordinal", "linear"]
     },
 
@@ -37,9 +37,9 @@ var charts = [{
     "chartConfig": {
         legendTitle: "",
         mode:"group",
-        colorScale: ["#5CB85C", "#FF0000"],
+        colorScale: ["#5CB85C", "#808080"],
         type: "bar",
-        x: "class",
+        x: "Artifact Type",
         charts : [{type: "bar",  y : "Count", color: "Status", mode:"group"}],
         width: $('body').width(),
         height: $('body').height(),

@@ -32,7 +32,7 @@ var gadgetConfig = {
         x: "Log Level",
         color: "Log Level",
         charts: [{y: "Count"}],
-        width: $(document).width()/1.27,
+        width: $(document).width()/1.0,
         height: $(document).height()/1.2,
         legend: false,
         padding: {"top": 10, "left": 80, "bottom": 70, "right": 200}
