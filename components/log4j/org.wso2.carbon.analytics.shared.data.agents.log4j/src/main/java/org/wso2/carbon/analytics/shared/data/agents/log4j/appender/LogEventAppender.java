@@ -21,6 +21,7 @@ package org.wso2.carbon.analytics.shared.data.agents.log4j.appender;
 import org.apache.log4j.Appender;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Logger;
+import org.apache.log4j.helpers.LogLog;
 import org.apache.log4j.spi.LoggingEvent;
 import org.wso2.carbon.analytics.shared.data.agents.log4j.appender.ds.LogAppenderServiceValueHolder;
 import org.wso2.carbon.analytics.shared.data.agents.log4j.util.TenantAwarePatternLayout;
@@ -80,6 +81,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     private String serviceName;
     private String appName;
     private boolean isStackTrace = false;
+    private boolean isFirstEvent = true;
     private static final String[] columns = {"serverName", "appName", "eventTimeStamp", "class", "level", "content", "ip",
             "instance", "trace"};
     private DataPublisher dataPublisher;
@@ -171,15 +173,15 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         try {
             dataPublisher = new DataPublisher("Thrift", url, authURLs, userName, password);
         } catch (DataEndpointAgentConfigurationException e) {
-            logError("Invalid urls passed for receiver and auth, and hence expected to fail " + e.getMessage(), e);
+            LogLog.error("Invalid urls passed for receiver and auth, and hence expected to fail " + e.getMessage(), e);
         } catch (DataEndpointException e) {
-            logError("Error while trying to publish events to data receiver " + e.getMessage(), e);
+            LogLog.error("Error while trying to publish events to data receiver " + e.getMessage(), e);
         } catch (DataEndpointConfigurationException e) {
-            logError("Invalid urls passed for receiver and auth, and hence expected to fail " + e.getMessage(), e);
+            LogLog.error("Invalid urls passed for receiver and auth, and hence expected to fail " + e.getMessage(), e);
         } catch (DataEndpointAuthenticationException e) {
-            logError("Error while trying to login to data receiver : " + e.getMessage(), e);
+            LogLog.error("Error while trying to login to data receiver : " + e.getMessage(), e);
         } catch (TransportException e) {
-            logError("Thrift transport exception occurred " + e.getMessage(), e);
+            LogLog.error("Thrift transport exception occurred " + e.getMessage(), e);
         }
     }
 
@@ -192,7 +194,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
             try {
                 scheduler.awaitTermination(10, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
-                logError("Interrupted while awaiting for Schedule Executor termination", null);
+                LogLog.error("Interrupted while awaiting for Schedule Executor termination");
             }
         }
         try {
@@ -200,7 +202,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
                 dataPublisher.shutdown();
             }
         } catch (DataEndpointException e) {
-            logError("Error in shutting down the data publisher " + e.getMessage(), e);
+            LogLog.error("Error in shutting down the data publisher " + e.getMessage(), e);
         }
     }
 
@@ -211,63 +213,63 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     protected void append(LoggingEvent event) {
         // Checking the configuration context service for wait DAS appender until proper server initialization.
         if (LogAppenderServiceValueHolder.getConfigurationContextService() != null) {
-            if (dataPublisher == null) {
+            if (isFirstEvent) {
                 publisherInitializer();
+                if (dataPublisher == null) {
+                    LogLog.error("Data Publisher not initialize for url : " + url);
+                }
+                isFirstEvent = false;
             }
 
-            Logger logger = Logger.getLogger(event.getLoggerName());
-            TenantDomainAwareLoggingEvent tenantEvent;
-            if (event.getThrowableInformation() != null) {
-                tenantEvent = new TenantDomainAwareLoggingEvent(event.fqnOfCategoryClass, logger, event.timeStamp,
-                        event.getLevel(), event.getMessage(), event.getThrowableInformation().getThrowable());
-            } else {
-                tenantEvent = new TenantDomainAwareLoggingEvent(event.fqnOfCategoryClass, logger, event.timeStamp,
-                        event.getLevel(), event.getMessage(), null);
-            }
-            tenantId = AccessController.doPrivileged(new PrivilegedAction<Integer>() {
-                public Integer run() {
-                    return CarbonContext.getThreadLocalCarbonContext().getTenantId();
+            if (dataPublisher != null) {
+                Logger logger = Logger.getLogger(event.getLoggerName());
+                TenantDomainAwareLoggingEvent tenantEvent;
+                if (event.getThrowableInformation() != null) {
+                    tenantEvent = new TenantDomainAwareLoggingEvent(event.fqnOfCategoryClass, logger, event.timeStamp,
+                            event.getLevel(), event.getMessage(), event.getThrowableInformation().getThrowable());
+                } else {
+                    tenantEvent = new TenantDomainAwareLoggingEvent(event.fqnOfCategoryClass, logger, event.timeStamp,
+                            event.getLevel(), event.getMessage(), null);
                 }
-            });
+                tenantId = AccessController.doPrivileged(new PrivilegedAction<Integer>() {
+                    public Integer run() {
+                        return CarbonContext.getThreadLocalCarbonContext().getTenantId();
+                    }
+                });
 
-            tenantDomain = AccessController.doPrivileged(new PrivilegedAction<String>() {
-                public String run() {
-                    return CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
+                tenantDomain = AccessController.doPrivileged(new PrivilegedAction<String>() {
+                    public String run() {
+                        return CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
 
-                }
-            });
+                    }
+                });
 
-            tenantEvent.setTenantDomain(tenantDomain);
+                tenantEvent.setTenantDomain(tenantDomain);
 
-            if (tenantId == MultitenantConstants.INVALID_TENANT_ID) {
-                if (tenantDomain != null && !tenantDomain.equals("")) {
-                    try {
-                        tenantId = getTenantIdForDomain(tenantDomain);
-                    } catch (UserStoreException e) {
-                        logError("Cannot find tenant id for the given tenant domain.", e);
+                if (tenantId == MultitenantConstants.INVALID_TENANT_ID) {
+                    if (tenantDomain != null && !tenantDomain.equals("")) {
+                        try {
+                            tenantId = getTenantIdForDomain(tenantDomain);
+                        } catch (UserStoreException e) {
+                            LogLog.error("Cannot find tenant id for the given tenant domain.", e);
+                        }
                     }
                 }
+                appName = CarbonContext.getThreadLocalCarbonContext().getApplicationName();
+                tenantEvent.setTenantId(String.valueOf(tenantId));
+                if (appName != null) {
+                    tenantEvent.setServiceName(CarbonContext.getThreadLocalCarbonContext().getApplicationName());
+                } else if (serviceName != null) {
+                    tenantEvent.setServiceName(serviceName);
+                } else {
+                    tenantEvent.setServiceName("");
+                }
+                if (!loggingEvents.offer(tenantEvent)) {
+                    LogLog.debug("Logging events queue exceed the process limits, purging log event array. Some logs " +
+                            "will be lost");
+                    loggingEvents.clear();
+                }
             }
-            appName = CarbonContext.getThreadLocalCarbonContext().getApplicationName();
-            tenantEvent.setTenantId(String.valueOf(tenantId));
-            if (appName != null) {
-                tenantEvent.setServiceName(CarbonContext.getThreadLocalCarbonContext().getApplicationName());
-            } else if (serviceName != null) {
-                tenantEvent.setServiceName(serviceName);
-            } else {
-                tenantEvent.setServiceName("");
-            }
-            if (!loggingEvents.offer(tenantEvent)) {
-                logError("Logging events queue exceed the process limits", null);
-            }
-        }
-    }
-
-
-    public static void logError(String message, Throwable exception) {
-        System.err.println(message);
-        if (exception != null) {
-            exception.printStackTrace();
         }
     }
 
@@ -371,21 +373,22 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         this.authURLs = authURLs;
     }
 
-
     private final class LogPublisherTask implements Runnable {
         private int numOfConsecutiveFailures;
 
         public void run() {
             try {
                 for (int i = 0; i < loggingEvents.size(); i++) {
-                    TenantDomainAwareLoggingEvent tenantDomainAwareLoggingEvent = loggingEvents.take();
-                    publishLogEvent(tenantDomainAwareLoggingEvent);
+                    if (dataPublisher != null) {
+                        TenantDomainAwareLoggingEvent tenantDomainAwareLoggingEvent = loggingEvents.take();
+                        publishLogEvent(tenantDomainAwareLoggingEvent);
+                    }
                 }
             } catch (Throwable t) {
-                logError("FATAL: LogEventAppender Cannot publish log events, " + t.getMessage(), t);
+                LogLog.error("LogEventAppender Cannot publish log events, " + t.getMessage(), t);
                 numOfConsecutiveFailures++;
                 if (numOfConsecutiveFailures >= getMaxTolerableConsecutiveFailure()) {
-                    logError("WARN: Number of consecutive log publishing failures reached the threshold of " +
+                    LogLog.debug("Number of consecutive log publishing failures reached the threshold of " +
                             getMaxTolerableConsecutiveFailure() + ". Purging log event array. Some logs will be lost.", null);
                     loggingEvents.clear();
                     numOfConsecutiveFailures = 0;
@@ -399,7 +402,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
          * @param event log event which is wrapped TenantAwareLoggingEvent.
          * @throws ParseException
          */
-        private void publishLogEvent(TenantDomainAwareLoggingEvent event) throws Exception {
+        private void publishLogEvent(TenantDomainAwareLoggingEvent event) throws ParseException {
             String tenantID = tenantIDLayout.format(event);
             String tenantDomain = tenantDomainLayout.format(event);
             String serverName = serverNameLayout.format(event);
@@ -435,16 +438,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
             }
             Event logEvent = new Event(streamDef, date.getTime(), null, null, new String[]{tenantDomain},
                     arbitraryDataMap);
-            if (dataPublisher != null) {
-                dataPublisher.publish(logEvent);
-            } else {
-                publisherInitializer();
-                if (dataPublisher != null) {
-                    dataPublisher.publish(logEvent);
-                } else {
-                    throw new Exception("Data Publisher not initialize for url : " + url);
-                }
-            }
+            dataPublisher.publish(logEvent);
         }
     }
 
