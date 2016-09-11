@@ -889,21 +889,17 @@
           ],
           "error-code-dist-bar-chart": [
             {
-              "id": "Log_ErrorCode_Distribution-0",
+              "id": "Log_ESB_Error_Code_Distribution-error-code-dist",
               "content": {
-                "id": "Log_ErrorCode_Distribution",
+                "id": "Log_ESB_Error_Code_Distribution",
                 "title": "Error code distribution",
                 "type": "gadget",
-                "thumbnail": "fs://gadget/Log_ErrorCode_Distribution/img/thumbnail.png",
-                "data": {"url": "fs://gadget/Log_ErrorCode_Distribution/index.xml"},
+                "thumbnail": "fs://gadget/Log_ESB_Error_Code_Distribution/img/thumbnail.png",
+                "data": {"url": "fs://gadget/Log_ESB_Error_Code_Distribution/index.xml"},
                 "notify": {
                   "publisher": {
                     "type": "filter",
-                    "description": "This notifies selected filter"
-                  },
-                  "publisher2": {
-                    "type": "other-data",
-                    "description": "This notifies selected filter"
+                    "description": "This notifies selected state"
                   }
                 },
                 "listen": {
@@ -912,7 +908,7 @@
                     "description": "Used to listen to any date range-selected",
                     "on": [
                       {
-                        "from": "Log_ESB_Date_Range_Picker-error-code-dist",
+                        "from": "Log_ESB_Date_Range_Picker-overview",
                         "event": "range-selected"
                       }
                     ]
@@ -930,10 +926,18 @@
                   "no_heading": false,
                   "hide_gadget": false,
                   "titlePosition": "left",
-                  "title": "Error code distribution"
+                  "title": "Log Event Chart"
                 },
-                "options": {},
-                "locale_titles": {"en-US": "Error code distribution"},
+                "options": {
+                  "type": {
+                    "type": "STRING",
+                    "title": "Gadget Type",
+                    "value": "ESB",
+                    "options": [],
+                    "required": true
+                  }
+                },
+                "locale_titles": {"en-US": "Log Event Chart"},
                 "settings": {
                   "priority": "5",
                   "timeoutInterval": "60000"
