@@ -28,6 +28,9 @@ import java.util.regex.Pattern;
  */
 public class RegExrUDF implements CarbonUDF {
     public String getRegexMatch(String message, String regEx) {
+        if (message == null || regEx == null) {
+            return null;
+        }
         Pattern pattern = Pattern.compile(regEx);
         Matcher matcher = pattern.matcher(message);
 

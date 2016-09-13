@@ -29,11 +29,6 @@ public class GeoLocationResolverUDFWithImprovedCache implements CarbonUDF {
 
     private static final Log log = LogFactory.getLog(GeoLocationResolverUDFWithImprovedCache.class);
 
-    public GeoLocationResolverUDFWithImprovedCache(){
-        LocationResolver locationResolver = GeoResolverInitializer.getInstance().getLocationResolver();
-        locationResolver.setPersistInDataBase(true);
-    }
-
     /**
      * Extract the Country from IP
      *
@@ -75,6 +70,8 @@ public class GeoLocationResolverUDFWithImprovedCache implements CarbonUDF {
             location = GeoResolverInitializer.getInstance().getLocationResolver().getLocation(ip);
             if (location != null) {
                 locationLRUCache.put(ip, location);
+            } else {
+                locationLRUCache.put(ip, new Location("", null, null));
             }
         }
         return location != null ? location.getCity() : "";

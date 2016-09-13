@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.wso2.carbon.analytics.shared</groupId>
         <artifactId>spark-udf</artifactId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -91,7 +91,7 @@
                             org.wso2.carbon.analytics.shared.common.udf*
                         </Export-Package>
                         <Import-Package>
-                            org.wso2.carbon.analytics.spark.core.*,
+                            org.wso2.carbon.analytics.spark.core.*;version="${carbon.analytics.spark.version}",
                             *;resolution:=optional
                         </Import-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>

@@ -33,6 +33,4 @@ public abstract class LocationResolver {
     public void init() throws GeoLocationResolverException {
 
     }
-
-    public abstract void setPersistInDataBase(boolean persistInDataBase);
 }

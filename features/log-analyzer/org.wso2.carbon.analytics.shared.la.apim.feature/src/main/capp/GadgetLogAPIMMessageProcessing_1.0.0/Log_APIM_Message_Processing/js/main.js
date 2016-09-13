@@ -16,7 +16,7 @@
  * under the License.
  */
 
-var client = new AnalyticsClient().init(null, null, "https://"+location.hostname +":"+ location.port +"/admin/modules/la/log-analyzer-proxy.jag");
+var client = new AnalyticsClient().init(null, null, "https://" + location.hostname + ":" + location.port + "/admin/modules/la/log-analyzer-proxy.jag");
 var timeFrom = gadgetUtil.timeFrom();
 var timeTo = gadgetUtil.timeTo();
 var timeUnit = null;
@@ -109,10 +109,10 @@ function initialize() {
             }
         }
     }, function (error) {
-        if(error === undefined){
+        if (error === undefined) {
             onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
             console.log("Analytics server not found : Please troubleshoot connection problems.");
-        }else{
+        } else {
             error.message = "Internal server error while data indexing.";
             onError(error);
             console.log(error);
@@ -149,10 +149,10 @@ function fetch(start, count) {
                         drawErrorChart();
                     }
                 }, function (error) {
-                    if(error === undefined){
+                    if (error === undefined) {
                         onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
                         console.log("Analytics server not found : Please troubleshoot connection problems.");
-                    }else{
+                    } else {
                         error.message = "Internal server error while data indexing.";
                         onError(error);
                         console.log(error);
@@ -166,10 +166,10 @@ function fetch(start, count) {
             }
         }
     }, function (error) {
-        if(error === undefined){
+        if (error === undefined) {
             onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
             console.log("Analytics server not found : Please troubleshoot connection problems.");
-        }else{
+        } else {
             error.message = "Internal server error while data indexing.";
             onError(error);
             console.log(error);
@@ -225,7 +225,7 @@ function drawErrorChart() {
         //perform necessary transformation on input data
         var summarizeData = chartDataBuilder();
         $(legendTitleDiv).empty();
-        $(legendTitleDiv).append("<div style='position:absolute;top: 16px;left: "+(gadgetData.chartConfig.width-50)+";'>Legend</div>");
+        $(legendTitleDiv).append("<div style='position:absolute;top: 16px;left: " + (gadgetData.chartConfig.width - 50) + ";'>Legend</div>");
         for (var i = 0; i < summarizeData.length; i++) {
             if (summarizeData[i][2] != "NoEntries") {
                 drawLegend(summarizeData[i][2]);
@@ -233,14 +233,14 @@ function drawErrorChart() {
         }
         var drawingChartData = [];
         for (var i = 0; i < mockData.length; i++) {
-            var isFound =false;
+            var isFound = false;
             for (var j = 0; j < summarizeData.length; j++) {
                 if (mockData[i][0] === summarizeData[j][0]) {
                     drawingChartData.push(summarizeData[j]);
-                    isFound =true;
+                    isFound = true;
                 }
             }
-            if(!isFound){
+            if (!isFound) {
                 drawingChartData.push(mockData[i]);
             }
         }
@@ -414,7 +414,7 @@ var onclick = function (event, item) {
                             "values": selectedDataArray
                         }
                     ],
-                    "count" : eventCount,
+                    "count": eventCount,
                     "fromTime": getFromTime(tempFromTime),
                     "toTime": getToTime(tempFromTime)
                 }
@@ -437,7 +437,7 @@ var onclick = function (event, item) {
                             "values": selectedDataArray
                         }
                     ],
-                    "count" : eventCount,
+                    "count": eventCount,
                     "fromTime": getFromTime(tempFromTime),
                     "toTime": getToTime(tempFromTime)
                 }
@@ -516,8 +516,8 @@ function onErrorCustom(title, message) {
     $(canvasDiv).html(gadgetUtil.getCustemText(title, message));
 }
 
-function createLegendList(bulletColor, fullContext, subContext){
+function createLegendList(bulletColor, fullContext, subContext) {
     return "<ul class='legendText' style='list-style-type:none'><li class='context'><svg width='10' height='10'>" +
-        "<circle cx='5' cy='5' r='6' fill="+bulletColor+"/></svg><span class='textContext'><a class='legendTooltip' " +
-        "data-toggle='tooltip' data-placement='bottom' title=\""+fullContext+"\" style='cursor:default'>"+subContext+"</a></span></li></ul>";
+        "<circle cx='5' cy='5' r='6' fill=" + bulletColor + "/></svg><span class='textContext'><a class='legendTooltip' " +
+        "data-toggle='tooltip' data-placement='bottom' title=\"" + fullContext + "\" style='cursor:default'>" + subContext + "</a></span></li></ul>";
 }
