@@ -30,7 +30,7 @@ var configChartSecondary = JSON.parse(JSON.stringify(gadgetConfig.chartConfig));
 var canvasDiv = "#canvasDefault";
 var canvasDivSecondary = "#canvasSecondary";
 var prefs = new gadgets.Prefs();
-var svrUrl = gadgetUtil.getGadgetSvrUrl(prefs.getString(PARAM_TYPE));
+var svrUrl = gadgetUtil.getGadgetSvrUrl("ESB");
 var client = new AnalyticsClient().init(null,null,svrUrl);
 var fullChartColorScale = ["#5CB85C", "#438CAD", "#EECA5A", "#D9483D", "#95A5A6", "#800080"];
 var currentChartColorScale = [];
@@ -299,12 +299,11 @@ var onclick = function (event, item) {
 
 	 publish(
             {
-                "selected":[
-                	{
-                		"filter": "__content",
-                		"values": filterErrorCodes,
-                	}
-                ],
+                "selected":
+                {
+                	"errorCodes": filterErrorCodes,
+                    "type": item.datum["Error Type"]
+                },
                 "count": item.datum["Count"],
                 "fromTime": from,
                 "toTime": to
@@ -314,7 +313,6 @@ var onclick = function (event, item) {
 
 
 function publish(data) {
-    alert(data.toSource());
     gadgets.Hub.publish("publisher", data);
 };
 

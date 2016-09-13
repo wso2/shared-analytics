@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artifact name="GadgetLogErrorCodeDistributionFilterMessage" version="1.0.0" type="dashboards/gadget" serverRole="DataAnalyticsServer">
+    <file>Log_ESB_Error_Code_Distribution_Filtered_Message</file>
+</artifact>
+
