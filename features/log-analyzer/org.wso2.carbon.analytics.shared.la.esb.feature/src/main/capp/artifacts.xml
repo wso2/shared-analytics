@@ -4,6 +4,7 @@
         <dependency artifact="ESB_LOGANALYZER_SCRIPT" version="1.0.0" include="true" serverRole="DataAnalyticsServer"/>
 
         <dependency artifact="GadgetLogErrorCodeDistribution" version="1.0.0" include="true" serverRole="DataAnalyticsServer"/>
+	<dependency artifact="GadgetLogErrorCodeDistributionFilterMessage" version="1.0.0" include="true" serverRole="DataAnalyticsServer"/>
         <dependency artifact="GadgetLogArtifactDeploymentStats" version="1.0.0" include="true" serverRole="DataAnalyticsServer"/>
         <dependency artifact="GadgetLogArtifactFilter" version="1.0.0" include="true" serverRole="DataAnalyticsServer"/>
         <dependency artifact="GadgetLogDateRangePicker" version="1.0.0" include="true" serverRole="DataAnalyticsServer"/>

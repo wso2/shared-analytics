@@ -1,0 +1,325 @@
+.pagination {
+    margin: 10px 16px;
+}
+
+.pagination ul > li > a, .pagination ul > li > span {
+    float: left;
+    padding: 4px 12px;
+    line-height: 20px;
+    text-decoration: none;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-left-width: 0;
+    color: rgba(0, 0, 0, 0.67);
+}
+
+.paginationContainer {
+    margin: -2px 0px;
+}
+
+.canvas {
+    height: 25px;
+}
+
+.vega {
+    margin-top: 2px;
+    margin-left: -21px;
+}
+
+.form-control {
+    width: 111px;
+}
+
+.col-sm-12 table {
+    margin-left: 14px;
+    margin-top: 9px;
+}
+
+.control-label {
+    font-weight: 400;
+    margin-right: 5px;
+    margin-top: -5px;
+}
+
+.legendText {
+    font-size: x-small;
+}
+
+.legendTitle {
+    font-size: 20px;
+     font-weight: bold;
+}
+
+.legend {
+	left: 1300;
+	top: 5;
+    margin-left: -58px;
+    margin-top: 20px;
+    position: absolute;
+}
+
+.textContext {
+    margin-left: 5px;
+}
+
+a {
+    color: #3c3c3c;
+    text-decoration: none;
+}
+
+a:hover {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.link {
+    cursor: pointer;
+}
+
+.tooltip.bottom .tooltip-arrow {
+    border-bottom-color: rgb(229, 242, 255);
+
+}
+
+.tooltip-inner {
+    background-color: rgb(229, 242, 255);
+    color: black;
+    word-wrap: break-word;
+}
+
+.tooltip.in {
+    opacity: 1;
+    filter: alpha(opacity=100);
+}
+
+ul.legendText1 {
+    margin-top: 50px;
+}
+
+ul.legendText2 {
+    margin-top: 10px;
+}
+
+.checkBoxText{
+   font-size: 20px;
+   font-weight: bold;
+}
+
+input[type="checkbox"]{
+margin-left: 10px;
+display: none;
+
+}
+
+.checkboxTransportErrors label:before {
+	content: "";
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-left: 17px;
+	position: absolute;
+	left: 0;
+	bottom: 1px;
+	background-color: #5CB85C;
+	border-radius: 3px;
+	box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
+}
+
+.checkboxTransportErrors label {
+	display: inline-block;
+	cursor: pointer;
+	position: relative;
+	padding-left: 40px;
+	margin-right: 15px;
+	font-size: 13px;
+}
+.checkboxTransportErrors label {
+	margin-bottom: 10px;
+}
+
+ .checkbox label:before {
+    border-radius: 3px;
+}
+
+input[type="checkbox"]:checked + label:before {
+    content: "\2713";
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
+    font-size: 15px;
+    color: white;
+    text-align: center;
+    line-height: 15px;
+
+
+}
+
+
+
+
+.checkboxGeneralErrors label:before {
+	content: "";
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-left: 17px;
+	position: absolute;
+	left: 0;
+	bottom: 1px;
+	background-color: #438CAD;
+	border-radius: 3px;
+	box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
+}
+
+.checkboxGeneralErrors label {
+	display: inline-block;
+	cursor: pointer;
+	position: relative;
+	padding-left: 40px;
+	margin-right: 15px;
+	font-size: 13px;
+}
+.checkboxGeneralErrors label {
+	margin-bottom: 10px;
+}
+
+ .checkboxGeneralErrors label:before {
+    border-radius: 3px;
+}
+
+
+
+
+.checkboxEndpointFailures label:before {
+	content: "";
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-left: 17px;
+	position: absolute;
+	left: 0;
+	bottom: 1px;
+	background-color: #EECA5A;
+	border-radius: 3px;
+	box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
+}
+
+.checkboxEndpointFailures label {
+	display: inline-block;
+	cursor: pointer;
+	position: relative;
+	padding-left: 40px;
+	margin-right: 15px;
+	font-size: 13px;
+}
+.checkboxEndpointFailures label {
+	margin-bottom: 10px;
+}
+
+.checkboxEndpointFailures label:before {
+    border-radius: 3px;
+}
+
+
+
+.checkboxNonFatelWarnings label:before {
+	content: "";
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-left: 17px;
+	position: absolute;
+	left: 0;
+	bottom: 1px;
+	background-color: #D9483D;
+	border-radius: 3px;
+	box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
+}
+
+.checkboxNonFatelWarnings label {
+	display: inline-block;
+	cursor: pointer;
+	position: relative;
+	padding-left: 40px;
+	margin-right: 15px;
+	font-size: 13px;
+}
+.checkboxNonFatelWarnings label {
+	margin-bottom: 10px;
+}
+
+.checkboxNonFatelWarnings label:before {
+    border-radius: 3px;
+}
+
+
+
+
+.checkboxEndpointIsNull label:before {
+	content: "";
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-left: 17px;
+	position: absolute;
+	left: 0;
+	bottom: 1px;
+	background-color: #95A5A6;
+	border-radius: 3px;
+	box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
+}
+
+.checkboxEndpointIsNull label {
+	display: inline-block;
+	cursor: pointer;
+	position: relative;
+	padding-left: 40px;
+	margin-right: 15px;
+	font-size: 13px;
+	width: 161px;
+}
+.checkboxEndpointIsNull label {
+	margin-bottom: 10px;
+}
+
+.checkboxEndpointIsNull label:before {
+    border-radius: 3px;
+}
+
+
+.checkboxCalloutOpFailures label:before {
+	content: "";
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-left: 17px;
+	position: absolute;
+	left: 0;
+	bottom: 1px;
+	background-color: #800080;
+	border-radius: 3px;
+	box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
+}
+
+.checkboxCalloutOpFailures label {
+	display: inline-block;
+	cursor: pointer;
+	position: relative;
+	padding-left: 40px;
+	margin-right: 15px;
+	font-size: 13px;
+}
+.checkboxCalloutOpFailures label {
+	margin-bottom: 10px;
+}
+
+.checkboxCalloutOpFailures label:before {
+    border-radius: 3px;
+}
+
+.canvasDefault {
+    height: 200px;
+    width: 1200px;
+    min-height: 200px;
+    min-width: 1200px;
+}
+
