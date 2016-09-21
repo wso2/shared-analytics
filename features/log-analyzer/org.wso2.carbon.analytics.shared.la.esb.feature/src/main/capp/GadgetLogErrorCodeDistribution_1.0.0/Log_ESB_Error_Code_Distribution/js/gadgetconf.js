@@ -20,8 +20,8 @@ var gadgetConfig = {
     "id": "logESBErrorCodeDistirbution",
     "title": "Error Code Distribution",
     "datasource": "LOGANALYZER_ERROR_CODE_DISTRIBUTION_DAILY",
-    "errorType": ["Transport Error", "General Errors", "Failure on Endpoint in the Session", "Non-Fatal Warnings", "Referring Real Endpoint is Null", "Callout Operation Failed"],
-    "checkBoxId" : ["checkboxTransportErrors", "checkboxGeneralErrors", "checkboxEndpointFailures", "checkboxNonFatelWarnings", "checkboxEndpointIsNull", "checkboxCalloutOpFailures" ],
+    "errorType": ["Transport Error", "General Errors", "Failure on Endpoint in the Session", "Non-Fatal Warnings", "Referring Real Endpoint is Null", "Callout Operation Failed", "Custom"],
+    "checkBoxId" : ["checkboxTransportErrors", "checkboxGeneralErrors", "checkboxEndpointFailures", "checkboxNonFatelWarnings", "checkboxEndpointIsNull", "checkboxCalloutOpFailures", "checkboxCutom" ],
     "meta": {
         "names": ["Error Type", "Count"],
         "types": ["ordinal", "linear"]
@@ -53,12 +53,12 @@ var gadgetConfig = {
         }
     ],
     "chartConfig": {
-        colorScale: ["#CD5C5C", "#F08080", "#DC143C", "#FF0000", "#B22222", "#800080"],
+        colorScale: ["#CD5C5C", "#F08080", "#DC143C", "#FF0000", "#B22222", "#800080", "#700080" ],
         type: "bar",
         x: "Error Type",
         color: "Error Type",
         charts: [{y: "Count"}],
-        width: $(document).width()/1.1,
+        width: $(document).width()/1.2,
         height: $(document).height()/1.2,
         legend: false,
         padding: {"top": 10, "left": 80, "bottom": 70, "right": 200}

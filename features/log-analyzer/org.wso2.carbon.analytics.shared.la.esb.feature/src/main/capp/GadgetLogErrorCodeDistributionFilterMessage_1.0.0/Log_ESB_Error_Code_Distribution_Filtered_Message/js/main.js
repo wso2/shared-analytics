@@ -182,17 +182,25 @@ function subscribe(callback) {
 
 subscribe(function (topic, data, subscriber) {
     $(canvasDiv).html(gadgetUtil.getLoadingText());
-    
+
     errorType = data["selected"].type;
-    populateSelector(errorType);
+    var errorDescription = "";
+    for (var i = 0; i < errorDescriptions.length; i++){
+        if (errorType === errorDescriptions[i].type){
+            errorDescription = errorDescriptions[i];
+            break;
+        }
+    }
+    
+    populateSelector(errorDescription);
 
     fromTime = data["fromTime"];
     toTime = data["toTime"];
     count = data["count"];
 
-    var selectedArray = data["selected"].errorCodes;
-    allErrorCodes = selectedArray;
-    buildQueryString(selectedArray);
+    allErrorCodes = errorDescription.codes;
+    buildQueryString(errorDescription.codes);
+    
     fetch();
 });
 
@@ -217,7 +225,7 @@ function buildQueryString(selectedErrorCodes){
     queryString = queryString.concat(" AND  _timestamp: [" + fromTime + " TO " + toTime + "]");
 }
 
-function populateSelector(errorType){
+function populateSelector(errorDescription){
     clearSelectBox();
 
     var select = document.getElementById('selector');

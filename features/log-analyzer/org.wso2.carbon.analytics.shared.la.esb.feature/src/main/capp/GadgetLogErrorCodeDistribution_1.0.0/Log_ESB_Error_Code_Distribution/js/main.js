@@ -32,11 +32,10 @@ var canvasDivSecondary = "#canvasSecondary";
 var prefs = new gadgets.Prefs();
 var svrUrl = gadgetUtil.getGadgetSvrUrl("ESB");
 var client = new AnalyticsClient().init(null,null,svrUrl);
-var fullChartColorScale = ["#5CB85C", "#438CAD", "#EECA5A", "#D9483D", "#95A5A6", "#800080"];
+var fullChartColorScale = ["#5CB85C", "#438CAD", "#EECA5A", "#D9483D", "#95A5A6", "#800080", "#700080"];
 var currentChartColorScale = [];
-var checkedBars= [true, true, true, true , true, true];
+var checkedBars= [true, true, true, true , true, true, true];
 var xAxisValues= [];
-var errorCodes = gadgetConfig.errorCodes;
 
 function initialize() {
   xAxisValues.length = 0;
@@ -170,6 +169,25 @@ function calloutOpFailuresClick(checkbox) {
     fetch();
 }
 
+function checkboxCutomClick(checkbox) {
+    checkedBars[6] = !checkedBars[6];
+    xAxisValues.length = 0;
+    currentChartColorScale.length=0;
+    barColorBuilder();
+    xAxisBuilder();
+    gadgetConfig.chartConfig.colorScale = currentChartColorScale;
+    initState = true;
+    async_tasks = xAxisValues.length;
+    var dataArray = checkBoxCheckCounter();
+    if(dataArray[0] === 1){
+           document.getElementById(gadgetConfig.checkBoxId[dataArray[1]]).disabled= true;
+    }else{
+           enableCheckBoxes();
+    }
+
+    fetch();
+}
+
 function enableCheckBoxes(){
     for(var i =0; i < gadgetConfig.checkBoxId.length; i++){
         document.getElementById(gadgetConfig.checkBoxId[i]).disabled= false;
@@ -199,7 +217,7 @@ function checkBoxCheckCounter(){
 function xAxisBuilder(){
         for( var i = 0; i < checkedBars.length; i++ ){
            if(checkedBars[i]){
-               xAxisValues.push( gadgetConfig.errorType[i]);
+               xAxisValues.push(gadgetConfig.errorType[i]);
         }}
 
 }
@@ -217,16 +235,23 @@ function fetch(errorCodeTypeIndex) {
         receivedData.length = 0;
         errorCodeTypeIndex = 0;
     }
-    var queryInfo = {
-        tableName: gadgetConfig.datasource,
-        searchParams: {
-            query: "ErrorType:\"" + xAxisValues[errorCodeTypeIndex] + "\" AND  _timestamp: [" + from + " TO " + to + "]"
-        }
-    };
 
-    client.searchCount(queryInfo, function (d) {
+    var query = "ErrorType:\"" + xAxisValues[errorCodeTypeIndex] + "\" AND  _timestamp: [" + from + " TO " + to + "]";
+    var sorting = [
+        {
+            field: "ErrorType",
+            sortType: "DESC", // This can be ASC, DESC
+            reversed: "false" //optional
+        }
+    ];
+
+    var queryInfo = queryBuilder(gadgetConfig.datasource, query, 0, 100, sorting);
+
+    client.search(queryInfo, function (d) {
+        var result = JSON.parse(d["message"]);
+        
         if (d["status"] === "success") {
-            receivedData.push([xAxisValues[errorCodeTypeIndex], parseInt(d["message"])]);
+            receivedData.push([result[0].values.ErrorType, parseInt(result[0].values.ErrorCount)]);
             async_tasks--;
             if (async_tasks == 0) {
                 if (!initState) {
@@ -259,9 +284,12 @@ configChart = null;
 configChart = JSON.parse(JSON.stringify(gadgetConfig.chartConfig));
 
 var maxValue = getMaximumValue(receivedData);
-if(maxValue < 10){
+    if(maxValue < 10){
       configChart.yTicks = maxValue;
-}
+    }
+
+    alert(receivedData.toSource());
+
     try {
         $(canvasDiv).empty();
 
@@ -362,6 +390,18 @@ subscribe(function (topic, data, subscriber) {
 
      fetch();
 });
+
+function queryBuilder(tableName, query, start, count, sortBy) {
+    return {
+        tableName: tableName,
+        searchParams: {
+            query: query,
+            start: start, //starting index of the matching record set
+            count: count, //page size for pagination
+            sortBy: sortBy
+        }
+    };
+}
 
 function onError(msg) {
     $(canvasDiv).html(gadgetUtil.getErrorText(msg));
