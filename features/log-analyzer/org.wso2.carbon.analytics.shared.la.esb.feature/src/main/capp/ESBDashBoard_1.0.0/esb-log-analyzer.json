@@ -20,7 +20,7 @@
                 "x": 0,
                 "y": 0,
                 "width": 12,
-                "height": 3,
+                "height": 1,
                 "banner": false
               },
               {
@@ -68,6 +68,7 @@
                   "url": "fs://gadget/Log_ESB_Date_Range_Picker/index.xml"
                 },
                 "styles": {
+                  "no_heading": true,
                   "borders": false,
                   "title": "Date Range Picker"
                 },

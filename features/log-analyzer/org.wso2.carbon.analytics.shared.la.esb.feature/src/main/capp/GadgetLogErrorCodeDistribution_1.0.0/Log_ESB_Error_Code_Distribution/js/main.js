@@ -318,18 +318,10 @@ var maxValue = getMaximumValue(receivedData);
 }
 
 var onclick = function (event, item) {
-  var filterErrorCodes;
-  for (var i = 0; i < errorCodes.length; i++){
-    if (errorCodes[i].type === item.datum["Error Type"]){
-      filterErrorCodes = errorCodes[i].codes;
-    }
-  }
-
 	 publish(
             {
                 "selected":
                 {
-                	"errorCodes": filterErrorCodes,
                     "type": item.datum["Error Type"]
                 },
                 "count": item.datum["Count"],

@@ -28,28 +28,25 @@ var gadgetConfig = {
     },
     "errorCodes": [
         {
-            "type" : "Transport Error",
-            "codes" : ["101000", "101001", "101500", "101501", "101503", "101504", "101505", "101506", "101507", "101508", "101509", "101510"]
+            "type" : "Transport Error"
         },
         {
-            "type" : "General Errors",
-            "codes" : ["303000", "303001", "303002"]
+            "type" : "General Errors"
         },
         {
-            "type" : "Failure on Endpoint in the Session",
-            "codes" : ["309001", "309002", "309003"]
+            "type" : "Failure on Endpoint in the Session"
         },
         {
-            "type" : "Non-Fatal Warnings",
-            "codes" : ["303100", "304100"]
+            "type" : "Non-Fatal Warnings"
         },
         {
-            "type" : "Referring Real Endpoint is Null",
-            "codes" : ["305100"]
+            "type" : "Referring Real Endpoint is Null"
         },
         {
-            "type" : "Callout Operation Failed",
-            "codes" : ["401000"]
+            "type" : "Callout Operation Failed"
+        },
+        {
+            "type" : "Custom"
         }
     ],
     "chartConfig": {

@@ -114,6 +114,12 @@
                                     <label for="checkboxCalloutOpFailures" style="float:left" > Callout Operation Failed</label>
                                 </div>
 
+                                 <div class="checkboxCutom">
+                                    <input type="checkbox" value="None" id="checkboxCutom" name="check" checked 
+                                      onclick='checkboxCutomClick(this);'/>
+                                    <label for="checkboxCutom" style="float:left" > Callout Operation Failed</label>
+                                </div>
+
                             </div>
 
                             <div>
