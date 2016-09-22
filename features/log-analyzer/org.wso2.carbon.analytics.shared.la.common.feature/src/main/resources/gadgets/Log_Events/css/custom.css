@@ -9,3 +9,11 @@ body.dark svg.marks .mark-group .mark-text text {
 body.dark svg.marks .mark-group .mark-rule line {
     stroke: #E3E5E6 !important;
 }
+
+body.dark {
+    background: #121822 !important;
+}
+
+body.dark label{
+	color: #fff;
+}

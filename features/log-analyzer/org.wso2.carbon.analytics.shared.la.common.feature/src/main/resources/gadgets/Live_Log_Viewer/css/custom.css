@@ -24,3 +24,7 @@ body.dark svg.marks .mark-group .mark-rule line {
 .form-control {
     width: 111px;
 }
+
+body {
+	height : auto;
+}

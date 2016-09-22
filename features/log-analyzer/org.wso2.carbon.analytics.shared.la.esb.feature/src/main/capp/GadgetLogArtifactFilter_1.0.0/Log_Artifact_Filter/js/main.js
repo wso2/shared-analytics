@@ -117,7 +117,10 @@ function drawLogErrorFilteredTable() {
                 'rt' +
                 '<"dataTablesBottom"' +
                 'lip' +
-                '>'
+                '>',
+            columnDefs: [
+                {"orderable": false, "targets": -1}
+            ]
         });
         nanoScrollerSelector[0].nanoscroller.reset();
         dataTable.on('draw', function () {
