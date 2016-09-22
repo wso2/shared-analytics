@@ -49,12 +49,20 @@ function fetch() {
     client.searchCount(queryForSearchCount, function (d) {
         if (d["status"] === "success") {
             var totalRecordCount = d["message"];
+            var sorting = [
+                    {
+                        field: "_eventTimeStamp",
+                        sortType: "ASC", // This can be ASC, DESC
+                        reversed: "false" //optional
+                    }
+                ];
             queryInfo = {
                 tableName: "LOGANALYZER",
                 searchParams: {
                     query: "_timestamp: [" + from + " TO " + to + "]",
                     start: 0, //starting index of the matching record set
-                    count: totalRecordCount //page size for pagination
+                    count: totalRecordCount, //page size for pagination
+                    sortBy: sorting
                 }
             };
             client.search(queryInfo, function (d) {

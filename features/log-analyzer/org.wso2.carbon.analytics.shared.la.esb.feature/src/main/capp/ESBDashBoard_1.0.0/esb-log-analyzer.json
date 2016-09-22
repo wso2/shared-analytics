@@ -20,7 +20,7 @@
                 "x": 0,
                 "y": 0,
                 "width": 12,
-                "height": 3,
+                "height": 1,
                 "banner": false
               },
               {
@@ -68,6 +68,7 @@
                   "url": "fs://gadget/Log_ESB_Date_Range_Picker/index.xml"
                 },
                 "styles": {
+                  "no_heading": true,
                   "borders": false,
                   "title": "Date Range Picker"
                 },
@@ -275,7 +276,7 @@
       }
     },
     {
-      "id": "page0",
+      "id": "application-errors",
       "title": "Application Errors",
       "layout": {
         "content": {
@@ -286,7 +287,7 @@
                 "x": 0,
                 "y": 0,
                 "width": 12,
-                "height": 3,
+                "height": 1,
                 "banner": false
               },
               {
@@ -334,6 +335,7 @@
                   "url": "fs://gadget/Log_ESB_Date_Range_Picker/index.xml"
                 },
                 "styles": {
+                  "no_heading": true,
                   "borders": false,
                   "title": "Date Range Picker"
                 },
@@ -541,7 +543,7 @@
       }
     },
     {
-      "id": "page1",
+      "id": "login-errors",
       "title": "Login Errors",
       "layout": {
         "content": {
@@ -552,7 +554,7 @@
                 "x": 0,
                 "y": 0,
                 "width": 12,
-                "height": 2,
+                "height": 1,
                 "banner": false
               },
               {
@@ -600,6 +602,7 @@
                   "url": "fs://gadget/Log_ESB_Date_Range_Picker/index.xml"
                 },
                 "styles": {
+                  "no_heading": true,
                   "borders": false,
                   "title": "Date Range Picker"
                 },
@@ -810,7 +813,7 @@
       }
     },
     {
-      "id": "page2",
+      "id": "error-code-dist",
       "title": "Error Code Distribution",
       "layout": {
         "content": {
@@ -821,7 +824,7 @@
                 "x": 0,
                 "y": 0,
                 "width": 12,
-                "height": 3,
+                "height": 1,
                 "banner": false
               },
               {
@@ -869,6 +872,7 @@
                   "url": "fs://gadget/Log_ESB_Date_Range_Picker/index.xml"
                 },
                 "styles": {
+                  "no_heading": true,
                   "borders": false,
                   "title": "Date Range Picker"
                 },
@@ -1077,7 +1081,7 @@
       }
     },
     {
-      "id": "page3",
+      "id": "live-log-viewer",
       "title": "Live Log Viewer",
       "layout": {
         "content": {
@@ -1149,7 +1153,7 @@
       }
     },
     {
-      "id": "page4",
+      "id": "artifact-stats",
       "title": "Artifacts Stats",
       "layout": {
         "content": {
@@ -1160,7 +1164,7 @@
                 "x": 0,
                 "y": 0,
                 "width": 12,
-                "height": 3,
+                "height": 1,
                 "banner": false
               },
               {
@@ -1266,6 +1270,7 @@
                   "url": "fs://gadget/Log_ESB_Date_Range_Picker/index.xml"
                 },
                 "styles": {
+                  "no_heading": true,
                   "borders": false,
                   "title": "Date Range Picker"
                 },
@@ -1424,35 +1429,35 @@
       "subordinates": []
     },
     {
-      "id": "page0",
+      "id": "application-errors",
       "isanon": false,
       "ishidden": false,
       "title": "Application Errors",
       "subordinates": []
     },
     {
-      "id": "page1",
+      "id": "login-errors",
       "isanon": false,
       "ishidden": false,
       "title": "Login Errors",
       "subordinates": []
     },
     {
-      "id": "page2",
+      "id": "error-code-dist",
       "isanon": false,
       "ishidden": false,
       "title": "Error Code Distribution",
       "subordinates": []
     },
     {
-      "id": "page3",
+      "id": "live-log-viewer",
       "isanon": false,
       "ishidden": false,
       "title": "Live Log Viewer",
       "subordinates": []
     },
     {
-      "id": "page4",
+      "id": "artifact-stats",
       "isanon": false,
       "ishidden": false,
       "title": "Artifacts Stats",

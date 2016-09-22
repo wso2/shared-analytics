@@ -68,6 +68,8 @@ function fetch(artifactType, status) {
                 containerName = (obj[i].values._content).match(/(\Deployed From Artifact Container: )(.*?)(?=\ )/);
                 if(containerName!=null){
                 containerName = containerName[0].substring(33, containerName[0].length);
+                } else {
+                    containerName = "N/A";
                 }
 
                 var msg = obj[i].values._content.replace('\n',"");
@@ -104,7 +106,7 @@ function drawLogErrorFilteredTable() {
                 { title: "Timestamp" },
                 { title: "ArtifactType" },
                 { title: "ArtifactName" },
-                { title: "ContainerID" },
+                { title: "CAR File Name" },
                 { title: "LogLine" },
                 { title: "View" }
             ],
@@ -115,7 +117,10 @@ function drawLogErrorFilteredTable() {
                 'rt' +
                 '<"dataTablesBottom"' +
                 'lip' +
-                '>'
+                '>',
+            columnDefs: [
+                {"orderable": false, "targets": -1}
+            ]
         });
         nanoScrollerSelector[0].nanoscroller.reset();
         dataTable.on('draw', function () {
