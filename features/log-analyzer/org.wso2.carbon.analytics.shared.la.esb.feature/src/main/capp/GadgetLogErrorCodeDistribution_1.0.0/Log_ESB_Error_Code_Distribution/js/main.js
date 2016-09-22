@@ -251,7 +251,11 @@ function fetch(errorCodeTypeIndex) {
         var result = JSON.parse(d["message"]);
         
         if (d["status"] === "success") {
-            receivedData.push([result[0].values.ErrorType, parseInt(result[0].values.ErrorCount)]);
+            if (result.length > 0){
+                receivedData.push([result[0].values.ErrorType, parseInt(result[0].values.ErrorCount)]);
+            } else {
+                 receivedData.push([xAxisValues[errorCodeTypeIndex], 0]);
+            }
             async_tasks--;
             if (async_tasks == 0) {
                 if (!initState) {

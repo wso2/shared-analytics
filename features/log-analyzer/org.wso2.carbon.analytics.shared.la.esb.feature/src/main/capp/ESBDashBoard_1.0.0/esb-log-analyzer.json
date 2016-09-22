@@ -928,7 +928,7 @@
                     "description": "Used to listen to any date range-selected",
                     "on": [
                       {
-                        "from": "Log_ESB_Date_Range_Picker-overview",
+                        "from": "Log_ESB_Date_Range_Picker-error-code-dist",
                         "event": "range-selected"
                       }
                     ]
