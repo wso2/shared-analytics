@@ -117,7 +117,7 @@
                                  <div class="checkboxCutom">
                                     <input type="checkbox" value="None" id="checkboxCutom" name="check" checked 
                                       onclick='checkboxCutomClick(this);'/>
-                                    <label for="checkboxCutom" style="float:left" > Callout Operation Failed</label>
+                                    <label for="checkboxCutom" style="float:left" > Custom</label>
                                 </div>
 
                             </div>

@@ -288,8 +288,6 @@ var maxValue = getMaximumValue(receivedData);
       configChart.yTicks = maxValue;
     }
 
-    alert(receivedData.toSource());
-
     try {
         $(canvasDiv).empty();
 
