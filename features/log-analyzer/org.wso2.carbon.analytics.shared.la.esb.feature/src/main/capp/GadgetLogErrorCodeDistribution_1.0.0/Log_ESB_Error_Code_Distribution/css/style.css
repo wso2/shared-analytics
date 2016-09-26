@@ -121,7 +121,7 @@ display: none;
 	position: absolute;
 	left: 0;
 	bottom: 1px;
-	background-color: #5CB85C;
+	background-color: #F44336;
 	border-radius: 3px;
 	box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
 }
@@ -165,7 +165,7 @@ input[type="checkbox"]:checked + label:before {
 	position: absolute;
 	left: 0;
 	bottom: 1px;
-	background-color: #438CAD;
+	background-color: #FFEBEE;
 	border-radius: 3px;
 	box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
 }
@@ -198,7 +198,7 @@ input[type="checkbox"]:checked + label:before {
 	position: absolute;
 	left: 0;
 	bottom: 1px;
-	background-color: #EECA5A;
+	background-color: #FFCDD2;
 	border-radius: 3px;
 	box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
 }
@@ -230,7 +230,7 @@ input[type="checkbox"]:checked + label:before {
 	position: absolute;
 	left: 0;
 	bottom: 1px;
-	background-color: #D9483D;
+	background-color: #EF9A9A;
 	border-radius: 3px;
 	box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
 }
@@ -263,7 +263,7 @@ input[type="checkbox"]:checked + label:before {
 	position: absolute;
 	left: 0;
 	bottom: 1px;
-	background-color: #95A5A6;
+	background-color: #E57373;
 	border-radius: 3px;
 	box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
 }
@@ -295,7 +295,7 @@ input[type="checkbox"]:checked + label:before {
 	position: absolute;
 	left: 0;
 	bottom: 1px;
-	background-color: #800080;
+	background-color: #EF5350;
 	border-radius: 3px;
 	box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
 }
@@ -327,7 +327,7 @@ input[type="checkbox"]:checked + label:before {
 	position: absolute;
 	left: 0;
 	bottom: 1px;
-	background-color: #800080;
+	background-color: #F44336;
 	border-radius: 3px;
 	box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
 }

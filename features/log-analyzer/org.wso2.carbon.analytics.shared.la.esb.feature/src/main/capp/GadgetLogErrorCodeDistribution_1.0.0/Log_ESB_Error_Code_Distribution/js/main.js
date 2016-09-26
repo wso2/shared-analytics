@@ -32,7 +32,7 @@ var canvasDivSecondary = "#canvasSecondary";
 var prefs = new gadgets.Prefs();
 var svrUrl = gadgetUtil.getGadgetSvrUrl("ESB");
 var client = new AnalyticsClient().init(null,null,svrUrl);
-var fullChartColorScale = ["#5CB85C", "#438CAD", "#EECA5A", "#D9483D", "#95A5A6", "#800080", "#700080"];
+var fullChartColorScale =  ["#F44336", "#FFEBEE", "#FFCDD2", "#EF9A9A", "#E57373", "#EF5350", "#F44336" ];
 var currentChartColorScale = [];
 var checkedBars= [true, true, true, true , true, true, true];
 var xAxisValues= [];
@@ -251,7 +251,11 @@ function fetch(errorCodeTypeIndex) {
         var result = JSON.parse(d["message"]);
         
         if (d["status"] === "success") {
-            receivedData.push([result[0].values.ErrorType, parseInt(result[0].values.ErrorCount)]);
+            if (result.length > 0){
+                receivedData.push([result[0].values.ErrorType, parseInt(result[0].values.ErrorCount)]);
+            } else {
+                 receivedData.push([xAxisValues[errorCodeTypeIndex], 0]);
+            }
             async_tasks--;
             if (async_tasks == 0) {
                 if (!initState) {

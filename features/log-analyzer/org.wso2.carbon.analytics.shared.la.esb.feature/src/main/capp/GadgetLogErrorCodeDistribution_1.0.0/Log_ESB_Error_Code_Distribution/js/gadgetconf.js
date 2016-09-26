@@ -50,7 +50,7 @@ var gadgetConfig = {
         }
     ],
     "chartConfig": {
-        colorScale: ["#CD5C5C", "#F08080", "#DC143C", "#FF0000", "#B22222", "#800080", "#700080" ],
+        colorScale: ["#F44336", "#FFEBEE", "#FFCDD2", "#EF9A9A", "#E57373", "#EF5350", "#F44336" ],
         type: "bar",
         x: "Error Type",
         color: "Error Type",
