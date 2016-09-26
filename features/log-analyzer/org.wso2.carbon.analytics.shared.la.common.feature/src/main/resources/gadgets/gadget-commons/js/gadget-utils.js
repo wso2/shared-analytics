@@ -134,6 +134,15 @@ function GadgetUtil() {
             '</div>' +
             '</div>';
     };
+
+    this.getDontSupportCustomErrorCodesText = function() {
+        return '<div class="status-message">' +
+            '<div class="message message-info">' +
+            '<h4><i class="icon fw fw-info"></i>Drill down not supported</h4>' +
+            '<p>Drill down not supported by default for custom error codes</p>' +
+            '</div>' +
+            '</div>';
+    };
 }
 
 var gadgetUtil = new GadgetUtil();

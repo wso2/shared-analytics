@@ -181,9 +181,14 @@ function subscribe(callback) {
 }
 
 subscribe(function (topic, data, subscriber) {
-    $(canvasDiv).html(gadgetUtil.getLoadingText());
-
     errorType = data["selected"].type;
+
+    if (errorType == 'Custom'){
+        $(canvasDiv).html(gadgetUtil.getDontSupportCustomErrorCodesText());
+    } else {
+        $(canvasDiv).html(gadgetUtil.getLoadingText());
+    }
+
     var errorDescription = "";
     for (var i = 0; i < errorDescriptions.length; i++){
         if (errorType === errorDescriptions[i].type){

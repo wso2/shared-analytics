@@ -10,6 +10,78 @@
   "pages": [
     {
       "id": "landing",
+      "title": "Live Log Viewer",
+      "layout": {
+        "content": {
+          "loggedIn": {
+            "blocks": [
+              {
+                "id": "live-log-viewer",
+                "x": 0,
+                "y": 0,
+                "width": 12,
+                "height": 10,
+                "banner": false
+              }
+            ]
+          }
+        },
+        "fluidLayout": false
+      },
+      "isanon": false,
+      "content": {
+        "default": {
+          "live-log-viewer": [
+            {
+              "id": "landing",
+              "content": {
+                "id": "Live_Log_Viewer",
+                "title": "Live Log viewer",
+                "type": "gadget",
+                "thumbnail": "fs://gadget/Live_Log_Viewer/img/thumbnail.png",
+                "data": {"url": "fs://gadget/Live_Log_Viewer/index.xml"},
+                "listen": {
+                  "subscriber": {
+                    "type": "date-range",
+                    "description": "Used to listen to any date range-selected"
+                  }
+                },
+                "toolbarButtons": {
+                  "default": {
+                    "configurations": false
+                  },
+                  "custom": [],
+                  "isDropdownView": false
+                },
+                "styles": {
+                  "no_heading": false,
+                  "hide_gadget": false,
+                  "titlePosition": "left",
+                  "title": "Live Log viewer"
+                },
+                "options": {
+                  "type": {
+                    "type": "STRING",
+                    "title": "Gadget Type",
+                    "value": "ESB",
+                    "options": [],
+                    "required": true
+                  }
+                },
+                "locale_titles": {"en-US": "Live Log viewer"},
+                "settings": {
+                  "priority": "5",
+                  "timeoutInterval": "60000"
+                }
+              }
+            }
+          ]
+        },
+        "anon": {}
+      }
+    },
+    {
+      "id": "Overview",
       "title": "Overview",
       "layout": {
         "content": {
@@ -1081,78 +1153,6 @@
       }
     },
     {
-      "id": "live-log-viewer",
-      "title": "Live Log Viewer",
-      "layout": {
-        "content": {
-          "loggedIn": {
-            "blocks": [
-              {
-                "id": "live-log-viewer",
-                "x": 0,
-                "y": 0,
-                "width": 12,
-                "height": 10,
-                "banner": false
-              }
-            ]
-          }
-        },
-        "fluidLayout": false
-      },
-      "isanon": false,
-      "content": {
-        "default": {
-          "live-log-viewer": [
-            {
-              "id": "Live_Log_Viewer-0",
-              "content": {
-                "id": "Live_Log_Viewer",
-                "title": "Live Log viewer",
-                "type": "gadget",
-                "thumbnail": "fs://gadget/Live_Log_Viewer/img/thumbnail.png",
-                "data": {"url": "fs://gadget/Live_Log_Viewer/index.xml"},
-                "listen": {
-                  "subscriber": {
-                    "type": "date-range",
-                    "description": "Used to listen to any date range-selected"
-                  }
-                },
-                "toolbarButtons": {
-                  "default": {
-                    "configurations": false
-                  },
-                  "custom": [],
-                  "isDropdownView": false
-                },
-                "styles": {
-                  "no_heading": false,
-                  "hide_gadget": false,
-                  "titlePosition": "left",
-                  "title": "Live Log viewer"
-                },
-                "options": {
-                  "type": {
-                    "type": "STRING",
-                    "title": "Gadget Type",
-                    "value": "ESB",
-                    "options": [],
-                    "required": true
-                  }
-                },
-                "locale_titles": {"en-US": "Live Log viewer"},
-                "settings": {
-                  "priority": "5",
-                  "timeoutInterval": "60000"
-                }
-              }
-            }
-          ]
-        },
-        "anon": {}
-      }
-    },
-    {
       "id": "artifact-stats",
       "title": "Artifacts Stats",
       "layout": {
@@ -1425,6 +1425,13 @@
       "id": "landing",
       "isanon": false,
       "ishidden": false,
+      "title": "Live Log Viewer",
+      "subordinates": []
+    },
+    {
+      "id": "Overview",
+      "isanon": false,
+      "ishidden": false,
       "title": "Overview",
       "subordinates": []
     },
@@ -1447,13 +1454,6 @@
       "isanon": false,
       "ishidden": false,
       "title": "Error Code Distribution",
-      "subordinates": []
-    },
-    {
-      "id": "live-log-viewer",
-      "isanon": false,
-      "ishidden": false,
-      "title": "Live Log Viewer",
       "subordinates": []
     },
     {
