@@ -23,9 +23,11 @@ import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Logger;
 import org.apache.log4j.helpers.LogLog;
 import org.apache.log4j.spi.LoggingEvent;
+import org.apache.log4j.spi.ThrowableInformation;
 import org.wso2.carbon.analytics.shared.data.agents.log4j.appender.ds.LogAppenderServiceValueHolder;
 import org.wso2.carbon.analytics.shared.data.agents.log4j.util.TenantAwarePatternLayout;
 import org.wso2.carbon.context.CarbonContext;
+import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.databridge.agent.DataPublisher;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAgentConfigurationException;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAuthenticationException;
@@ -33,20 +35,14 @@ import org.wso2.carbon.databridge.agent.exception.DataEndpointConfigurationExcep
 import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
 import org.wso2.carbon.databridge.commons.Event;
 import org.wso2.carbon.databridge.commons.exception.TransportException;
-import org.wso2.carbon.logging.service.internal.LoggingServiceComponent;
 import org.wso2.carbon.logging.service.util.LoggingConstants;
-import org.wso2.carbon.user.api.UserStoreException;
-import org.wso2.carbon.user.core.tenant.TenantManager;
 import org.wso2.carbon.analytics.shared.data.agents.log4j.util.TenantDomainAwareLoggingEvent;
 import org.wso2.carbon.utils.logging.handler.TenantDomainSetter;
-import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 import org.wso2.securevault.SecretResolver;
 import org.wso2.securevault.SecretResolverFactory;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,6 +53,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -65,8 +62,10 @@ import java.util.concurrent.TimeUnit;
  * WSO2 carbon log appender for publishing tenant aware logging events to the DAS server.
  */
 public class LogEventAppender extends AppenderSkeleton implements Appender {
-    private static final Logger log = Logger.getLogger(LogEventAppender.class);
-    private ArrayBlockingQueue<TenantDomainAwareLoggingEvent> loggingEvents;
+    private static final String[] COLUMNS = {"serverName", "appName", "eventTimeStamp", "class", "level", "content", "ip",
+            "instance", "trace"};
+    private static final String SECRET_ALIAS = "log4j.appender.DAS_AGENT.password";
+    private BlockingQueue<TenantDomainAwareLoggingEvent> loggingEvents;
     private String url;
     private String password;
     private String userName;
@@ -76,14 +75,10 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     private int processingLimit = 100;
     private String streamDef;
     private String authURLs;
-    private int tenantId;
-    private String tenantDomain;
+    private String protocol;
     private String serviceName;
-    private String appName;
     private boolean isStackTrace = false;
     private boolean isFirstEvent = true;
-    private static final String[] columns = {"serverName", "appName", "eventTimeStamp", "class", "level", "content", "ip",
-            "instance", "trace"};
     private DataPublisher dataPublisher;
     private ScheduledExecutorService scheduler;
     private ConditionalLayoutWrapper tenantIDLayout = new ConditionalLayoutWrapper();
@@ -96,6 +91,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     private ConditionalLayoutWrapper messageLayout = new ConditionalLayoutWrapper();
     private ConditionalLayoutWrapper ipLayout = new ConditionalLayoutWrapper();
     private ConditionalLayoutWrapper instanceLayout = new ConditionalLayoutWrapper();
+    private int failedCount;
 
     /**
      * Log appender activator option by log4j framework.
@@ -112,43 +108,43 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
             switch (pattern) {
                 case "%D":
                     tenantDomainLayout.setWrappedLayout(new TenantAwarePatternLayout("%D"));
-                    tenantDomainLayout.setEnable(true);
+                    tenantDomainLayout.setEnabled(true);
                     break;
                 case "%T":
                     tenantIDLayout.setWrappedLayout(new TenantAwarePatternLayout("%T"));
-                    tenantIDLayout.setEnable(true);
+                    tenantIDLayout.setEnabled(true);
                     break;
                 case "%S":
                     serverNameLayout.setWrappedLayout(new TenantAwarePatternLayout("%S"));
-                    serverNameLayout.setEnable(true);
+                    serverNameLayout.setEnabled(true);
                     break;
                 case "%A":
                     appNameLayout.setWrappedLayout(new TenantAwarePatternLayout("%A"));
-                    appNameLayout.setEnable(true);
+                    appNameLayout.setEnabled(true);
                     break;
                 case "%d":
                     logTimeLayout.setWrappedLayout(new TenantAwarePatternLayout("%d"));
-                    logTimeLayout.setEnable(true);
+                    logTimeLayout.setEnabled(true);
                     break;
                 case "%c":
                     loggerLayout.setWrappedLayout(new TenantAwarePatternLayout("%c"));
-                    loggerLayout.setEnable(true);
+                    loggerLayout.setEnabled(true);
                     break;
                 case "%p":
                     priorityLayout.setWrappedLayout(new TenantAwarePatternLayout("%p"));
-                    priorityLayout.setEnable(true);
+                    priorityLayout.setEnabled(true);
                     break;
                 case "%m":
                     messageLayout.setWrappedLayout(new TenantAwarePatternLayout("%m"));
-                    messageLayout.setEnable(true);
+                    messageLayout.setEnabled(true);
                     break;
                 case "%H":
                     ipLayout.setWrappedLayout(new TenantAwarePatternLayout("%H"));
-                    ipLayout.setEnable(true);
+                    ipLayout.setEnabled(true);
                     break;
                 case "%I":
                     instanceLayout.setWrappedLayout(new TenantAwarePatternLayout("%I"));
-                    instanceLayout.setEnable(true);
+                    instanceLayout.setEnabled(true);
                     break;
                 case "%Stacktrace":
                     isStackTrace = true;
@@ -158,30 +154,37 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     }
 
     private void publisherInitializer() {
-        Properties passwordProperty = new Properties();
-        passwordProperty.put("log4j.appender.DAS_AGENT.password", password);
-        SecretResolver secretResolver = SecretResolverFactory.create(passwordProperty);
-        String secretAlias = "log4j.appender.DAS_AGENT.password";
-        //Checking the log4j appender DAS credentials.
-        if (secretResolver != null && secretResolver.isInitialized()) {
-            if (secretResolver.isTokenProtected(secretAlias)) {
-                password = secretResolver.resolve(secretAlias);
-            } else {
-                password = (String) passwordProperty.get(secretAlias);
-            }
-        }
+        resolveSecretPassword();
         try {
-            dataPublisher = new DataPublisher("Thrift", url, authURLs, userName, password);
+            dataPublisher = new DataPublisher(protocol, url, authURLs, userName, password);
         } catch (DataEndpointAgentConfigurationException e) {
-            LogLog.error("Invalid urls passed for receiver and auth, and hence expected to fail " + e.getMessage(), e);
+            LogLog.error("Invalid urls passed for receiver and auth, and hence expected to fail for data agent " + e
+                    .getMessage(), e);
         } catch (DataEndpointException e) {
             LogLog.error("Error while trying to publish events to data receiver " + e.getMessage(), e);
         } catch (DataEndpointConfigurationException e) {
-            LogLog.error("Invalid urls passed for receiver and auth, and hence expected to fail " + e.getMessage(), e);
+            LogLog.error("Invalid urls passed for receiver and auth, and hence expected to fail for data endpoint " + e
+                    .getMessage(), e);
         } catch (DataEndpointAuthenticationException e) {
             LogLog.error("Error while trying to login to data receiver : " + e.getMessage(), e);
         } catch (TransportException e) {
             LogLog.error("Thrift transport exception occurred " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Password is configured in log4j properties, either in plain text or alias. Resolves the correct real password
+     * in either case.
+     */
+    private void resolveSecretPassword() {
+        Properties passwordProperty = new Properties();
+        passwordProperty.put(SECRET_ALIAS, password);
+        SecretResolver secretResolver = SecretResolverFactory.create(passwordProperty);
+        //Checking the log4j appender DAS credentials.
+        if (secretResolver != null && secretResolver.isInitialized()) {
+            if (secretResolver.isTokenProtected(SECRET_ALIAS)) {
+                password = secretResolver.resolve(SECRET_ALIAS);
+            }
         }
     }
 
@@ -215,80 +218,37 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         if (LogAppenderServiceValueHolder.getConfigurationContextService() != null) {
             if (isFirstEvent) {
                 publisherInitializer();
-                if (dataPublisher == null) {
-                    LogLog.error("Data Publisher not initialize for url : " + url);
-                }
                 isFirstEvent = false;
             }
 
             if (dataPublisher != null) {
                 Logger logger = Logger.getLogger(event.getLoggerName());
-                TenantDomainAwareLoggingEvent tenantEvent;
-                if (event.getThrowableInformation() != null) {
-                    tenantEvent = new TenantDomainAwareLoggingEvent(event.fqnOfCategoryClass, logger, event.timeStamp,
-                            event.getLevel(), event.getMessage(), event.getThrowableInformation().getThrowable());
-                } else {
-                    tenantEvent = new TenantDomainAwareLoggingEvent(event.fqnOfCategoryClass, logger, event.timeStamp,
-                            event.getLevel(), event.getMessage(), null);
-                }
-                tenantId = AccessController.doPrivileged(new PrivilegedAction<Integer>() {
-                    public Integer run() {
-                        return CarbonContext.getThreadLocalCarbonContext().getTenantId();
-                    }
-                });
+                ThrowableInformation throwableInformation = event.getThrowableInformation();
+                TenantDomainAwareLoggingEvent tenantEvent = new TenantDomainAwareLoggingEvent(event.fqnOfCategoryClass,
+                        logger, event.timeStamp, event.getLevel(), event.getMessage(), (throwableInformation != null)
+                        ? throwableInformation
+                        .getThrowable() : null);
 
-                tenantDomain = AccessController.doPrivileged(new PrivilegedAction<String>() {
-                    public String run() {
-                        return CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
-
-                    }
-                });
-
-                tenantEvent.setTenantDomain(tenantDomain);
-
-                if (tenantId == MultitenantConstants.INVALID_TENANT_ID) {
-                    if (tenantDomain != null && !tenantDomain.equals("")) {
-                        try {
-                            tenantId = getTenantIdForDomain(tenantDomain);
-                        } catch (UserStoreException e) {
-                            LogLog.error("Cannot find tenant id for the given tenant domain.", e);
-                        }
-                    }
-                }
-                appName = CarbonContext.getThreadLocalCarbonContext().getApplicationName();
+                int tenantId = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantId(true);
                 tenantEvent.setTenantId(String.valueOf(tenantId));
+                String tenantDomain = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantDomain(true);
+                tenantEvent.setTenantDomain(tenantDomain);
+                String appName = CarbonContext.getThreadLocalCarbonContext().getApplicationName();
                 if (appName != null) {
-                    tenantEvent.setServiceName(CarbonContext.getThreadLocalCarbonContext().getApplicationName());
+                    tenantEvent.setServiceName(appName);
                 } else if (serviceName != null) {
                     tenantEvent.setServiceName(serviceName);
                 } else {
                     tenantEvent.setServiceName("");
                 }
                 if (!loggingEvents.offer(tenantEvent)) {
-                    LogLog.debug("Logging events queue exceed the process limits, purging log event array. Some logs " +
-                            "will be lost");
-                    loggingEvents.clear();
+                    if(++failedCount % 1000 == 0){
+                        LogLog.warn("Logging events queue exceed the process limits " + processingLimit + ", dropping the " +
+                                "log event.");
+                    }
                 }
             }
         }
-    }
-
-    /**
-     * Retrieve the tenant domain.
-     *
-     * @param tenantDomain tenant domain name.
-     * @return tenant id.
-     * @throws UserStoreException
-     */
-    public int getTenantIdForDomain(String tenantDomain) throws UserStoreException {
-        int tenantId;
-        TenantManager tenantManager = LoggingServiceComponent.getTenantManager();
-        if (tenantDomain == null || tenantDomain.equals("")) {
-            tenantId = MultitenantConstants.SUPER_TENANT_ID;
-        } else {
-            tenantId = tenantManager.getTenantId(tenantDomain);
-        }
-        return tenantId;
     }
 
     private String getStacktrace(Throwable e) {
@@ -373,26 +333,24 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         this.authURLs = authURLs;
     }
 
-    private final class LogPublisherTask implements Runnable {
-        private int numOfConsecutiveFailures;
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
+    }
 
+    private final class LogPublisherTask implements Runnable {
         public void run() {
             try {
-                for (int i = 0; i < loggingEvents.size(); i++) {
+                while (!loggingEvents.isEmpty()) {
                     if (dataPublisher != null) {
-                        TenantDomainAwareLoggingEvent tenantDomainAwareLoggingEvent = loggingEvents.take();
-                        publishLogEvent(tenantDomainAwareLoggingEvent);
+                        try {
+                            publishLogEvent(loggingEvents.take());
+                        } catch (ParseException e) {
+                            LogLog.error("LogEventAppender Cannot publish log event, " + e.getMessage(), e);
+                        }
                     }
                 }
-            } catch (Throwable t) {
-                LogLog.error("LogEventAppender Cannot publish log events, " + t.getMessage(), t);
-                numOfConsecutiveFailures++;
-                if (numOfConsecutiveFailures >= getMaxTolerableConsecutiveFailure()) {
-                    LogLog.debug("Number of consecutive log publishing failures reached the threshold of " +
-                            getMaxTolerableConsecutiveFailure() + ". Purging log event array. Some logs will be lost.", null);
-                    loggingEvents.clear();
-                    numOfConsecutiveFailures = 0;
-                }
+            } catch (InterruptedException e) {
+                LogLog.error("LogEventAppender Cannot publish log events, " + e.getMessage(), e);
             }
         }
 
@@ -415,29 +373,28 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
             String priority = priorityLayout.format(event);
             String message = messageLayout.format(event);
             String ip = ipLayout.format(event);
-            String instance = (getInstanceId() == null || getInstanceId().isEmpty()) ? instanceLayout.format(event) : getInstanceId();
+            String instance = (getInstanceId() == null || getInstanceId().isEmpty()) ? instanceLayout.format(event) :
+                    getInstanceId();
             String stacktrace = "";
 
             if (isStackTrace) {
                 if (event.getThrowableInformation() != null) {
                     stacktrace = getStacktrace(event.getThrowableInformation().getThrowable());
-                } else {
-                    stacktrace = "";
                 }
             }
             DateFormat formatter = new SimpleDateFormat(LoggingConstants.DATE_TIME_FORMATTER);
             Date date = formatter.parse(logTime);
             Map<String, String> arbitraryDataMap = new HashMap<String, String>();
-            arbitraryDataMap.put(columns[0], serverName);
-            arbitraryDataMap.put(columns[1], appName);
-            arbitraryDataMap.put(columns[2], String.valueOf(date.getTime()));
-            arbitraryDataMap.put(columns[3], logger);
-            arbitraryDataMap.put(columns[4], priority);
-            arbitraryDataMap.put(columns[5], message);
-            arbitraryDataMap.put(columns[6], ip);
-            arbitraryDataMap.put(columns[7], instance);
+            arbitraryDataMap.put(COLUMNS[0], serverName);
+            arbitraryDataMap.put(COLUMNS[1], appName);
+            arbitraryDataMap.put(COLUMNS[2], String.valueOf(date.getTime()));
+            arbitraryDataMap.put(COLUMNS[3], logger);
+            arbitraryDataMap.put(COLUMNS[4], priority);
+            arbitraryDataMap.put(COLUMNS[5], message);
+            arbitraryDataMap.put(COLUMNS[6], ip);
+            arbitraryDataMap.put(COLUMNS[7], instance);
             if (event.getThrowableInformation() != null) {
-                arbitraryDataMap.put(columns[8], stacktrace);
+                arbitraryDataMap.put(COLUMNS[8], stacktrace);
             }
             Event logEvent = new Event(streamDef, date.getTime(), null, null, new String[]{tenantDomain},
                     arbitraryDataMap);
@@ -447,18 +404,18 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
 
     private static class ConditionalLayoutWrapper {
         TenantAwarePatternLayout wrappedLayout;
-        boolean isEnable;
+        boolean isEnabled;
 
         public void setWrappedLayout(TenantAwarePatternLayout wrappedLayout) {
             this.wrappedLayout = wrappedLayout;
         }
 
-        public void setEnable(boolean enable) {
-            isEnable = enable;
+        public void setEnabled(boolean enabled) {
+            isEnabled = enabled;
         }
 
         public String format(TenantDomainAwareLoggingEvent event) {
-            if (isEnable) {
+            if (isEnabled) {
                 return wrappedLayout.format(event);
             }
             return "";
