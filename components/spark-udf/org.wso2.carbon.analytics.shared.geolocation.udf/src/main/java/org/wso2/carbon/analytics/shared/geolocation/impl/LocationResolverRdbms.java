@@ -134,6 +134,9 @@ public class LocationResolverRdbms extends LocationResolver {
             } else {
                 location = getLocationFromLongValueOfIp(ipAddress, connection);
                 if (location != null) {
+                    if(location.getCity() == null){
+                        location.setCity("");
+                    }
                     if (persistInDataBase) {
                         saveLocation(location, connection);
                     }
