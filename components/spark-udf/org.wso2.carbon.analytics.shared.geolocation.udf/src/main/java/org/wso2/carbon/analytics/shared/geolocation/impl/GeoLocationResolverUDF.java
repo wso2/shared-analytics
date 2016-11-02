@@ -43,6 +43,8 @@ public class GeoLocationResolverUDF implements CarbonUDF {
             location = GeoResolverInitializer.getInstance().getLocationResolver().getLocation(ip);
             if (location != null) {
                 locationLRUCache.put(ip, location);
+            }else{
+                locationLRUCache.put(ip, new Location("", "", ""));
             }
         }
         return location != null ? location.getCountry() : "";
