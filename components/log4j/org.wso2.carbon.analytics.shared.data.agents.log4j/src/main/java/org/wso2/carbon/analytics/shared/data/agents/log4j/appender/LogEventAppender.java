@@ -149,6 +149,8 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
                 case "%Stacktrace":
                     isStackTrace = true;
                     break;
+                default:
+                    break;
             }
         }
     }
@@ -225,9 +227,8 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
                 Logger logger = Logger.getLogger(event.getLoggerName());
                 ThrowableInformation throwableInformation = event.getThrowableInformation();
                 TenantDomainAwareLoggingEvent tenantEvent = new TenantDomainAwareLoggingEvent(event.fqnOfCategoryClass,
-                        logger, event.timeStamp, event.getLevel(), event.getMessage(), (throwableInformation != null)
-                        ? throwableInformation
-                        .getThrowable() : null);
+                        logger, event.timeStamp, event.getLevel(), event.getMessage(),
+                        (throwableInformation != null) ? throwableInformation.getThrowable() : null);
 
                 int tenantId = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantId(true);
                 tenantEvent.setTenantId(String.valueOf(tenantId));
@@ -242,7 +243,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
                     tenantEvent.setServiceName("");
                 }
                 if (!loggingEvents.offer(tenantEvent)) {
-                    if(++failedCount % 1000 == 0){
+                    if (++failedCount % 1000 == 0) {
                         LogLog.warn("Logging events queue exceed the process limits " + processingLimit + ", dropping the " +
                                 "log event.");
                     }
@@ -358,12 +359,11 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
          * Publishing the log event using thrift client.
          *
          * @param event log event which is wrapped TenantAwareLoggingEvent.
-         * @throws ParseException
+         * @throws ParseException signals that an error has been reached unexpectedly while parsing.
          */
         private void publishLogEvent(TenantDomainAwareLoggingEvent event) throws ParseException {
-            String tenantID = tenantIDLayout.format(event);
             String tenantDomain = tenantDomainLayout.format(event);
-            if (tenantDomain == null || tenantDomain.isEmpty()){
+            if (tenantDomain == null || tenantDomain.isEmpty()) {
                 tenantDomain = "[Not Available]";
             }
             String serverName = serverNameLayout.format(event);
