@@ -75,7 +75,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     private int processingLimit = 100;
     private String streamDef;
     private String authURLs;
-    private String protocol;
+    private String protocol = "Thrift";
     private String serviceName;
     private boolean isStackTrace = false;
     private boolean isFirstEvent = true;
