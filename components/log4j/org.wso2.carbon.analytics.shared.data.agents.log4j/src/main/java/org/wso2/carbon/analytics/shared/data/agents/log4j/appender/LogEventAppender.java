@@ -160,12 +160,14 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         try {
             dataPublisher = new DataPublisher(protocol, url, authURLs, userName, password);
         } catch (DataEndpointAgentConfigurationException e) {
-            LogLog.error("Invalid urls passed for receiver and auth, and hence expected to fail for data agent " + e
+            LogLog.error("Invalid urls (" + url + (authURLs != null ? ", " + authURLs : "") + ") passed for receiver and auth, " +
+                    "and hence expected to fail for data agent " + e
                     .getMessage(), e);
         } catch (DataEndpointException e) {
             LogLog.error("Error while trying to publish events to data receiver " + e.getMessage(), e);
         } catch (DataEndpointConfigurationException e) {
-            LogLog.error("Invalid urls passed for receiver and auth, and hence expected to fail for data endpoint " + e
+            LogLog.error("Invalid urls (" + url + (authURLs != null ? ", " + authURLs : "") + ") passed for receiver and auth, " +
+                    "and hence expected to fail for data endpoint " + e
                     .getMessage(), e);
         } catch (DataEndpointAuthenticationException e) {
             LogLog.error("Error while trying to login to data receiver : " + e.getMessage(), e);
