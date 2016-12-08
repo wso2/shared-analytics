@@ -25,6 +25,7 @@ import org.apache.log4j.helpers.LogLog;
 import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.spi.ThrowableInformation;
 import org.wso2.carbon.analytics.shared.data.agents.log4j.appender.ds.LogAppenderServiceValueHolder;
+import org.wso2.carbon.analytics.shared.data.agents.log4j.util.AppenderConstants;
 import org.wso2.carbon.analytics.shared.data.agents.log4j.util.TenantAwarePatternLayout;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
@@ -62,9 +63,6 @@ import java.util.concurrent.TimeUnit;
  * WSO2 carbon log appender for publishing tenant aware logging events to the DAS server.
  */
 public class LogEventAppender extends AppenderSkeleton implements Appender {
-    private static final String[] COLUMNS = {"serverName", "appName", "eventTimeStamp", "class", "level", "content", "ip",
-            "instance", "trace"};
-    private static final String SECRET_ALIAS = "log4j.appender.DAS_AGENT.password";
     private BlockingQueue<TenantDomainAwareLoggingEvent> loggingEvents;
     private String url;
     private String password;
@@ -160,13 +158,13 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         try {
             dataPublisher = new DataPublisher(protocol, url, authURLs, userName, password);
         } catch (DataEndpointAgentConfigurationException e) {
-            LogLog.error("Invalid urls passed for receiver and auth, and hence expected to fail for data agent " + e
-                    .getMessage(), e);
+            LogLog.error("Invalid urls (" + url + (authURLs != null ? ", " + authURLs : "") + ") passed for receiver " +
+                    "and auth, and hence expected to fail for data agent " + e.getMessage(), e);
         } catch (DataEndpointException e) {
             LogLog.error("Error while trying to publish events to data receiver " + e.getMessage(), e);
         } catch (DataEndpointConfigurationException e) {
-            LogLog.error("Invalid urls passed for receiver and auth, and hence expected to fail for data endpoint " + e
-                    .getMessage(), e);
+            LogLog.error("Invalid urls (" + url + (authURLs != null ? ", " + authURLs : "") + ") passed for receiver " +
+                    "and auth, and hence expected to fail for data endpoint " + e.getMessage(), e);
         } catch (DataEndpointAuthenticationException e) {
             LogLog.error("Error while trying to login to data receiver : " + e.getMessage(), e);
         } catch (TransportException e) {
@@ -180,12 +178,12 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
      */
     private void resolveSecretPassword() {
         Properties passwordProperty = new Properties();
-        passwordProperty.put(SECRET_ALIAS, password);
+        passwordProperty.put(AppenderConstants.SECRET_ALIAS, password);
         SecretResolver secretResolver = SecretResolverFactory.create(passwordProperty);
         //Checking the log4j appender DAS credentials.
         if (secretResolver != null && secretResolver.isInitialized()) {
-            if (secretResolver.isTokenProtected(SECRET_ALIAS)) {
-                password = secretResolver.resolve(SECRET_ALIAS);
+            if (secretResolver.isTokenProtected(AppenderConstants.SECRET_ALIAS)) {
+                password = secretResolver.resolve(AppenderConstants.SECRET_ALIAS);
             }
         }
     }
@@ -385,16 +383,16 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
             DateFormat formatter = new SimpleDateFormat(LoggingConstants.DATE_TIME_FORMATTER);
             Date date = formatter.parse(logTime);
             Map<String, String> arbitraryDataMap = new HashMap<String, String>();
-            arbitraryDataMap.put(COLUMNS[0], serverName);
-            arbitraryDataMap.put(COLUMNS[1], appName);
-            arbitraryDataMap.put(COLUMNS[2], String.valueOf(date.getTime()));
-            arbitraryDataMap.put(COLUMNS[3], logger);
-            arbitraryDataMap.put(COLUMNS[4], priority);
-            arbitraryDataMap.put(COLUMNS[5], message);
-            arbitraryDataMap.put(COLUMNS[6], ip);
-            arbitraryDataMap.put(COLUMNS[7], instance);
+            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_SERVER_NAME, serverName);
+            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_APP_NAME, appName);
+            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_EVENT_TIMESTAMP, String.valueOf(date.getTime()));
+            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_CLASS, logger);
+            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_LEVEL, priority);
+            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_CONTENT, message);
+            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_IP, ip);
+            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_INSTANCE, instance);
             if (event.getThrowableInformation() != null) {
-                arbitraryDataMap.put(COLUMNS[8], stacktrace);
+                arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_TRACE, stacktrace);
             }
             Event logEvent = new Event(streamDef, date.getTime(), null, null, new String[]{tenantDomain},
                     arbitraryDataMap);
