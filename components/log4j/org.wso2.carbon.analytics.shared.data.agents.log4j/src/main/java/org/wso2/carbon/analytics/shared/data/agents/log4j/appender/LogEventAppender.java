@@ -383,16 +383,16 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
             DateFormat formatter = new SimpleDateFormat(LoggingConstants.DATE_TIME_FORMATTER);
             Date date = formatter.parse(logTime);
             Map<String, String> arbitraryDataMap = new HashMap<String, String>();
-            arbitraryDataMap.put(AppenderConstants.SERVER_NAME, serverName);
-            arbitraryDataMap.put(AppenderConstants.APP_NAME, appName);
-            arbitraryDataMap.put(AppenderConstants.EVENT_TIMESTAMP, String.valueOf(date.getTime()));
-            arbitraryDataMap.put(AppenderConstants.CLASS, logger);
-            arbitraryDataMap.put(AppenderConstants.LEVEL, priority);
-            arbitraryDataMap.put(AppenderConstants.CONTENT, message);
-            arbitraryDataMap.put(AppenderConstants.IP, ip);
-            arbitraryDataMap.put(AppenderConstants.INSTANCE, instance);
+            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_SERVER_NAME, serverName);
+            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_APP_NAME, appName);
+            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_EVENT_TIMESTAMP, String.valueOf(date.getTime()));
+            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_CLASS, logger);
+            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_LEVEL, priority);
+            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_CONTENT, message);
+            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_IP, ip);
+            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_INSTANCE, instance);
             if (event.getThrowableInformation() != null) {
-                arbitraryDataMap.put(AppenderConstants.TRACE, stacktrace);
+                arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_TRACE, stacktrace);
             }
             Event logEvent = new Event(streamDef, date.getTime(), null, null, new String[]{tenantDomain},
                     arbitraryDataMap);

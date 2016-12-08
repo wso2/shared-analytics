@@ -18,14 +18,14 @@
 package org.wso2.carbon.analytics.shared.data.agents.log4j.util;
 
 public class AppenderConstants {
-    public static final String SERVER_NAME = "serverName";
-    public static final String APP_NAME = "appName";
-    public static final String EVENT_TIMESTAMP = "eventTimeStamp";
-    public static final String CLASS = "class";
-    public static final String LEVEL = "level";
-    public static final String CONTENT = "content";
-    public static final String IP = "ip";
-    public static final String INSTANCE = "instance";
-    public static final String TRACE = "trace";
+    public static final String ARBITRARY_FIELD_SERVER_NAME = "serverName";
+    public static final String ARBITRARY_FIELD_APP_NAME = "appName";
+    public static final String ARBITRARY_FIELD_EVENT_TIMESTAMP = "eventTimeStamp";
+    public static final String ARBITRARY_FIELD_CLASS = "class";
+    public static final String ARBITRARY_FIELD_LEVEL = "level";
+    public static final String ARBITRARY_FIELD_CONTENT = "content";
+    public static final String ARBITRARY_FIELD_IP = "ip";
+    public static final String ARBITRARY_FIELD_INSTANCE = "instance";
+    public static final String ARBITRARY_FIELD_TRACE = "trace";
     public static final String SECRET_ALIAS = "log4j.appender.DAS_AGENT.password";
 }
