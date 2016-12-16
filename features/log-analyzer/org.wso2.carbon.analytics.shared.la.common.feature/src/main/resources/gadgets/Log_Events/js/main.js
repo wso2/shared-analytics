@@ -223,11 +223,9 @@ function fetch(logLevelIndex) {
     }, function (error) {
         if(error === undefined){
             onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
-            console.log("Analytics server not found : Please troubleshoot connection problems.");
         }else{
             error.message = "Internal server error while data indexing.";
             onError(error);
-            console.log(error);
         }
     });
 }
@@ -263,7 +261,6 @@ if(maxValue < 10){
                 ]);
 
     } catch (error) {
-        console.log(error);
         error.message = "Error while drawing log event chart.";
         error.status = "";
         onError(error);

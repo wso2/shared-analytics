@@ -108,17 +108,14 @@ function fetch() {
                             error.message = "Internal server error while data indexing.";
                             error.status = "Failure";
                             onError(error);
-                            console.log(error);
                         }
                     }
                 }, function (error) {
                     if(error === undefined){
                         onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
-                        console.log("Analytics server not found : Please troubleshoot connection problems.");
                     }else{
                         error.message = "Internal server error while data indexing.";
                         onError(error);
-                        console.log(error);
                     }
                 });
             } else {
@@ -128,11 +125,9 @@ function fetch() {
     }, function (error) {
         if(error === undefined){
             onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
-            console.log("Analytics server not found : Please troubleshoot connection problems.");
         }else{
             error.message = "Internal server error while data indexing.";
             onError(error);
-            console.log(error);
         }
     });
 }
@@ -162,7 +157,6 @@ function drawDeletedArtifactTable() {
         });
         nanoScrollerSelector[0].nanoscroller.reset();
     } catch (error) {
-        console.log(error);
         error.message = "Error while drawing table.";
         error.status = "";
         onError(error)
