@@ -28,4 +28,5 @@ public class AppenderConstants {
     public static final String ARBITRARY_FIELD_INSTANCE = "instance";
     public static final String ARBITRARY_FIELD_TRACE = "trace";
     public static final String SECRET_ALIAS = "log4j.appender.DAS_AGENT.password";
+    public static final String TENANT_DOMAIN_NOT_AVAILABLE_MESSAGE = "[Not Available]";
 }

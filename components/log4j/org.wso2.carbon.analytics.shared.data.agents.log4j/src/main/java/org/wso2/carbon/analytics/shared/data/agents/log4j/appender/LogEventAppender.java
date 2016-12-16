@@ -60,10 +60,71 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * WSO2 carbon log appender for publishing tenant aware logging events to the DAS server.
+ * LogEventAppender is the custom log4j appender class for publishing
+ * tenant aware WSO2 carbon logging events to the DAS server.
+ * A log4j.property file configuration information needed
+ * for the filtering and publishing operations that LogEventAppender supports.
+ * This configuration information includes:
+ * <ul>
+ * <li> log4j.appender.DAS_AGENT=org.wso2.carbon.analytics.shared.data.agents.log4j.appender.LogEventAppender
+ * <li> log4j.appender.DAS_AGENT.layout=org.wso2.carbon.analytics.shared.data.agents.log4j.util.TenantAwarePatternLayout
+ * <li> log4j.appender.DAS_AGENT.columnList=%D,%S,%A,%d,%c,%p,%m,%H,%I,%Stacktrace
+ * <li> log4j.appender.DAS_AGENT.userName=admin
+ * <li> log4j.appender.DAS_AGENT.password=admin
+ * <li> log4j.appender.DAS_AGENT.maxTolerableConsecutiveFailure=5
+ * <li> log4j.appender.DAS_AGENT.url=tcp://localhost:7612
+ * <li> log4j.appender.DAS_AGENT.streamDef=loganalyzer:1.0.0
+ * </ul>
+ * <p>
+ * The log4j logging framework populate these information prior to the invocation of the activateOptions by using
+ * getter and setter methods which are implemented in the LogEventAppender class.
+ * <p>
+ * <h3>Some important points to consider are that :</h3>
+ * <ul>
+ * <li>
+ * The data publisher needs some system property to set for the initialization process
+ * (ex : "javax.net.ssl.trustStore"). When the carbon logging invoke the appender activateOptions()
+ * method these properties are not in the system property.
+ * All the filtering and publishing task are not executing until those system properties are available.
+ * The limitation is during this waiting process all the log events discard by the LogEventAppender class.
+ * </li>
+ * <li>
+ * For the first event after above waiting process checking nullity of the publisher object.
+ * If publisher is null log event processing (filtering and publishing tasks) will be stopped until user
+ * provide correct publisher configuration and restart the server.
+ * </li>
+ * </ul>
+ * <h3>Some important instance variables used are :</h3>
+ * <ul>
+ * <li>
+ * <b>loggingEvents</b> : log event queue uses for buffering the log event, append method offers filtered log events
+ * to the queue and LogPublisherTask runnable takes the event from the queue and perform the publishing tasks.
+ * </li>
+ * <li>
+ * <b>scheduler</b> : uses for publish operation task scheduling. This include following params and user can configuer them
+ * log4j.property file as follows:
+ * <ul>
+ * <li>log4j.appender.DAS_AGENT.schedulerCorePoolSize=10</li>
+ * <li>log4j.appender.DAS_AGENT.schedulerInitialDelay=10</li>
+ * <li>log4j.appender.DAS_AGENT.schedulerTerminationDelay=10</li>
+ * </ul>
+ * <ul>
+ * <li>schedulerCorePoolSize : default value is 10 and defined the thread pool size for publish tasks.</li>
+ * <li>schedulerInitialDelay : default value is 10 and defined the time to delay first execution.</li>
+ * <li>schedulerInitialDelay : default value is 10 and defined the delay between the termination of one
+ * execution and the commencement of the next.</li>
+ * </ul>
+ * </li>
+ * </ul>
  */
 public class LogEventAppender extends AppenderSkeleton implements Appender {
     private BlockingQueue<TenantDomainAwareLoggingEvent> loggingEvents;
+    private ScheduledExecutorService scheduler;
+    private DataPublisher dataPublisher;
+    private int failedCount;
+    private boolean isFirstEvent = true;
+    private boolean isStackTrace = false;
+
     private String url;
     private String password;
     private String userName;
@@ -71,25 +132,23 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     private String columnList;
     private int maxTolerableConsecutiveFailure;
     private int processingLimit = 100;
+    private int schedulerCorePoolSize = 10;
+    private int schedulerInitialDelay = 10;
+    private int schedulerTerminationDelay = 10;
     private String streamDef;
     private String authURLs;
     private String protocol = "Thrift";
     private String serviceName;
-    private boolean isStackTrace = false;
-    private boolean isFirstEvent = true;
-    private DataPublisher dataPublisher;
-    private ScheduledExecutorService scheduler;
-    private ConditionalLayoutWrapper tenantIDLayout = new ConditionalLayoutWrapper();
-    private ConditionalLayoutWrapper tenantDomainLayout = new ConditionalLayoutWrapper();
-    private ConditionalLayoutWrapper serverNameLayout = new ConditionalLayoutWrapper();
-    private ConditionalLayoutWrapper appNameLayout = new ConditionalLayoutWrapper();
-    private ConditionalLayoutWrapper logTimeLayout = new ConditionalLayoutWrapper();
-    private ConditionalLayoutWrapper loggerLayout = new ConditionalLayoutWrapper();
-    private ConditionalLayoutWrapper priorityLayout = new ConditionalLayoutWrapper();
-    private ConditionalLayoutWrapper messageLayout = new ConditionalLayoutWrapper();
-    private ConditionalLayoutWrapper ipLayout = new ConditionalLayoutWrapper();
-    private ConditionalLayoutWrapper instanceLayout = new ConditionalLayoutWrapper();
-    private int failedCount;
+
+    private TenantAwarePatternLayout tenantDomainLayout;
+    private TenantAwarePatternLayout serverNameLayout;
+    private TenantAwarePatternLayout appNameLayout;
+    private TenantAwarePatternLayout logTimeLayout;
+    private TenantAwarePatternLayout loggerLayout;
+    private TenantAwarePatternLayout priorityLayout;
+    private TenantAwarePatternLayout messageLayout;
+    private TenantAwarePatternLayout ipLayout;
+    private TenantAwarePatternLayout instanceLayout;
 
     /**
      * Log appender activator option by log4j framework.
@@ -97,74 +156,63 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     @Override
     public void activateOptions() {
         loggingEvents = new ArrayBlockingQueue<>(processingLimit);
-        scheduler = Executors.newScheduledThreadPool(10);
-        scheduler.scheduleWithFixedDelay(new LogPublisherTask(), 10, 10, TimeUnit.MILLISECONDS);
+        scheduler = Executors.newScheduledThreadPool(schedulerCorePoolSize);
+        scheduler.scheduleWithFixedDelay(new LogPublisherTask(), schedulerInitialDelay, schedulerTerminationDelay, TimeUnit.MILLISECONDS);
         serviceName = TenantDomainSetter.getServiceName();
 
         List<String> patterns = Arrays.asList(columnList.split(","));
         for (String pattern : patterns) {
             switch (pattern) {
                 case "%D":
-                    tenantDomainLayout.setWrappedLayout(new TenantAwarePatternLayout("%D"));
-                    tenantDomainLayout.setEnabled(true);
-                    break;
-                case "%T":
-                    tenantIDLayout.setWrappedLayout(new TenantAwarePatternLayout("%T"));
-                    tenantIDLayout.setEnabled(true);
+                    tenantDomainLayout = new TenantAwarePatternLayout("%D");
                     break;
                 case "%S":
-                    serverNameLayout.setWrappedLayout(new TenantAwarePatternLayout("%S"));
-                    serverNameLayout.setEnabled(true);
+                    serverNameLayout = new TenantAwarePatternLayout("%S");
                     break;
                 case "%A":
-                    appNameLayout.setWrappedLayout(new TenantAwarePatternLayout("%A"));
-                    appNameLayout.setEnabled(true);
+                    appNameLayout = new TenantAwarePatternLayout("%A");
                     break;
                 case "%d":
-                    logTimeLayout.setWrappedLayout(new TenantAwarePatternLayout("%d"));
-                    logTimeLayout.setEnabled(true);
+                    logTimeLayout = new TenantAwarePatternLayout("%d");
                     break;
                 case "%c":
-                    loggerLayout.setWrappedLayout(new TenantAwarePatternLayout("%c"));
-                    loggerLayout.setEnabled(true);
+                    loggerLayout = new TenantAwarePatternLayout("%c");
                     break;
                 case "%p":
-                    priorityLayout.setWrappedLayout(new TenantAwarePatternLayout("%p"));
-                    priorityLayout.setEnabled(true);
+                    priorityLayout = new TenantAwarePatternLayout("%p");
                     break;
                 case "%m":
-                    messageLayout.setWrappedLayout(new TenantAwarePatternLayout("%m"));
-                    messageLayout.setEnabled(true);
+                    messageLayout = new TenantAwarePatternLayout("%m");
                     break;
                 case "%H":
-                    ipLayout.setWrappedLayout(new TenantAwarePatternLayout("%H"));
-                    ipLayout.setEnabled(true);
+                    ipLayout = new TenantAwarePatternLayout("%H");
                     break;
                 case "%I":
-                    instanceLayout.setWrappedLayout(new TenantAwarePatternLayout("%I"));
-                    instanceLayout.setEnabled(true);
+                    instanceLayout = new TenantAwarePatternLayout("%I");
                     break;
                 case "%Stacktrace":
                     isStackTrace = true;
                     break;
                 default:
+                    LogLog.error("Invalid pattern given : " + pattern + ",  not found in pattern matching.");
                     break;
             }
         }
     }
 
     private void publisherInitializer() {
-        resolveSecretPassword();
         try {
-            dataPublisher = new DataPublisher(protocol, url, authURLs, userName, password);
+            dataPublisher = new DataPublisher(protocol, url, authURLs, userName, resolveSecretPassword());
         } catch (DataEndpointAgentConfigurationException e) {
-            LogLog.error("Invalid urls (" + url + (authURLs != null ? ", " + authURLs : "") + ") passed for receiver " +
-                    "and auth, and hence expected to fail for data agent " + e.getMessage(), e);
+            LogLog.error("Invalid URLs : (" + url + (authURLs != null ? ", " + authURLs : "") + ") or username : " +
+                    userName + " passed for receiver and auth, and hence expected to fail for data agent "
+                    + e.getMessage(), e);
         } catch (DataEndpointException e) {
             LogLog.error("Error while trying to publish events to data receiver " + e.getMessage(), e);
         } catch (DataEndpointConfigurationException e) {
-            LogLog.error("Invalid urls (" + url + (authURLs != null ? ", " + authURLs : "") + ") passed for receiver " +
-                    "and auth, and hence expected to fail for data endpoint " + e.getMessage(), e);
+            LogLog.error("Invalid urls (" + url + (authURLs != null ? ", " + authURLs : "") + ") or username : " +
+                    userName + " passed for receiver and auth, and hence expected to fail for data endpoint " +
+                    e.getMessage(), e);
         } catch (DataEndpointAuthenticationException e) {
             LogLog.error("Error while trying to login to data receiver : " + e.getMessage(), e);
         } catch (TransportException e) {
@@ -176,16 +224,17 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
      * Password is configured in log4j properties, either in plain text or alias. Resolves the correct real password
      * in either case.
      */
-    private void resolveSecretPassword() {
+    private String resolveSecretPassword() {
         Properties passwordProperty = new Properties();
         passwordProperty.put(AppenderConstants.SECRET_ALIAS, password);
         SecretResolver secretResolver = SecretResolverFactory.create(passwordProperty);
         //Checking the log4j appender DAS credentials.
         if (secretResolver != null && secretResolver.isInitialized()) {
             if (secretResolver.isTokenProtected(AppenderConstants.SECRET_ALIAS)) {
-                password = secretResolver.resolve(AppenderConstants.SECRET_ALIAS);
+                return secretResolver.resolve(AppenderConstants.SECRET_ALIAS);
             }
         }
+        return password; //When secure vault is not in use.
     }
 
     /**
@@ -193,10 +242,14 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
      */
     public void close() {
         if (scheduler != null) {
-            scheduler.shutdown();
             try {
+                scheduler.shutdown();
                 scheduler.awaitTermination(10, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
+                // (Re-)Cancel if current thread also interrupted
+                scheduler.shutdownNow();
+                // Preserve interrupt status
+                Thread.currentThread().interrupt();
                 LogLog.error("Interrupted while awaiting for Schedule Executor termination" + e.getMessage(), e);
             }
         }
@@ -336,6 +389,30 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         this.protocol = protocol;
     }
 
+    public int getSchedulerCorePoolSize() {
+        return schedulerCorePoolSize;
+    }
+
+    public void setSchedulerCorePoolSize(int schedulerCorePoolSize) {
+        this.schedulerCorePoolSize = schedulerCorePoolSize;
+    }
+
+    public int getSchedulerInitialDelay() {
+        return schedulerInitialDelay;
+    }
+
+    public void setSchedulerInitialDelay(int schedulerInitialDelay) {
+        this.schedulerInitialDelay = schedulerInitialDelay;
+    }
+
+    public int getSchedulerTerminationDelay() {
+        return schedulerTerminationDelay;
+    }
+
+    public void setSchedulerTerminationDelay(int schedulerTerminationDelay) {
+        this.schedulerTerminationDelay = schedulerTerminationDelay;
+    }
+
     private final class LogPublisherTask implements Runnable {
         public void run() {
             try {
@@ -362,16 +439,16 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         private void publishLogEvent(TenantDomainAwareLoggingEvent event) throws ParseException {
             String tenantDomain = tenantDomainLayout.format(event);
             if (tenantDomain == null || tenantDomain.isEmpty()) {
-                tenantDomain = "[Not Available]";
+                tenantDomain = AppenderConstants.TENANT_DOMAIN_NOT_AVAILABLE_MESSAGE;
             }
-            String serverName = serverNameLayout.format(event);
-            String appName = appNameLayout.format(event);
-            String logTime = logTimeLayout.format(event);
-            String logger = loggerLayout.format(event);
-            String priority = priorityLayout.format(event);
-            String message = messageLayout.format(event);
-            String ip = ipLayout.format(event);
-            String instance = (getInstanceId() == null || getInstanceId().isEmpty()) ? instanceLayout.format(event) :
+            String serverName = format(event, serverNameLayout);
+            String appName = format(event, appNameLayout);
+            String logTime = format(event, logTimeLayout);
+            String logger = format(event, loggerLayout);
+            String priority = format(event, priorityLayout);
+            String message = format(event, messageLayout);
+            String ip = format(event, ipLayout);
+            String instance = (getInstanceId() == null || getInstanceId().isEmpty()) ? format(event, instanceLayout) :
                     getInstanceId();
             String stacktrace = "";
 
@@ -400,24 +477,11 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         }
     }
 
-    private static class ConditionalLayoutWrapper {
-        TenantAwarePatternLayout wrappedLayout;
-        boolean isEnabled;
-
-        public void setWrappedLayout(TenantAwarePatternLayout wrappedLayout) {
-            this.wrappedLayout = wrappedLayout;
+    private String format(TenantDomainAwareLoggingEvent event, TenantAwarePatternLayout tenantAwarePatternLayout) {
+        if (tenantAwarePatternLayout != null) {
+            return tenantAwarePatternLayout.format(event);
         }
-
-        public void setEnabled(boolean enabled) {
-            isEnabled = enabled;
-        }
-
-        public String format(TenantDomainAwareLoggingEvent event) {
-            if (isEnabled) {
-                return wrappedLayout.format(event);
-            }
-            return "";
-        }
+        return "";
     }
 }
 
