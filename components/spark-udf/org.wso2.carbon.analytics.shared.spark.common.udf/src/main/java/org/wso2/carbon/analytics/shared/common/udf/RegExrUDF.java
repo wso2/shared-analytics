@@ -27,6 +27,14 @@ import java.util.regex.Pattern;
  * Functions to extract message filtered by regex pattern
  */
 public class RegExrUDF implements CarbonUDF {
+
+    /**
+     * This method is use for filtering string using regEx pattern and return
+     * the result string value.
+     * @param message string which are required to matching.
+     * @param regEx regular expression for pattern matching.
+     * @return string matching value for given message and return null if value not found.
+     */
     public String getRegexMatch(String message, String regEx) {
         if (message == null || regEx == null) {
             return null;
