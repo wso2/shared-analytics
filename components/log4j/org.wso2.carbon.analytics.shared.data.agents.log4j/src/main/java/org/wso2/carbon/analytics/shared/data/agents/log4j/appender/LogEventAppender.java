@@ -426,6 +426,8 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
                     }
                 }
             } catch (InterruptedException e) {
+                // Preserve interrupt status
+                Thread.currentThread().interrupt();
                 LogLog.error("LogEventAppender Cannot publish log events, " + e.getMessage(), e);
             }
         }
