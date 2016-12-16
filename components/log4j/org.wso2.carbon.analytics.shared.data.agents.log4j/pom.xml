@@ -82,19 +82,16 @@
                             org.wso2.carbon.analytics.shared.data.agents.log4j.*
                         </Export-Package>
                         <Import-Package>
-                            org.apache.log4j.*,
-                            org.apache.log4j.spi,
-                            org.wso2.carbon.base.*,
-                            org.wso2.carbon.context.*,
-                            org.wso2.carbon.databridge.agent.*,
-                            org.wso2.carbon.databridge.commons.*,
-                            org.wso2.carbon.logging.service.*,
-                            org.wso2.carbon.user.*,
-                            org.wso2.carbon.utils.*,
-                            org.wso2.securevault.*,
-                            *;resolution:=optional
+                            org.apache.log4j.*;version="${log4j.imp.pkg.version.range}",
+                            org.apache.log4j.spi;version="${log4j.imp.pkg.version.range}",
+                            org.wso2.carbon.utils.*;version="${carbon.kernel.imp.pkg.version.range}",
+                            org.osgi.service.component.*;version="${osgi.service.component.imp.pkg.version.range}",
+                            org.wso2.carbon.base.*;version="${carbon.base.imp.pkg.version.range}",
+                            org.wso2.carbon.context.*;version="${carbon.kernel.imp.pkg.version.range}",
+                            org.wso2.carbon.databridge.agent.*;version="${carbon.analytics.common.imp.pkg.version.range}",
+                            org.wso2.carbon.databridge.commons.*;version="${carbon.analytics.common.imp.pkg.version.range}",
+                            org.wso2.securevault.*;version="0.0.0"
                         </Import-Package>
-                        <DynamicImport-Package>*</DynamicImport-Package>
                     </instructions>
                 </configuration>
             </plugin>

@@ -508,11 +508,6 @@
                 <version>${version.equinox.osgi.services}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.analytics</groupId>
-                <artifactId>org.wso2.carbon.analytics.spark.core</artifactId>
-                <version>${carbon.analytics.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>ua.parser.wso2</groupId>
                 <artifactId>ua-parser</artifactId>
                 <version>${orbit.version.ua_parser}</version>
@@ -654,7 +649,13 @@
         <org.eclipse.osgi.version>3.7.0.v20110613</org.eclipse.osgi.version>
         <version.equinox.osgi.services>3.3.100.v20120522-1822</version.equinox.osgi.services>
         <carbon.analytics.spark.version>[1.1.0, 2.0.0)</carbon.analytics.spark.version>
-	</properties>
+        <log4j.imp.pkg.version.range>[1.2, 2.0)</log4j.imp.pkg.version.range>
+        <carbon.commons.imp.pkg.version>[4.5.0, 5.0.0)</carbon.commons.imp.pkg.version>
+        <carbon.analytics.common.imp.pkg.version.range>[5.1.0, 6.0.0)</carbon.analytics.common.imp.pkg.version.range>
+        <carbon.kernel.imp.pkg.version.range>[4.4.0, 5.0.0)</carbon.kernel.imp.pkg.version.range>
+        <carbon.base.imp.pkg.version.range>[1.0.0, 2.0.0)</carbon.base.imp.pkg.version.range>
+        <osgi.service.component.imp.pkg.version.range>[1.2.0, 2.0.0)</osgi.service.component.imp.pkg.version.range>
+    </properties>
 
 	<organization>
 		<name>WSO2, Inc.</name>
