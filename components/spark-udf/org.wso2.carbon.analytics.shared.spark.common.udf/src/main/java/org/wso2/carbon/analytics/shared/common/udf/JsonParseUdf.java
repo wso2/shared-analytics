@@ -34,11 +34,12 @@ public class JsonParseUdf implements CarbonUDF {
     /**
      * This method is use for parsing the json message and return
      * the value for given key.
+     *
      * @param jsonString json string which are required to parsing.
-     * @param key json string search key for parser.
+     * @param key        json string search key for parser.
      * @return string value for given key and return null if value not found.
      */
-    public String parseJson(String jsonString, String key){
+    public String parseJson(String jsonString, String key) {
         String result = null;
         try {
             JSONObject jsonObject = new JSONObject(jsonString);

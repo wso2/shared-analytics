@@ -90,6 +90,7 @@
                             org.wso2.carbon.context.*;version="${carbon.kernel.imp.pkg.version.range}",
                             org.wso2.carbon.databridge.agent.*;version="${carbon.analytics.common.imp.pkg.version.range}",
                             org.wso2.carbon.databridge.commons.*;version="${carbon.analytics.common.imp.pkg.version.range}",
+                            org.wso2.carbon.logging.service.*;version="${carbon.logging.service.imp.pkg.version}",
                             org.wso2.securevault.*;version="0.0.0"
                         </Import-Package>
                     </instructions>
