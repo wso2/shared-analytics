@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var client = new AnalyticsClient().init(null, null, "https://"+location.hostname +":"+ location.port +"/admin/modules/la/log-analyzer-proxy.jag");
+var client = new AnalyticsClient().init(null, null, "https://" + location.hostname + ":" + location.port + "/admin/modules/la/log-analyzer-proxy.jag");
 var canvasDiv = "#canvas";
 var table, chart;
 var fromTime = gadgetUtil.timeFrom();
@@ -84,13 +84,11 @@ function fetch(statusType) {
             }
         }
     }, function (error) {
-        if(error === undefined){
+        if (error === undefined) {
             onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
-            console.log("Analytics server not found : Please troubleshoot connection problems.");
-        }else{
+        } else {
             error.message = "Internal server error while data indexing.";
             onError(error);
-            console.log(error);
         }
     });
 
@@ -99,7 +97,7 @@ function fetch(statusType) {
 function drawApiKeyStatus() {
     try {
         $(canvasDiv).empty();
-        if(recordCount>0){
+        if (recordCount > 0) {
             chart = new vizg(
                 [
                     {
@@ -115,7 +113,7 @@ function drawApiKeyStatus() {
                     callback: onclick
                 }
             ]);
-        }else{
+        } else {
             $(canvasDiv).html(gadgetUtil.getEmptyRecordsText());
         }
     } catch (error) {
@@ -127,15 +125,14 @@ function drawApiKeyStatus() {
 
 function redrawApiKeyStatus() {
     try {
-        if(recordCount>0){
+        if (recordCount > 0) {
             for (var i in receivedData) {
                 chart.insert([receivedData[i]]);
             }
-        }else{
+        } else {
             $(canvasDiv).html(gadgetUtil.getEmptyRecordsText());
         }
     } catch (error) {
-        console.log(error);
         error.message = "Error while drawing log event chart.";
         error.status = "";
         onError(error);
@@ -152,7 +149,7 @@ var onclick = function (event, item) {
             {
                 "selected": item.datum.StatusId,
                 "fromTime": fromTime,
-                "toTime":toTime,
+                "toTime": toTime,
                 "count": item.datum.Count
             }
         );

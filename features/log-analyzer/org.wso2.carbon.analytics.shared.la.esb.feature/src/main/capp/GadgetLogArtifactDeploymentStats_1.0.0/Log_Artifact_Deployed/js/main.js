@@ -29,13 +29,13 @@ var async_tasks = gadgetConfig.classes.length;
 var meta = gadgetConfig.meta;
 var configChart;
 var svrUrl = gadgetUtil.getGadgetSvrUrl("ESB");
-var client = new AnalyticsClient().init(null,null,svrUrl);
+var client = new AnalyticsClient().init(null, null, svrUrl);
 var initialBarCount = gadgetConfig.barCount;
-var currentBarCount =  gadgetConfig.barCount;
+var currentBarCount = gadgetConfig.barCount;
 var dataSourceCount = 0;
 
 function initialize() {
-    fetchDeployed(null,gadgetConfig.barData.names[initialBarCount - currentBarCount]);
+    fetchDeployed(null, gadgetConfig.barData.names[initialBarCount - currentBarCount]);
 }
 
 $(document).ready(function () {
@@ -43,9 +43,9 @@ $(document).ready(function () {
 });
 
 function fetchDeployed(logLevelIndex, param) {
-    if (!logLevelIndex ) {
+    if (!logLevelIndex) {
         logLevelIndex = 0;
-        if(dataSourceCount == 0){
+        if (dataSourceCount == 0) {
             receivedData.length = 0;
         }
     }
@@ -61,43 +61,41 @@ function fetchDeployed(logLevelIndex, param) {
 
     client.searchCount(queryInfo, function (d) {
         if (d["status"] === "success") {
-            receivedData.push([gadgetConfig.classes[logLevelIndex],param, parseInt(d["message"])]);
+            receivedData.push([gadgetConfig.classes[logLevelIndex], param, parseInt(d["message"])]);
             async_tasks--;
             if (async_tasks == 0) {
-            async_tasks = gadgetConfig.classes.length;
+                async_tasks = gadgetConfig.classes.length;
 
-                if(--currentBarCount > 0){
+                if (--currentBarCount > 0) {
                     dataSourceCount++;
                     fetchDeployed(0, gadgetConfig.barData.names[currentBarCount]);
 
-                }else{
-                    if(initState){
-                       drawLogLevelChart();
-                    }else{
-                       initState=  false;
-                       redrawLogLevelChart();
+                } else {
+                    if (initState) {
+                        drawLogLevelChart();
+                    } else {
+                        initState = false;
+                        redrawLogLevelChart();
                     }
 
                 }
             } else {
-                    fetchDeployed(++logLevelIndex,gadgetConfig.barData.names[initialBarCount - currentBarCount]);
+                fetchDeployed(++logLevelIndex, gadgetConfig.barData.names[initialBarCount - currentBarCount]);
             }
         }
     }, function (error) {
-        if(error === undefined){
+        if (error === undefined) {
             onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
-            console.log("Analytics server not found : Please troubleshoot connection problems.");
-        }else{
+        } else {
             error.message = "Internal server error while data indexing.";
             onError(error);
-            console.log(error);
         }
     });
 }
 
-function queryBuilder(logLevelIndex){
-     for(var i=0; i < gadgetConfig.queryParams.fieldNames[dataSourceCount][logLevelIndex].length; i++){
-              return gadgetConfig.queryParams.fieldNames[dataSourceCount][logLevelIndex][i] +": \"" + gadgetConfig.queryParams.searchParams[dataSourceCount][logLevelIndex][i] + "\"";
+function queryBuilder(logLevelIndex) {
+    for (var i = 0; i < gadgetConfig.queryParams.fieldNames[dataSourceCount][logLevelIndex].length; i++) {
+        return gadgetConfig.queryParams.fieldNames[dataSourceCount][logLevelIndex][i] + ": \"" + gadgetConfig.queryParams.searchParams[dataSourceCount][logLevelIndex][i] + "\"";
     }
 }
 
@@ -108,7 +106,7 @@ function drawLogLevelChart() {
         configChart = null;
         configChart = JSON.parse(JSON.stringify(gadgetConfig.chartConfig))
         var maxValue = getMaximumValue(receivedData);
-        if(maxValue < 10){
+        if (maxValue < 10) {
             configChart.yTicks = maxValue;
         }
 
@@ -123,24 +121,23 @@ function drawLogLevelChart() {
             configChart
         );
 
-          chart.draw(canvasDiv, [
-                    {
-                        type: "click",
-                        callback: onclick
-                    }
-                ]);
+        chart.draw(canvasDiv, [
+            {
+                type: "click",
+                callback: onclick
+            }
+        ]);
     } catch (error) {
-        console.log(error);
         error.message = "Error while drawing log event chart.";
         error.status = "";
         onError(error);
     }
 }
 
-function getMaximumValue(receivedData){
+function getMaximumValue(receivedData) {
     var max = 0;
-    for(var i=0;i<receivedData.length;i++){
-        if(receivedData[i][2] > max){
+    for (var i = 0; i < receivedData.length; i++) {
+        if (receivedData[i][2] > max) {
             max = receivedData[i][2];
         }
     }
@@ -172,7 +169,7 @@ subscribe(function (topic, data, subscriber) {
     async_tasks = gadgetConfig.classes.length;
     currentBarCount = gadgetConfig.barCount;
     dataSourceCount = 0;
-    fetchDeployed(null,gadgetConfig.barData.names[initialBarCount - gadgetConfig.barCount]);
+    fetchDeployed(null, gadgetConfig.barData.names[initialBarCount - gadgetConfig.barCount]);
 });
 
 function onError(msg) {
@@ -185,13 +182,13 @@ function onErrorCustom(title, message) {
 
 var onclick = function (event, item) {
     if (item != null) {
-           publish(
-                {
-                    "ArtifactType": item.datum["Artifact Type"],
-                    "Status": item.datum["Status"],
-                    "fromTime": from,
-                    "toTime": to
-                }
-            );
-        }
+        publish(
+            {
+                "ArtifactType": item.datum["Artifact Type"],
+                "Status": item.datum["Status"],
+                "fromTime": from,
+                "toTime": to
+            }
+        );
+    }
 };
