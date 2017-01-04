@@ -200,23 +200,29 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         }
     }
 
-    private void publisherInitializer() {
-        try {
-            dataPublisher = new DataPublisher(protocol, url, authURLs, userName, resolveSecretPassword());
-        } catch (DataEndpointAgentConfigurationException e) {
-            LogLog.error("Invalid URLs : (" + url + (authURLs != null ? ", " + authURLs : "") + ") or username : " +
-                    userName + " passed for receiver and auth, and hence expected to fail for data agent "
-                    + e.getMessage(), e);
-        } catch (DataEndpointException e) {
-            LogLog.error("Error while trying to publish events to data receiver " + e.getMessage(), e);
-        } catch (DataEndpointConfigurationException e) {
-            LogLog.error("Invalid urls (" + url + (authURLs != null ? ", " + authURLs : "") + ") or username : " +
-                    userName + " passed for receiver and auth, and hence expected to fail for data endpoint " +
-                    e.getMessage(), e);
-        } catch (DataEndpointAuthenticationException e) {
-            LogLog.error("Error while trying to login to data receiver : " + e.getMessage(), e);
-        } catch (TransportException e) {
-            LogLog.error("Thrift transport exception occurred " + e.getMessage(), e);
+    private void initializePublisher() {
+        if (dataPublisher == null) {
+            synchronized (this) {
+                if (dataPublisher == null) {
+                    try {
+                        dataPublisher = new DataPublisher(protocol, url, authURLs, userName, resolveSecretPassword());
+                    } catch (DataEndpointAgentConfigurationException e) {
+                        LogLog.error("Invalid URLs : (" + url + (authURLs != null ? ", " + authURLs : "") + ") or username : " +
+                                userName + " passed for receiver and auth, and hence expected to fail for data agent "
+                                + e.getMessage(), e);
+                    } catch (DataEndpointException e) {
+                        LogLog.error("Error while trying to publish events to data receiver " + e.getMessage(), e);
+                    } catch (DataEndpointConfigurationException e) {
+                        LogLog.error("Invalid urls (" + url + (authURLs != null ? ", " + authURLs : "") + ") or username : " +
+                                userName + " passed for receiver and auth, and hence expected to fail for data endpoint " +
+                                e.getMessage(), e);
+                    } catch (DataEndpointAuthenticationException e) {
+                        LogLog.error("Error while trying to login to data receiver : " + e.getMessage(), e);
+                    } catch (TransportException e) {
+                        LogLog.error("Thrift transport exception occurred " + e.getMessage(), e);
+                    }
+                }
+            }
         }
     }
 
@@ -270,7 +276,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         // Checking the configuration context service for wait DAS appender until proper server initialization.
         if (LogAppenderServiceValueHolder.getConfigurationContextService() != null) {
             if (isFirstEvent) {
-                publisherInitializer();
+                initializePublisher();
                 isFirstEvent = false;
             }
 
