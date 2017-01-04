@@ -28,7 +28,6 @@ import org.wso2.carbon.analytics.shared.data.agents.log4j.appender.ds.LogAppende
 import org.wso2.carbon.analytics.shared.data.agents.log4j.util.AppenderConstants;
 import org.wso2.carbon.analytics.shared.data.agents.log4j.util.TenantAwarePatternLayout;
 import org.wso2.carbon.context.CarbonContext;
-import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.databridge.agent.DataPublisher;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAgentConfigurationException;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAuthenticationException;
@@ -287,9 +286,9 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
                         logger, event.timeStamp, event.getLevel(), event.getMessage(),
                         (throwableInformation != null) ? throwableInformation.getThrowable() : null);
 
-                int tenantId = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantId(true);
+                int tenantId = CarbonContext.getThreadLocalCarbonContext().getTenantId();
                 tenantEvent.setTenantId(String.valueOf(tenantId));
-                String tenantDomain = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantDomain(true);
+                String tenantDomain = CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
                 tenantEvent.setTenantDomain(tenantDomain);
                 String appName = CarbonContext.getThreadLocalCarbonContext().getApplicationName();
                 if (appName != null) {
