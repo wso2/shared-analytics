@@ -22,7 +22,7 @@ var gadgetConfig = {
     "tableFieldsFilterPatterns":{
         "ignoreCase":/_WSO2/,
         "user":/.*(?=--)/,
-        "artifact":/--(.*):/,
+        "artifact":/--(.*?)\s*($|:)/,
         "version":/:(.*)/
     }
 };
