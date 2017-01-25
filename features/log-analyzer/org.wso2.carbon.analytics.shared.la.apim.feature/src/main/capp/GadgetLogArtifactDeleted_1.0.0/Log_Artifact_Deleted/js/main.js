@@ -17,7 +17,7 @@
  */
 var prefs = new gadgets.Prefs();
 var svrUrl = gadgetUtil.getGadgetSvrUrl(prefs.getString(PARAM_TYPE));
-var client = new AnalyticsClient().init(null,null,svrUrl);
+var client = new AnalyticsClient().init(null, null, svrUrl);
 var canvasDiv = "#canvas";
 var timeFrom = gadgetUtil.timeFrom();
 var timeTo = gadgetUtil.timeTo();
@@ -25,8 +25,8 @@ var receivedData = [];
 var nanoScrollerSelector = $(".nano");
 
 var meta = {
-    "names": ["user","apiArtifact","version", "Frequency"],
-    "types": ["ordinal","ordinal","ordinal", "linear"]
+    "names": ["user", "apiArtifact", "version", "Frequency"],
+    "types": ["ordinal", "ordinal", "ordinal", "linear"]
 };
 
 var configTable = {
@@ -88,7 +88,7 @@ function fetch() {
                 client.searchWithAggregates(queryInfo, function (d) {
                     var obj = JSON.parse(d["message"]);
                     if (d["status"] === "success") {
-                        try{
+                        try {
                             for (var i = 0; i < obj.length; i++) {
                                 var ignorePattern = new RegExp(gadgetConfig.tableFieldsFilterPatterns.ignoreCase);
                                 var userPattern = new RegExp(gadgetConfig.tableFieldsFilterPatterns.user);
@@ -100,7 +100,7 @@ function fetch() {
                                 var version = versionPattern.exec(artifact)
 
                                 if(artifact != null && ignorePattern != null && user != null && artifactList != null && !ignorePattern.test(artifact)){
-                                    receivedData.push([user, (version != null) ? artifactList[1] : artifactList[1].concat(":default") , (version != null) ? version[1] : "" , obj[i].values.artifactCountSum]);
+                                    receivedData.push([user, (version != null) ? artifactList[1] : artifactList[1].concat(":default"), (version != null) ? version[1] : "" , obj[i].values.artifactCountSum]);
                                 }
                             }
                             if (receivedData.length > 0) {
@@ -108,21 +108,18 @@ function fetch() {
                             } else {
                                 $(canvasDiv).html(gadgetUtil.getEmptyRecordsText());
                             }
-                        }catch (error){
+                        } catch (error) {
                             error.message = "Internal server error while data indexing.";
                             error.status = "Failure";
                             onError(error);
-                            console.log(error);
                         }
                     }
                 }, function (error) {
-                    if(error === undefined){
+                    if (error === undefined) {
                         onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
-                        console.log("Analytics server not found : Please troubleshoot connection problems.");
-                    }else{
+                    } else {
                         error.message = "Internal server error while data indexing.";
                         onError(error);
-                        console.log(error);
                     }
                 });
             } else {
@@ -130,13 +127,11 @@ function fetch() {
             }
         }
     }, function (error) {
-        if(error === undefined){
+        if (error === undefined) {
             onErrorCustom("Analytics server not found.", "Please troubleshoot connection problems.");
-            console.log("Analytics server not found : Please troubleshoot connection problems.");
-        }else{
+        } else {
             error.message = "Internal server error while data indexing.";
             onError(error);
-            console.log(error);
         }
     });
 }
@@ -166,7 +161,6 @@ function drawDeletedArtifactTable() {
         });
         nanoScrollerSelector[0].nanoscroller.reset();
     } catch (error) {
-        console.log(error);
         error.message = "Error while drawing table.";
         error.status = "";
         onError(error)
