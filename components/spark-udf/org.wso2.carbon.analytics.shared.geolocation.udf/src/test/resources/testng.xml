@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Component Tests" verbose="2" annotations="JDK">
+  <test name="GeoLocationTests" preserve-order="true" >
+    <classes>
+      <class name="org.wso2.carbon.analytics.shared.geolocation.impl.LocationResolverRdbmsTest" />
+    </classes>
+  </test>
+</suite>
