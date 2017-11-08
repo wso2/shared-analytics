@@ -63,7 +63,8 @@ public class LocationResolverRdbmsTest {
 
     private LocationResolverRdbms locationResolverRdbms;
     private int threadCount = 10;
-    private static String LOCATION_MAPPING_DATA_LOCATION = "../../../../../features/spark-udf/org.wso2.carbon.analytics.shared.geolocation.udf.feature/src/main/resources/dbscripts/h2.sql";
+    private static String LOCATION_MAPPING_DATA_LOCATION = "../../../../../features/spark-udf/org.wso2.carbon" +
+            ".analytics.shared.geolocation.udf.feature/src/main/resources/dbscripts/h2.sql";
 
     @BeforeTest
     public void setUp() throws NoSuchFieldException, IllegalAccessException, IOException, GeoLocationResolverException {
@@ -128,6 +129,10 @@ public class LocationResolverRdbmsTest {
 
         location2 = locationResolverRdbms.getLocation("::ffff:c0a9:202");
         Assert.assertNull(location2);
+        location2 = locationResolverRdbms.getLocation("192.168.2.0/24");
+        Assert.assertNotNull(location2);
+        Assert.assertEquals(location2.getCountry(), "Germany");
+
     }
 
     /**
