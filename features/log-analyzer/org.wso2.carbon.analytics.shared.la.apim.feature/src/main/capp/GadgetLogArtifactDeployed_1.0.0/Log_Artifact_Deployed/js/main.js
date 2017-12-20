@@ -95,8 +95,12 @@ function fetch() {
                                 var artifactPattern = new RegExp(gadgetConfig.tableFieldsFilterPatterns.artifact);
                                 var versionPattern = new RegExp(gadgetConfig.tableFieldsFilterPatterns.version);
                                 var artifact = obj[i].values.artifact;
-                                if (artifact != null && !ignorePattern.test(artifact)) {
-                                    receivedData.push([userPattern.exec(artifact), artifactPattern.exec(artifact)[1], versionPattern.exec(artifact)[1], obj[i].values.artifactCountSum]);
+                                var user =  userPattern.exec(artifact)
+                                var artifactList = artifactPattern.exec(artifact)
+                                var version = versionPattern.exec(artifact)
+
+                                if(artifact != null && ignorePattern != null && user != null && artifactList != null && !ignorePattern.test(artifact)){
+                                    receivedData.push([user, (version != null) ? artifactList[1] : artifactList[1].concat(":default"), (version != null) ? version[1] : "" , obj[i].values.artifactCountSum]);
                                 }
                             }
                             if (receivedData.length > 0) {

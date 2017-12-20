@@ -28,7 +28,6 @@ import org.wso2.carbon.analytics.shared.data.agents.log4j.appender.ds.LogAppende
 import org.wso2.carbon.analytics.shared.data.agents.log4j.util.AppenderConstants;
 import org.wso2.carbon.analytics.shared.data.agents.log4j.util.TenantAwarePatternLayout;
 import org.wso2.carbon.context.CarbonContext;
-import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.databridge.agent.DataPublisher;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAgentConfigurationException;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAuthenticationException;
@@ -47,6 +46,7 @@ import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -58,6 +58,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 /**
  * LogEventAppender is the custom log4j appender class for publishing
@@ -136,9 +137,11 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
     private int schedulerInitialDelay = 10;
     private int schedulerTerminationDelay = 10;
     private String streamDef;
+    private String filterRegex;
     private String authURLs;
     private String protocol = "Thrift";
     private String serviceName;
+    private List<Pattern> patterns = new ArrayList<>();
 
     private TenantAwarePatternLayout tenantDomainLayout;
     private TenantAwarePatternLayout serverNameLayout;
@@ -224,6 +227,13 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
                 }
             }
         }
+        if (filterRegex != null) {
+            List<String> regexs = Arrays.asList(filterRegex.split(","));
+
+            for (int i = 0; i < regexs.size(); i++) {
+                patterns.add(Pattern.compile(regexs.get(i)));
+            }
+        }
     }
 
     /**
@@ -287,9 +297,9 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
                         logger, event.timeStamp, event.getLevel(), event.getMessage(),
                         (throwableInformation != null) ? throwableInformation.getThrowable() : null);
 
-                int tenantId = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantId(true);
+                int tenantId = CarbonContext.getThreadLocalCarbonContext().getTenantId();
                 tenantEvent.setTenantId(String.valueOf(tenantId));
-                String tenantDomain = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantDomain(true);
+                String tenantDomain = CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
                 tenantEvent.setTenantDomain(tenantDomain);
                 String appName = CarbonContext.getThreadLocalCarbonContext().getApplicationName();
                 if (appName != null) {
@@ -371,6 +381,12 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
         this.streamDef = streamDef;
     }
 
+    public String getFilterRegex() {
+        return filterRegex;
+    }
+
+    public void setFilterRegex(String filterRegex) { this.filterRegex = filterRegex; }
+
     public void setMaxTolerableConsecutiveFailure(int maxTolerableConsecutiveFailure) {
         this.maxTolerableConsecutiveFailure = maxTolerableConsecutiveFailure;
     }
@@ -445,44 +461,51 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
          * @throws ParseException signals that an error has been reached unexpectedly while parsing.
          */
         private void publishLogEvent(TenantDomainAwareLoggingEvent event) throws ParseException {
-            String tenantDomain = tenantDomainLayout.format(event);
-            if (tenantDomain == null || tenantDomain.isEmpty()) {
-                tenantDomain = AppenderConstants.TENANT_DOMAIN_NOT_AVAILABLE_MESSAGE;
-            }
-            String serverName = format(event, serverNameLayout);
-            String appName = format(event, appNameLayout);
-            String logTime = format(event, logTimeLayout);
-            String logger = format(event, loggerLayout);
-            String priority = format(event, priorityLayout);
-            String message = format(event, messageLayout);
-            String ip = format(event, ipLayout);
-            String instance = (getInstanceId() == null || getInstanceId().isEmpty()) ? format(event, instanceLayout) :
-                    getInstanceId();
-            String stacktrace = "";
-
-            if (isStackTrace) {
-                if (event.getThrowableInformation() != null) {
-                    stacktrace = getStacktrace(event.getThrowableInformation().getThrowable());
+            boolean isFilter = false;
+            for (int i=0; i < patterns.size(); i++) {
+                if (patterns.get(i).matcher(event.getLoggerName()).matches()) {
+                    isFilter = true;
                 }
             }
-            DateFormat formatter = new SimpleDateFormat(LoggingConstants.DATE_TIME_FORMATTER);
-            Date date = formatter.parse(logTime);
-            Map<String, String> arbitraryDataMap = new HashMap<String, String>();
-            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_SERVER_NAME, serverName);
-            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_APP_NAME, appName);
-            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_EVENT_TIMESTAMP, String.valueOf(date.getTime()));
-            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_CLASS, logger);
-            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_LEVEL, priority);
-            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_CONTENT, message);
-            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_IP, ip);
-            arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_INSTANCE, instance);
-            if (event.getThrowableInformation() != null) {
-                arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_TRACE, stacktrace);
+            if (!isFilter) {
+                String tenantDomain = tenantDomainLayout.format(event);
+                if (tenantDomain == null || tenantDomain.isEmpty()) {
+                    tenantDomain = AppenderConstants.TENANT_DOMAIN_NOT_AVAILABLE_MESSAGE;
+                }
+                String serverName = format(event, serverNameLayout);
+                String appName = format(event, appNameLayout);
+                String logTime = format(event, logTimeLayout);
+                String logger = format(event, loggerLayout);
+                String priority = format(event, priorityLayout);
+                String message = format(event, messageLayout);
+                String ip = format(event, ipLayout);
+                String instance = (getInstanceId() == null || getInstanceId().isEmpty()) ? format(event, instanceLayout) :
+                        getInstanceId();
+                String stacktrace = "";
+
+                if (isStackTrace) {
+                    if (event.getThrowableInformation() != null) {
+                        stacktrace = getStacktrace(event.getThrowableInformation().getThrowable());
+                    }
+                }
+                DateFormat formatter = new SimpleDateFormat(LoggingConstants.DATE_TIME_FORMATTER);
+                Date date = formatter.parse(logTime);
+                Map<String, String> arbitraryDataMap = new HashMap<String, String>();
+                arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_SERVER_NAME, serverName);
+                arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_APP_NAME, appName);
+                arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_EVENT_TIMESTAMP, String.valueOf(date.getTime()));
+                arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_CLASS, logger);
+                arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_LEVEL, priority);
+                arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_CONTENT, message);
+                arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_IP, ip);
+                arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_INSTANCE, instance);
+                if (event.getThrowableInformation() != null) {
+                    arbitraryDataMap.put(AppenderConstants.ARBITRARY_FIELD_TRACE, stacktrace);
+                }
+                Event logEvent = new Event(streamDef, date.getTime(), null, null, new String[]{tenantDomain},
+                        arbitraryDataMap);
+                 dataPublisher.tryPublish(logEvent);
             }
-            Event logEvent = new Event(streamDef, date.getTime(), null, null, new String[]{tenantDomain},
-                    arbitraryDataMap);
-            dataPublisher.tryPublish(logEvent);
-        }
     }
 
     private String format(TenantDomainAwareLoggingEvent event, TenantAwarePatternLayout tenantAwarePatternLayout) {

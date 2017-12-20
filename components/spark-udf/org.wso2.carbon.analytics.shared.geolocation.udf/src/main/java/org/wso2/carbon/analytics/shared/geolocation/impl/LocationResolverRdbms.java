@@ -17,14 +17,17 @@
 */
 package org.wso2.carbon.analytics.shared.geolocation.impl;
 
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.analytics.shared.geolocation.api.LocationResolver;
 import org.wso2.carbon.analytics.shared.geolocation.api.Location;
+import org.wso2.carbon.analytics.shared.geolocation.api.LocationResolver;
 import org.wso2.carbon.analytics.shared.geolocation.dbutil.DBUtil;
 import org.wso2.carbon.analytics.shared.geolocation.exception.GeoLocationResolverException;
 
+import java.net.Inet4Address;
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -44,6 +47,8 @@ public class LocationResolverRdbms extends LocationResolver {
     public static final String SQL_SELECT_LOCATION_FROM_LONG_VALUE_OF_IP = "SELECT loc.country_name,loc" +
             ".subdivision_1_name FROM BLOCKS block , LOCATION loc WHERE block.network_blocks = ? AND ? BETWEEN block" +
             ".network AND block.broadcast AND block.geoname_id=loc.geoname_id";
+    public static final String SQL_SELECT_LOCATION_FROM_CIDR_OF_IP = "SELECT loc.country_name,loc.subdivision_1_name " +
+            "FROM BLOCKS block , LOCATION loc WHERE block.network_cidr = ? AND block.geoname_id=loc.geoname_id";
 
     @Override
     public void init() throws GeoLocationResolverException {
@@ -104,9 +109,32 @@ public class LocationResolverRdbms extends LocationResolver {
                 statement.setLong(2, getIpV4ToLong(ipAddress));
                 resultSet = statement.executeQuery();
                 if (resultSet.next()) {
-                    location = new Location(resultSet.getString("country_name"), resultSet.getString("subdivision_1_name"),
+                    location = new Location(resultSet.getString("country_name"), resultSet.getString
+                            ("subdivision_1_name"),
                             ipAddress);
                 }
+            }
+        } catch (SQLException e) {
+            throw new GeoLocationResolverException("Error while getting the location from database", e);
+        } finally {
+            dbUtil.closeAllConnections(statement, null, resultSet);
+        }
+        return location;
+    }
+
+    private Location getLocationFromCIDR(String ipAddress, Connection connection) throws
+            GeoLocationResolverException {
+
+        Location location = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(SQL_SELECT_LOCATION_FROM_CIDR_OF_IP);
+            statement.setString(1, ipAddress);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                location = new Location(resultSet.getString("country_name"), resultSet.getString("subdivision_1_name"),
+                        ipAddress);
             }
         } catch (SQLException e) {
             throw new GeoLocationResolverException("Error while getting the location from database", e);
@@ -119,10 +147,80 @@ public class LocationResolverRdbms extends LocationResolver {
     private Location getLocationFromIp(String ipAddress) throws GeoLocationResolverException {
         Location location = null;
         Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
         try {
             connection = dbUtil.getConnection();
+            if (persistInDataBase) {
+                location = loadLocation(ipAddress, connection);
+            }
+            if (location == null) {
+                if (!isCIDR(ipAddress)) {
+                    InetAddress address = InetAddress.getByName(ipAddress);
+
+                    if (address instanceof Inet6Address) {
+                        // It's ipv6
+                        // Any mapped IPv4 address in IPv6 space will also returns as Inet4Address
+                        if (log.isDebugEnabled()) {
+                            log.debug(
+                                    "Found IPv6 address which can not be resolved to location. IP Address = " +
+                                            ipAddress);
+                        }
+                        location = getLocationFromIPv6((Inet6Address) address, connection);
+                    } else if (address instanceof Inet4Address) {
+                        // It's ipv4
+                        location = getLocationFromLongValueOfIp(address.getHostAddress(), connection);
+                    }
+                } else {
+                    location = getLocationFromCIDR(ipAddress, connection);
+                }
+
+                if (location != null) {
+                    if (location.getCity() == null) {
+                        location.setCity("");
+                    }
+                    if (persistInDataBase) {
+                        //Insert or update in Application Level, Rather than using DB specific query.
+                        boolean autoCommitMode = connection.getAutoCommit();
+                        try {
+                            connection.setAutoCommit(false);
+                            Location updatedLocation = loadLocation(location.getIp(), connection);
+                            if (updatedLocation != null) {
+                                saveLocation(location, connection);
+                            }
+                        } finally {
+                            connection.setAutoCommit(autoCommitMode);
+                        }
+                    }
+                }
+            }
+        } catch (UnknownHostException e) {
+            throw new GeoLocationResolverException("Error while parsing the IP address : " + ipAddress, e);
+        } catch (SQLException e) {
+            throw new GeoLocationResolverException("Error while getting the location from database", e);
+        } finally {
+            dbUtil.closeAllConnections(null, connection, null);
+        }
+        return location;
+    }
+
+    /**
+     * Calls external system or database database to find the IPv6 adress to location details.
+     * Can be used by an extended class.
+     *
+     * @param address
+     * @param connection the Db connection to be used. Do not close this connection within this method.
+     * @return
+     */
+    protected Location getLocationFromIPv6(Inet6Address address, Connection connection)
+            throws SQLException, GeoLocationResolverException {
+        return null;
+    }
+
+
+    private Location loadLocation(String ipAddress, Connection connection) throws SQLException {
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        Location location = null;
+        try {
             if (persistInDataBase) {
                 statement = connection.prepareStatement(SQL_SELECT_LOCATION_FROM_IP);
                 statement.setString(1, ipAddress);
@@ -131,21 +229,9 @@ public class LocationResolverRdbms extends LocationResolver {
             if (resultSet != null && resultSet.next()) {
                 location = new Location(resultSet.getString("country_name"), resultSet.getString("city_name"),
                         ipAddress);
-            } else {
-                location = getLocationFromLongValueOfIp(ipAddress, connection);
-                if (location != null) {
-                    if(location.getCity() == null){
-                        location.setCity("");
-                    }
-                    if (persistInDataBase) {
-                        saveLocation(location, connection);
-                    }
-                }
             }
-        } catch (SQLException e) {
-            throw new GeoLocationResolverException("Error while getting the location from database", e);
         } finally {
-            dbUtil.closeAllConnections(statement, connection, resultSet);
+            dbUtil.closeAllConnections(statement, null, resultSet);
         }
         return location;
     }
@@ -186,5 +272,14 @@ public class LocationResolverRdbms extends LocationResolver {
             ipToLong = longValueOfIp;
         }
         return ipToLong;
+    }
+
+    private static boolean isCIDR(String ipAddress) {
+        if (ipAddress.split("\\.").length == 4) {
+            if (ipAddress.indexOf("/") > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 }
