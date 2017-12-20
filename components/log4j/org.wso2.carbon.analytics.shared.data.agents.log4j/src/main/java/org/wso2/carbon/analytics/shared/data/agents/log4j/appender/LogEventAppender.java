@@ -504,7 +504,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
                 }
                 Event logEvent = new Event(streamDef, date.getTime(), null, null, new String[]{tenantDomain},
                         arbitraryDataMap);
-                dataPublisher.publish(logEvent);
+                 dataPublisher.tryPublish(logEvent);
             }
         }
     }
