@@ -506,6 +506,7 @@ public class LogEventAppender extends AppenderSkeleton implements Appender {
                         arbitraryDataMap);
                  dataPublisher.tryPublish(logEvent);
             }
+        }
     }
 
     private String format(TenantDomainAwareLoggingEvent event, TenantAwarePatternLayout tenantAwarePatternLayout) {
