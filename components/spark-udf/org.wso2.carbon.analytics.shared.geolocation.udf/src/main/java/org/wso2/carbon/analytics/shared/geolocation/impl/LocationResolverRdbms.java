@@ -193,9 +193,9 @@ public class LocationResolverRdbms extends LocationResolver {
                 }
             }
         } catch (UnknownHostException e) {
-            throw new GeoLocationResolverException("Error while parsing the IP address : " + ipAddress, e);
+            log.error("Error while parsing the IP address : " + ipAddress, e);
         } catch (SQLException e) {
-            throw new GeoLocationResolverException("Error while getting the location from database", e);
+            log.error("Error while getting the location from database", e);
         } finally {
             dbUtil.closeAllConnections(null, connection, null);
         }
