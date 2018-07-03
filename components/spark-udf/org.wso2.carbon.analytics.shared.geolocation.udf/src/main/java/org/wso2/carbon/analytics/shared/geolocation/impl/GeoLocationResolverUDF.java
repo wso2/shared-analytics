@@ -44,7 +44,8 @@ public class GeoLocationResolverUDF implements CarbonUDF {
             if (location != null) {
                 locationLRUCache.put(ip, location);
             }else{
-                locationLRUCache.put(ip, new Location("", "", ""));
+                //Fixing analytics-apim/#529
+                locationLRUCache.put(ip, new Location("NA", "NA", ip));
             }
         }
         return location != null ? location.getCountry() : "";
