@@ -43,12 +43,12 @@ public class GeoLocationResolverUDF implements CarbonUDF {
             location = GeoResolverInitializer.getInstance().getLocationResolver().getLocation(ip);
             if (location != null) {
                 locationLRUCache.put(ip, location);
-            }else{
+            } else {
                 //Fixing analytics-apim/#529
                 locationLRUCache.put(ip, new Location("NA", "NA", ip));
             }
         }
-        return location != null ? location.getCountry() : "";
+        return location != null ? location.getCountry() : "NA";
     }
 
     /**
@@ -69,7 +69,7 @@ public class GeoLocationResolverUDF implements CarbonUDF {
                 locationLRUCache.put(ip, location);
             }
         }
-        return location != null ? location.getCity() : "";
+        return location != null ? location.getCity() : "NA";
     }
 }
 

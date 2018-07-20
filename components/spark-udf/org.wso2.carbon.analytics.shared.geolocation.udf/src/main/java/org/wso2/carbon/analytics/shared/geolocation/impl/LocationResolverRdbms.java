@@ -17,6 +17,7 @@
 */
 package org.wso2.carbon.analytics.shared.geolocation.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.analytics.shared.geolocation.api.Location;
@@ -174,8 +175,8 @@ public class LocationResolverRdbms extends LocationResolver {
                 }
 
                 if (location != null) {
-                    if (location.getCity() == null) {
-                        location.setCity("");
+                    if (StringUtils.isEmpty(location.getCity())) {
+                        location.setCity("NA");
                     }
                     if (persistInDataBase) {
                         //Insert or update in Application Level, Rather than using DB specific query.
